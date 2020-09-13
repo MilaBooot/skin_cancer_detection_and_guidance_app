@@ -1,9 +1,8 @@
 from flask import Flask, request
-import json
 #Workaround for the bug in https://github.com/jarus/flask-testing/issues/143
 import werkzeug
 werkzeug.cached_property = werkzeug.utils.cached_property
-from flask_restplus import Api, Resource, fields, reqparse, abort
+from flask_restplus import Api, Resource, fields, abort
 from lib.services.db_connect import loginDBConnect
 
 flask_app = Flask(__name__)
@@ -39,6 +38,8 @@ class dataFields:
 @register_api.route("/")
 class signUp(Resource):
 	@register_api.expect(dataFields().user_reg())
+	@user_validate_api.response(200, 'User Created')
+	@user_validate_api.response(409, 'User ID already exists')
 	def post(self):
 		json_data = request.json
 		user_id = json_data["user_id"]
@@ -53,10 +54,24 @@ class signUp(Resource):
 		return {"message": "User created", "result": ret}
 
 
+resource_fields = app.model('Resource', {
+    'message': fields.String,
+})
+
+
 @user_validate_api.route("/")
 class login(Resource):
 	@user_validate_api.expect(dataFields().login_creds())
+	@user_validate_api.response(200, 'User Validated')
+	@user_validate_api.response(401, 'Wrong credentials, in case the user id does not exist or password is wrong')
 	def post(self):
-		pass
-		#add login creds fetch function
-		return {"message": "User Validated", "data": json.dumps(rows)}
+		json_data = request.json
+		user_id = json_data["user_id"]
+		password = json_data["password"]
+		try:
+			stored_pass = ldb.get_login_creds(user_id)
+		except KeyError as errmsg:
+			abort(401, errmsg)
+		if password != stored_pass:
+			abort(401, "Wrong credentials")
+		return {"message": "User Validated"}

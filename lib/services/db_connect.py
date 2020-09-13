@@ -9,10 +9,15 @@ class loginDBConnect:
         except Exception as errmsg:
             print("Login failed %s" %errmsg)
         
-    def get_login_creds(self):
-        self.cur.execute("""SELECT * FROM user_registration""")
-        rows = self.cur.fetchall()
-        return rows
+    def get_login_creds(self, user_id):
+        query = """SELECT password FROM user_registration WHERE user_id='%s'""" % (user_id,)
+        self.cur.execute(query)
+        password = self.cur.fetchall()
+        if len(password) > 0:
+            password = password[0][0]
+        else:
+            raise KeyError("User ID does not exist")
+        return password
     
     def get_user_ids(self):
         self.cur.execute("""SELECT user_id FROM user_registration""")
@@ -35,5 +40,5 @@ class loginDBConnect:
 if __name__ == "__main__":
     #testing function
     ldb = loginDBConnect()
-    uids = ldb.get_user_ids()
-    print(uids)
+    password = ldb.get_login_creds("deepak7946@gmail.com")
+    print(password)
