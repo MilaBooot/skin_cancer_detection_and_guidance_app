@@ -82,3 +82,19 @@ class login(Resource):
 		except KeyError:
 			abort(401, result=msgFormats().error_msg("User ID not found"))
 		return msgFormats().data_msg(data)
+
+
+@common_services_api.route("/getDoctors")
+class getDocList(Resource):
+	#@user_validate_api.expect(dataFields().login_creds())
+	@user_validate_api.response(200, 'Found doctors nearby')
+	@user_validate_api.response(401, 'Unservicable area')
+	def get(self):
+		longitude = request.args.get("longitude", None)
+		latitude = request.args.get("latitude", None)
+		if longitude is None or latitude is None:
+			abort(400, result=msgFormats().error_msg("Bad Request. Incomplete location details"))
+		#call service to get list of doctors nearby. Adding a dumy data for now
+		data = [{"name": "test_name", "speciality": "dermetologist", "hospital": "some hospital"},
+		  {"name": "test_name2", "speciality": "dermetologist", "hospital": "some hospital2"}]
+		return msgFormats().data_msg(data)
