@@ -1,8 +1,8 @@
 package com.skincancerdetection.bffnode.router;
 
 import com.skincancerdetection.bffnode.enums.ErrorEnum;
+import com.skincancerdetection.bffnode.exception.BffNodeException;
 import com.skincancerdetection.bffnode.exception.DuplicateEntryException;
-import com.skincancerdetection.bffnode.exception.ServiceDownException;
 import com.skincancerdetection.bffnode.model.CommonResponse;
 import com.skincancerdetection.bffnode.model.ErrorMessageDto;
 import com.skincancerdetection.bffnode.model.UserDetailsDto;
@@ -31,19 +31,27 @@ public class CommonServiceRouterImpl implements CommonServiceRouter{
     @Override
     public CommonResponse registerUser(UserDetailsDto userDetailsDto) {
         final String url = new StringBuilder(commonServiceUrl).append(userRegistrationEndpoint).toString();
-        ResponseEntity<CommonResponse> responseEntity = restTemplate
-                .postForEntity(url, userDetailsDto, CommonResponse.class);
+        ResponseEntity<CommonResponse> responseEntity = null;
 
-        if (responseEntity.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
-            throw new ServiceDownException(responseEntity.getStatusCode().getReasonPhrase()
-                    , ErrorEnum.COMMON_SERVICE_ERROR.getErrMessage()
-                    , new RuntimeException());
+        try {
+            responseEntity = restTemplate
+                    .postForEntity(url, userDetailsDto, CommonResponse.class);
 
-        } else if (responseEntity.getStatusCode() == HttpStatus.CONFLICT) {
-            CommonResponse<ErrorMessageDto> response = (CommonResponse<ErrorMessageDto>)responseEntity.getBody().getResult();
-            throw new DuplicateEntryException(responseEntity.getStatusCode().getReasonPhrase()
-                    , response.getResult().getError()
-                    , new RuntimeException());
+            if (responseEntity.getStatusCode() == HttpStatus.CONFLICT) {
+                CommonResponse<ErrorMessageDto> response = (CommonResponse<ErrorMessageDto>) responseEntity.getBody().getResult();
+                throw new DuplicateEntryException(responseEntity.getStatusCode().getReasonPhrase()
+                        , response.getResult().getError()
+                        , new RuntimeException());
+
+            } else if (responseEntity.getStatusCode() != HttpStatus.CREATED) {
+                throw new BffNodeException(responseEntity.getStatusCode().getReasonPhrase()
+                        , ErrorEnum.COMMON_SERVICE_ERROR.getErrMessage()
+                        , new RuntimeException());
+
+            }
+
+        } catch (Exception e) {
+            throw new BffNodeException(e.getMessage(), e);
         }
         return responseEntity.getBody();
 
