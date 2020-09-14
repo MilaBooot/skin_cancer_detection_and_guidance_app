@@ -1,8 +1,8 @@
 package com.skincancerdetection.bffnode.router;
 
 import com.skincancerdetection.bffnode.model.CommonResponse;
-import com.skincancerdetection.bffnode.model.RegistrationDto;
+import com.skincancerdetection.bffnode.model.UserDetailsDto;
 
 public interface CommonServiceRouter {
-    CommonResponse registerUser(RegistrationDto registrationDto);
+    CommonResponse registerUser(UserDetailsDto userDetailsDto);
 }

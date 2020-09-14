@@ -23,6 +23,8 @@ dependencies {
 	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 	compileOnly 'org.projectlombok:lombok'
+	compile group: 'net.sf.dozer', name: 'dozer', version: '5.5.1'
+
 	annotationProcessor 'org.projectlombok:lombok'
 
 	testCompile group: 'junit', name: 'junit', version: '4.12'
