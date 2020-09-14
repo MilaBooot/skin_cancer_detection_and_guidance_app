@@ -10,7 +10,12 @@ Backend-for-Frontend (BFF) developed using Java and Spring Boot
 
 ####Build Code
 
-`$ gradle clean build`
+`$ gradle clean build -xtest`
+
+
+####Run
+
+`$ start.bat`
 
 
 ###Links
@@ -21,4 +26,6 @@ Backend-for-Frontend (BFF) developed using Java and Spring Boot
 
 ####Configurable by property file
 
-`$ server.port=8080`
+`server.port=8080`
+`common.service.url=http://<host>:<port>/common-service/api #common-service url`
+`common.service.user.registration.endpoint=/register  #user registration endpoint` 
