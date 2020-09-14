@@ -1,9 +1,31 @@
-Multi class classification
-  1. Lables - 
-    0: Melanoma
-    1: Melanocytic Nevus
-    2: Basal Cell Carcinoma
-    3: Actinic Keratosis
-    4: Benign Keratosis
-    5: Dermatoﬁbroma
-    6: Vascular Lesion
+1. Data set path: https://www.isic-archive.com/#!/topWithHeader/wideContentTop/main
+
+2. Type of classification
+   > Multi class
+     > Lables are shown below
+       0: Melanoma
+       1: Melanocytic Nevus
+       2: Basal Cell Carcinoma
+       3: Actinic Keratosis
+       4: Benign Keratosis
+       5: Dermatoﬁbroma
+       6: Vascular Lesion
+          
+3. How to train the model ?
+   > Ensemble of image processing and questionarie would be used to determine the possibility of skin cancer
+   > Image processing would be done as described in section 3.1
+   > Usage of questionarie would be analytical
+   3.1 Inception resnet V2 
+       > 164 layers deep
+       > Requires 299 x 299 as image size
+       > Basic inception resnet V2 architecture link: https://medium.com/the-owl/building-inception-resnet-v2-in-keras-from-scratch-a3546c4d93f0
+       > Tensor Flow API Link: https://keras.io/api/applications/inceptionresnetv2/
+
+4. Share the output to BFF - // To check with team how to achieve this 
+   > Below are the details to be shared with BFF
+     > Possibility of skin cancer categorize as High/Medium/Low
+     > In either case, share the class and % of skin cancer which has highest probability 
+   
+
+// Backup/Useful Links
+ImageNet Large Scale Visual Recognition Challenge(ILSVRC)
