@@ -2,7 +2,7 @@ from flask import Flask, request
 #Workaround for the bug in https://github.com/jarus/flask-testing/issues/143
 import werkzeug
 werkzeug.cached_property = werkzeug.utils.cached_property
-from flask_restplus import Api, Resource, fields, abort
+from flask_restplus import Api, Resource, fields, abort, reqparse, inputs
 from lib.services.db_connect import loginDBConnect
 import json
 
@@ -40,10 +40,17 @@ class dataFields:
 			})
 		return resource_fields
 
-	def login_creds(self):
-		resource_fields = user_validate_api.model("Login credentials",
-		   {'user_id': fields.String(description="Email ID of user", required=True)})
-		return resource_fields
+class reqparseArgs:
+	def get_user_details(self):
+		parser = reqparse.RequestParser()
+		parser.add_argument('user_id', default=None, required=True)
+		return parser
+
+	def get_doc_list(self):
+		parser = reqparse.RequestParser()
+		parser.add_argument('latitude', type=float, default=None, required=True)
+		parser.add_argument('longitude', type=float, default=None, required=True)
+		return parser
 
 
 @register_api.route("/")
@@ -73,7 +80,7 @@ class signUp(Resource):
 class login(Resource):
 	@user_validate_api.response(200, 'Found user detail')
 	@user_validate_api.response(401, 'User ID not found')
-	@user_validate_api.response(400, 'Bad request')
+	@user_validate_api.expect(reqparseArgs().get_user_details())
 	def get(self):
 		user_id =  request.args.get("user_id", None)
 		if user_id is None:
@@ -87,9 +94,9 @@ class login(Resource):
 
 @common_services_api.route("/getDoctors")
 class getDocList(Resource):
-	@user_validate_api.response(200, 'Found doctors nearby')
-	@user_validate_api.response(401, 'Unservicable area')
-	@user_validate_api.response(400, 'Bad request')
+	@common_services_api.response(200, 'Found doctors nearby')
+	@common_services_api.response(401, 'Unservicable area')
+	@common_services_api.expect(reqparseArgs().get_doc_list())
 	def get(self):
 		longitude = request.args.get("longitude", None)
 		latitude = request.args.get("latitude", None)
