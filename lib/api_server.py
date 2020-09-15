@@ -69,14 +69,15 @@ class signUp(Resource):
 		return msgFormats().default_msg("User Added")
 
 
-@user_validate_api.route("/")
+@user_validate_api.route("")
 class login(Resource):
-	@user_validate_api.expect(dataFields().login_creds())
 	@user_validate_api.response(200, 'Found user detail')
 	@user_validate_api.response(401, 'User ID not found')
-	def post(self):
-		json_data = request.json
-		user_id = json_data["user_id"]
+	@user_validate_api.response(400, 'Bad request')
+	def get(self):
+		user_id =  request.args.get("user_id", None)
+		if user_id is None:
+			abort(400, result=msgFormats().error_msg("Bad Request. Missing user_id parameter"))
 		try:
 			data = ldb.get_user_details(user_id)
 		except KeyError:
@@ -86,9 +87,9 @@ class login(Resource):
 
 @common_services_api.route("/getDoctors")
 class getDocList(Resource):
-	#@user_validate_api.expect(dataFields().login_creds())
 	@user_validate_api.response(200, 'Found doctors nearby')
 	@user_validate_api.response(401, 'Unservicable area')
+	@user_validate_api.response(400, 'Bad request')
 	def get(self):
 		longitude = request.args.get("longitude", None)
 		latitude = request.args.get("latitude", None)
