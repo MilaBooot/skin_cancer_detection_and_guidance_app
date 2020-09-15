@@ -17,4 +17,4 @@ FLASK_APP=lib/api_server.py flask run --cert adhoc
 
 The common services api will be launched at port 5000 (localhost:5000)
 
- - Sagger UI: localhost:5000
+ - Swagger UI: localhost:5000
