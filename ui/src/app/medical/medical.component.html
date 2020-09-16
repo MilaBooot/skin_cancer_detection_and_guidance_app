@@ -1,0 +1,20 @@
+<div class="container-fluid">
+    <p>Doctor Details</p>
+    <table id="productSizes" class="table">
+        <thead>
+    <tr>
+      <th>Name</th>
+      <th>Hospital</th>
+      <th>Contact</th>
+    </tr>
+ </thead>
+ <tbody>
+    <tr *ngFor="let docDetail of doctorDetails">
+      <td>{{docDetail.name}}</td>
+      <td>{{docDetail.hospital}}</td>
+      <td>{{docDetail.contact}}</td>
+    </tr>
+ </tbody>
+
+</table>
+</div>

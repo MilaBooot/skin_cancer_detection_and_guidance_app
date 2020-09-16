@@ -1,0 +1,21 @@
+<mat-card *ngFor="let questionRow of surveyQuestion">
+    <div>
+    <mat-card-header>
+        <mat-card-title>{{questionRow.question}}</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+        <div *ngFor="let optionRow of questionRow.options">
+            <label for="option_{{optionRow.id}}">
+              <input id="option_{{optionRow.id}}" [value]='optionRow.id' type="radio" name="option_{{optionRow.id}}" [(ngModel)]="questionRow.answer">
+              {{optionRow.option}}
+            </label>
+          </div>
+        
+     
+    </mat-card-content>
+   
+    </div>
+    
+    </mat-card>
+    <button mat-button (click)="sendMessage()">Submit</button>
