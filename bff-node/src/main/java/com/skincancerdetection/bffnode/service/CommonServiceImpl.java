@@ -1,6 +1,7 @@
 package com.skincancerdetection.bffnode.service;
 
-import com.skincancerdetection.bffnode.model.UserDetailsDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.skincancerdetection.bffnode.model.*;
 import com.skincancerdetection.bffnode.router.CommonServiceRouter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,9 +12,22 @@ public class CommonServiceImpl implements CommonService{
     @Autowired
     private CommonServiceRouter commonServiceRouter;
 
+    @Autowired
+    private ObjectMapper mapper;
+
     @Override
     public void registerUser(UserDetailsDto userDetailsDto) {
         commonServiceRouter.registerUser(userDetailsDto);
+    }
+
+
+    @Override
+    public UserInfoResponseDto retrieveUser(UserInfoRequestDto userInfoRequestDto) {
+        CommonResponseData<UserInfoResponseDto> responseData = new CommonResponseData<>();
+        CommonResponse<CommonResponseData> response = commonServiceRouter.retrieveUser(userInfoRequestDto);
+        responseData = (CommonResponseData<UserInfoResponseDto>)mapper
+                .convertValue(response.getResult(), CommonResponseData.class);
+        return mapper.convertValue(responseData.getData(), UserInfoResponseDto.class);
     }
 
 }
