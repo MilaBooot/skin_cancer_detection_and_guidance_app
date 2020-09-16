@@ -1,6 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Question } from '../_models';
+import { GeolocationService } from '../_services';
 
 
 @Component({
@@ -18,8 +19,9 @@ export class StepperComponent implements OnInit {
   fileUpload: ElementRef;
   file: File;
   surveyQuestion: Question[];
-
-  constructor(private _formBuilder: FormBuilder) {}
+  
+  constructor(private _formBuilder: FormBuilder
+    , private geolocationService: GeolocationService) {}
 
   ngOnInit() {
     this.firstFormGroup = this._formBuilder.group({
@@ -36,7 +38,7 @@ export class StepperComponent implements OnInit {
       for (let index = 0; index < fileUpload.files.length; index++)  {  
         this.file = fileUpload.files[0];  
      }
-     this.uploadFile(); 
+    // this.uploadFile(); 
 
     };
     fileUpload.click();  
@@ -44,8 +46,10 @@ export class StepperComponent implements OnInit {
 
 uploadFile() {
   //call upload service to post the request
-    console.log(this.file.name);
+   
+    console.log(this.file.name, this.file.size);
     console.log(this.surveyQuestion);
+    console.log(this.geolocationService.lat, this.geolocationService.lng);
 
 }
 

@@ -23,8 +23,8 @@
       </button>  
       <input type="file" #fileUpload id="fileUpload" name="fileUpload" accept="image/*" style="display:none;" />
       <div>
-        <button mat-button matStepperNext>Next</button>
         <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext (click)="uploadFile()">Next</button>
       </div>
     </form>
   </mat-step>

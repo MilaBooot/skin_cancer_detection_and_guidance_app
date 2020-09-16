@@ -19,6 +19,8 @@ import { PolicyComponent } from './policy/policy.component';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import { QuestionnaireComponent } from './questionnaire/questionnaire.component';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatTableModule} from '@angular/material/table';
 
 
  
@@ -48,7 +50,9 @@ import { QuestionnaireComponent } from './questionnaire/questionnaire.component'
     MatInputModule,
     MatStepperModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    MatPaginatorModule,
+    MatTableModule
 
 
   ],

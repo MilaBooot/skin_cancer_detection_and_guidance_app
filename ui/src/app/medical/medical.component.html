@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<!--<div class="container-fluid">
     <p>Doctor Details</p>
     <table id="productSizes" class="table">
         <thead>
@@ -17,4 +17,34 @@
  </tbody>
 
 </table>
+</div>
+-->
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource">
+
+
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+
+    <!-- Hospital Column -->
+    <ng-container matColumnDef="hospital">
+      <th mat-header-cell *matHeaderCellDef> Hospital </th>
+      <td mat-cell *matCellDef="let element"> {{element.hospital}} </td>
+    </ng-container>
+
+    <!-- Contact Column -->
+    <ng-container matColumnDef="contact">
+      <th mat-header-cell *matHeaderCellDef> Contact </th>
+      <td mat-cell *matCellDef="let element"> {{element.contact}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
 </div>
