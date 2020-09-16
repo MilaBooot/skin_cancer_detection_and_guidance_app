@@ -3,7 +3,7 @@ from flask import Flask, request
 import werkzeug
 werkzeug.cached_property = werkzeug.utils.cached_property
 from flask_restplus import Api, Resource, fields, abort, reqparse, inputs
-from lib.services.db_connect import loginDBConnect
+from lib.services.db_connect import dbConnect
 import json
 
 flask_app = Flask(__name__)
@@ -13,7 +13,7 @@ register_api = app.namespace('register', description='signup API')
 user_validate_api = app.namespace("getUserDetails", description="user validation API")
 common_services_api = app.namespace("commonServices", description="common services API")
 
-ldb = loginDBConnect()
+db = dbConnect()
 
 
 class msgFormats:
@@ -39,6 +39,7 @@ class dataFields:
 			"gender": fields.String(description="Gender", required=True)
 			})
 		return resource_fields
+
 
 class reqparseArgs:
 	def get_user_details(self):
@@ -67,10 +68,10 @@ class signUp(Resource):
 		last_name = json_data["last_name"]
 		dob = json_data["dob"]
 		gender = json_data["gender"]
-		if user_id in ldb.get_user_ids():
+		if user_id in db.get_user_ids():
 			abort(409, result=msgFormats().error_msg("User ID already exists"))
 		try:
-			ret = ldb.insert_value(user_id, password, first_name, last_name, dob, gender)
+			ret = db.insert_value(user_id, password, first_name, last_name, dob, gender)
 		except Exception:
 			abort(400, result=msgFormats().error_msg("Bad request. DB insert operation failed"))
 		return msgFormats().default_msg("User Added")
@@ -86,7 +87,7 @@ class login(Resource):
 		if user_id is None:
 			abort(400, result=msgFormats().error_msg("Bad Request. Missing user_id parameter"))
 		try:
-			data = ldb.get_user_details(user_id)
+			data = db.get_user_details(user_id)
 		except KeyError:
 			abort(401, result=msgFormats().error_msg("User ID not found"))
 		return msgFormats().data_msg(data)
@@ -106,3 +107,25 @@ class getDocList(Resource):
 		data = [{"name": "test_name", "speciality": "dermetologist", "hospital": "some hospital"},
 		  {"name": "test_name2", "speciality": "dermetologist", "hospital": "some hospital2"}]
 		return msgFormats().data_msg(data)
+
+
+@common_services_api.route("/getQuestions")
+class getQuestions(Resource):
+	@common_services_api.response(200, 'Success')
+	def get(self):
+		data = db.get_questions()
+		return msgFormats().data_msg(data)
+
+
+@common_services_api.route("/getQuestions/<id>")
+class getQuestions(Resource):
+	@common_services_api.response(200, 'Success')
+	@common_services_api.response(401, 'Resource not found')
+	def get(self, id):
+		id = int(id)
+		data = db.get_questions(id)
+		if len(data) == 0:
+			abort(401, result="question id NOT FOUND")
+		return msgFormats().data_msg(data)
+
+
