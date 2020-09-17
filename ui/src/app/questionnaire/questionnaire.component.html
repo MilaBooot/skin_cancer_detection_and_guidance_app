@@ -6,9 +6,9 @@
 
     <mat-card-content>
         <div *ngFor="let optionRow of questionRow.options">
-            <label for="option_{{optionRow.id}}">
-              <input id="option_{{optionRow.id}}" [value]='optionRow.id' type="radio" name="option_{{optionRow.id}}" [(ngModel)]="questionRow.answer">
-              {{optionRow.option}}
+            <label for="{{questionRow.question}}_option_{{optionRow.id}}">
+              <input id="{{questionRow.question}}_option_{{optionRow.id}}" [value]='optionRow.id' type="radio" name="{{questionRow.question}}_option_{{optionRow.id}}" [(ngModel)]="questionRow.answer">
+              {{optionRow.value}}
             </label>
           </div>
         

@@ -1,5 +1,6 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { Question } from '../_models';
+import { QuestionnaireService } from '../_services';
 
 @Component({
   selector: 'app-questionnaire',
@@ -11,21 +12,27 @@ export class QuestionnaireComponent implements OnInit {
   surveyQuestion: Question[];
   @Output() messageEvent = new EventEmitter<Question[]>();
 
-  constructor() { }
+  constructor(private questionnaireService: QuestionnaireService) { }
 
   ngOnInit(): void {
     //intialise by invoking service
-    this.surveyQuestion = [{id: 100, question: "Question1", options:[{id: 101, option: "A"}
-    , {id: 102, option: "B"}
-    , {id: 103, option: "C"}], answer:0 },
-    {id: 200, question: "Question2", options:[{id: 201, option: "A"}
-    , {id: 202, option: "B"}
-    , {id: 203, option: "C"}], answer:0 }];
-
+    this.questionnaireService
+    .getQuestions()
+    .subscribe(data => this.surveyQuestion = data);
+    console.log(this.surveyQuestion);
+    /*
+    [{id: 100, question: "Question1", options:[{id: 101, value: "A"}
+    , {id: 102, value: "B"}
+    , {id: 103, value: "C"}], answer:0 },
+    {id: 200, question: "Question2", options:[{id: 201, value: "A"}
+    , {id: 202, value: "B"}
+    , {id: 203, value: "C"}], answer:0 }];
+*/
 
   }
 
   getsurveyQuestions() {
+   
     return this.surveyQuestion;
   }
 
