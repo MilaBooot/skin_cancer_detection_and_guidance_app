@@ -7,9 +7,12 @@ import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class BffNodeController {
@@ -33,7 +36,6 @@ public class BffNodeController {
 
     @PostMapping(value="/authenticate")
     public ResponseEntity authenticateUser(@RequestBody AuthenticationRequest request) {
-
         UserInfoRequestDto userInfoRequestDto = requestAssembler.assembleUserInfoRequestDto(request);
         UserInfoResponseDto userInfoResponseDto = commonService.retrieveUser(userInfoRequestDto);
 
@@ -44,6 +46,15 @@ public class BffNodeController {
             return new ResponseEntity(response, HttpStatus.OK);
         }
         return new ResponseEntity(HttpStatus.NOT_FOUND);
+
+    }
+
+    @GetMapping("/questionnaire")
+    public ResponseEntity getQuestionnaire() {
+        List<QuestionDto> questionnaireRespons = commonService.getQuestionnaire();
+        QuestionnaireResponse response = new QuestionnaireResponse();
+        response.setQuestions(questionnaireRespons);
+        return new ResponseEntity(response, HttpStatus.OK);
 
     }
 

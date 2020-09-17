@@ -7,4 +7,5 @@ import com.skincancerdetection.bffnode.model.UserInfoRequestDto;
 public interface CommonServiceRouter {
     CommonResponse registerUser(UserDetailsDto userDetailsDto);
     CommonResponse retrieveUser(UserInfoRequestDto userInfoRequestDto);
+    CommonResponse getQuestionnaire();
 }

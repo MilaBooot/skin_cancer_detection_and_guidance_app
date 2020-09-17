@@ -6,6 +6,9 @@ import com.skincancerdetection.bffnode.router.CommonServiceRouter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Service
 public class CommonServiceImpl implements CommonService{
 
@@ -28,6 +31,15 @@ public class CommonServiceImpl implements CommonService{
         responseData = (CommonResponseData<UserInfoResponseDto>)mapper
                 .convertValue(response.getResult(), CommonResponseData.class);
         return mapper.convertValue(responseData.getData(), UserInfoResponseDto.class);
+    }
+
+    @Override
+    public List<QuestionDto> getQuestionnaire() {
+        CommonArrResponseData<QuestionDto[]> responseData = new CommonArrResponseData<>();
+        CommonResponse<CommonArrResponseData> response = commonServiceRouter.getQuestionnaire();
+        responseData = mapper.convertValue(response.getResult(), CommonArrResponseData.class);
+        return Arrays.asList(mapper.convertValue(responseData.getData(), QuestionDto[].class));
+
     }
 
 }

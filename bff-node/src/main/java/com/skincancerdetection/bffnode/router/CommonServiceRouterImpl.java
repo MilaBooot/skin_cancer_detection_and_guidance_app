@@ -27,6 +27,9 @@ public class CommonServiceRouterImpl implements CommonServiceRouter{
     @Value("${common.service.user.retrieve.endpoint}")
     private String userRetrieveEndpoint;
 
+    @Value("${common.service.questionnaire.endpoint}")
+    private String questionnaireEndpoint;
+
     @Autowired
     private RestTemplate restTemplate;
 
@@ -81,5 +84,25 @@ public class CommonServiceRouterImpl implements CommonServiceRouter{
         }
         return responseEntity.getBody();
 
+    }
+
+    @Override
+    public CommonResponse getQuestionnaire() {
+        final String url = new StringBuilder(commonServiceUrl).append(questionnaireEndpoint).toString();
+        ResponseEntity<CommonResponse> responseEntity = null;
+        try {
+            responseEntity = restTemplate
+                    .getForEntity(url, CommonResponse.class);
+            if (responseEntity.getStatusCode().value()!= HttpStatus.OK.value()) {
+                throw new BffNodeException(responseEntity.getStatusCode().getReasonPhrase()
+                        , ErrorEnum.COMMON_SERVICE_ERROR.getErrMessage()
+                        , new RuntimeException());
+
+            }
+
+        } catch (HttpClientErrorException e) {
+            throw new BffNodeException(e.getMessage(), e);
+        }
+        return responseEntity.getBody();
     }
 }
