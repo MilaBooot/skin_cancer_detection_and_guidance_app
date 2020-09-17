@@ -40,11 +40,15 @@ class loginDBConnect:
         return user_ids
 
     def insert_value(self, user_id, password, first_name, last_name, dob, gender):
-        insert_query = """INSERT INTO user_registration (user_id, password, first_name, last_name, dob, gender) VALUES (%s, %s, %s, %s, %s, %s)"""
-        to_insert = (user_id, password, first_name, last_name, dob, gender)
-        self.cur.execute(insert_query, to_insert)
-        self.db.commit()
-        count = self.cur.rowcount
+        try:
+            insert_query = """INSERT INTO user_registration (user_id, password, first_name, last_name, dob, gender) VALUES (%s, %s, %s, %s, %s, %s)"""
+            to_insert = (user_id, password, first_name, last_name, dob, gender)
+            self.cur.execute(insert_query, to_insert)
+            self.db.commit()
+            count = self.cur.rowcount
+        except Exception:
+            self.db.rollback()
+            raise Exception("DB insert operation failed")
         return ("%s Record inserted successfully into user_registration table" % count)
 
     def __del__(self):
