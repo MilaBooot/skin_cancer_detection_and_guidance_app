@@ -1,0 +1,39 @@
+
+<mat-horizontal-stepper [linear]="isLinear" #stepper>
+
+  <mat-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel>Answer the Questionnaire</ng-template>
+  
+      <app-questionnaire (messageEvent)="receiveMessage($event)"> </app-questionnaire>
+
+      <div>
+    
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Upload Image</ng-template>
+      <button mat-button color="warn" (click)="onClick()">  
+        <mat-icon>file_upload</mat-icon>  
+        Upload  
+      </button>  
+      <input type="file" #fileUpload id="fileUpload" name="fileUpload" accept="image/*" style="display:none;" />
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext (click)="uploadFile()">Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Result</ng-template>
+    <p>Prediction: {{prediction}}</p>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
