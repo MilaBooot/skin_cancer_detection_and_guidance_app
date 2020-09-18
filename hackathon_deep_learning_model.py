@@ -24,6 +24,8 @@ from keras.initializers import glorot_uniform
 import scipy.misc
 from matplotlib.pyplot import imshow
 import keras.backend as K
+
+#Import user defined module
 from Hackathon_create_data_set import data_set_creation as DSC
 
 #Global Variables
