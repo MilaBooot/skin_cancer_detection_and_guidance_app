@@ -22,8 +22,8 @@ MODEL_METRICS = 'accuracy'
 OUTPUT_LAYER_ACTIVATION = 'softmax'
 
 #Importing user defined modules
-from Hackathon_create_data_set import data_set_creation as DSC
-from ml_api_top import deep_learning_model_creation as DLMC
+from hackathon_create_data_set import data_set_creation as DSC
+from hackathon_deep_learning_model import deep_learning_model_creation as DLMC
 
 class hackathon_skin_cancer_detection_top:
 
