@@ -14,6 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class CommonServiceRouterImpl implements CommonServiceRouter{
@@ -68,9 +72,12 @@ public class CommonServiceRouterImpl implements CommonServiceRouter{
     public CommonResponse retrieveUser(UserInfoRequestDto userInfoRequestDto) {
         final String url = new StringBuilder(commonServiceUrl).append(userRetrieveEndpoint).toString();
         ResponseEntity<CommonResponse> responseEntity = null;
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
+                .queryParam("user_id", userInfoRequestDto.getUser_id());
+
         try {
             responseEntity = restTemplate
-                    .postForEntity(url, userInfoRequestDto, CommonResponse.class);
+                    .getForEntity(builder.toUriString(), CommonResponse.class);
 
             if (responseEntity.getStatusCode().value()!= HttpStatus.OK.value()) {
                 throw new BffNodeException(responseEntity.getStatusCode().getReasonPhrase()
