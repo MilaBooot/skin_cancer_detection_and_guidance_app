@@ -20,6 +20,7 @@ public class RequestAssembler {
         //TODO: do encryption
         userDetailsDto.setPassword(request.getPassword());
         userDetailsDto.setUser_id(request.getUsername());
+        userDetailsDto.setGender(request.getGender());
         return userDetailsDto;
     }
 
