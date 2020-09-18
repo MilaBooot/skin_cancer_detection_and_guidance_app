@@ -24,7 +24,7 @@
     <div class="form-group">
         <label for="gender">Gender</label>
         <select formControlName="gender" class="form-control">
-          <option *ngFor="let g of genders"  value="g">
+          <option *ngFor="let g of genders"  [value]="g">
                     {{g}}
           </option>
         </select>
