@@ -1,4 +1,4 @@
-# Common Services API
+# ML prediction Services API
 The services are written in python3.6
 ## Install the pip requirements
 ```
