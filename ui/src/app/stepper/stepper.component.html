@@ -20,8 +20,9 @@
       <button mat-button color="warn" (click)="onClick()">  
         <mat-icon>file_upload</mat-icon>  
         Upload  
-      </button>  
-      <input type="file" #fileUpload id="fileUpload" name="fileUpload" accept="image/*" style="display:none;" />
+      </button> 
+      <img [src]="url" height="200"> <br/> 
+      <input type="file" #fileUpload id="fileUpload" name="fileUpload" accept="image/*" style="display:none;" (change)="onSelectFile($event)"/>
       <div>
         <button mat-button matStepperPrevious>Back</button>
         <button mat-button matStepperNext (click)="uploadFile()">Next</button>
