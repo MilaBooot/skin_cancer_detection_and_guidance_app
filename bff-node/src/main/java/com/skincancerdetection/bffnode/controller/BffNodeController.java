@@ -1,6 +1,7 @@
 package com.skincancerdetection.bffnode.controller;
 
 import com.skincancerdetection.bffnode.assemble.RequestAssembler;
+import com.skincancerdetection.bffnode.enums.ErrorEnum;
 import com.skincancerdetection.bffnode.model.*;
 import com.skincancerdetection.bffnode.service.CommonService;
 import org.dozer.DozerBeanMapper;
@@ -44,8 +45,12 @@ public class BffNodeController {
 
         if (userInfoResponseDto.getPassword().equalsIgnoreCase(request.getPassword())) {
             return new ResponseEntity(response, HttpStatus.OK);
+        } else {
+            ErrorMessageDto messageDto = new ErrorMessageDto(ErrorEnum.USER_NOT_FOUND.getErrMessage());
+            CommonResponse<ErrorMessageDto> errResponse = new CommonResponse(messageDto);
+            return new ResponseEntity(ErrorEnum.USER_NOT_FOUND.getErrMessage(), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity(HttpStatus.NOT_FOUND);
+
 
     }
 

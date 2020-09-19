@@ -14,20 +14,18 @@ public class BffExceptionHandler {
 
     @ExceptionHandler(value = DuplicateEntryException.class)
     @ResponseStatus(value = HttpStatus.CONFLICT)
-    public CommonResponse handleDuplicateException(DuplicateEntryException ex) {
+    public String handleDuplicateException(DuplicateEntryException ex) {
         return getErrorReponse(ex);
     }
 
     @ExceptionHandler(value = BffNodeException.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public CommonResponse handleBffNodeException(BffNodeException ex) {
+    public String handleBffNodeException(BffNodeException ex) {
         return getErrorReponse(ex);
     }
 
 
-    private CommonResponse getErrorReponse(RuntimeException ex) {
-        ErrorMessageDto messageDto = new ErrorMessageDto(ex.getMessage());
-        CommonResponse<ErrorMessageDto> response = new CommonResponse(messageDto);
-        return response;
+    private String getErrorReponse(RuntimeException ex) {
+        return ex.getMessage();
     }
 }
