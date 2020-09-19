@@ -18,6 +18,7 @@ export class StepperComponent implements OnInit {
   @ViewChild("fileUpload", {static: false})
   fileUpload: ElementRef;
   file: File;
+  url;
   surveyQuestion: Question[];
   
   constructor(private _formBuilder: FormBuilder
@@ -51,6 +52,18 @@ uploadFile() {
     console.log(this.surveyQuestion);
     console.log(this.geolocationService.lat, this.geolocationService.lng);
 
+}
+
+onSelectFile(event) {
+  if (event.target.files && event.target.files[0]) {
+    var reader = new FileReader();
+
+    reader.readAsDataURL(event.target.files[0]); // read file as data url
+
+    reader.onload = (event) => { // called once readAsDataURL is completed
+      this.url = event.target.result;
+    }
+  }
 }
 
 receiveMessage($event) {
