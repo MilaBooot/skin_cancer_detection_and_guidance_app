@@ -5,8 +5,8 @@
     <form [formGroup]="secondFormGroup">
       <ng-template matStepLabel>Answer the Questionnaire</ng-template>
   
-      <app-questionnaire (messageEvent)="receiveMessage($event)"> </app-questionnaire>
-
+    <!--  <app-questionnaire (messageEvent)="receiveMessage($event)"> </app-questionnaire>-->
+    <app-questionnaire></app-questionnaire>
       <div>
     
         <button mat-button matStepperNext>Next</button>
