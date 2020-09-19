@@ -2,6 +2,7 @@ package com.skincancerdetection.bffnode.assemble;
 
 import com.skincancerdetection.bffnode.model.*;
 import com.skincancerdetection.bffnode.utils.AESEncryptionDecryption;
+import com.skincancerdetection.bffnode.utils.SurveyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -36,5 +37,12 @@ public class RequestAssembler {
         response.setLastname(userInfoResponseDto.getLast_name());
         response.setUsername(username);
         return response;
+    }
+
+    public ImageProcRequest assembleImageProcRequest(byte[] bytes, String username) {
+        ImageProcRequest imageProcRequest = new ImageProcRequest();
+        imageProcRequest.setByteArray(bytes);
+        imageProcRequest.setQuestions(SurveyUtil.getResponse(username).getQuestions());
+        return imageProcRequest;
     }
 }
