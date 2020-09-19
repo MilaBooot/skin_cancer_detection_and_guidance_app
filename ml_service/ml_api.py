@@ -35,14 +35,16 @@ class dataFields:
 @ml_api.route("/predict")
 class login(Resource):
 	@ml_api.expect(dataFields().predict_data())
-	@ml_api.response(200, 'Success')
+	@ml_api.response(200, '{result:{"data":{"cancer":"yes/no", "value":proablity value (float), \
+	"type": "type of cancer predicted"}}}')
 	@ml_api.response(401, 'User ID not found')
 	def post(self):
 		json_data = request.json
-		image = data["image"]
-		response = data["questions"]
+		image = json_data["image"]
+		response = json_data["questions"]
 		print(image)
 		print(response)
+		data = {"cancer":"yes", "value":0.75, "type": "Basal cell carsinoma"}
 		#try:
 	#		data = ldb.get_user_details(user_id)
 #		except KeyError:#
