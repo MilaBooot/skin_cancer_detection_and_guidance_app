@@ -11,5 +11,5 @@ import java.util.List;
 @NoArgsConstructor
 public class ImageProcRequest {
     private byte[] byteArray;
-    private List<QuestionDto> questions;
+    private List<SurveyResponseDto> questions;
 }
