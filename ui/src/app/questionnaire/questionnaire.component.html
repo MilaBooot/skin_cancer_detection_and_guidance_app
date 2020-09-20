@@ -7,7 +7,7 @@
     <mat-card-content>
         <div *ngFor="let optionRow of questionRow.options">
             <label for="{{questionRow.question}}_option_{{optionRow.id}}">
-              <input id="{{questionRow.question}}_option_{{optionRow.id}}" [value]='optionRow.id' type="radio" name="{{questionRow.question}}_option_{{optionRow.id}}" [(ngModel)]="questionRow.answer">
+              <input id="{{questionRow.question}}_option_{{optionRow.id}}" [value]='optionRow.value' type="radio" name="{{questionRow.question}}_option_{{optionRow.id}}" [(ngModel)]="questionRow.answer">
               {{optionRow.value}}
             </label>
           </div>
@@ -18,4 +18,4 @@
     </div>
     
     </mat-card>
-    <button mat-button (click)="sendMessage()">Submit</button>
+    <button mat-button (click)="uploadAnswers()">Submit</button>
