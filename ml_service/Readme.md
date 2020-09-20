@@ -8,7 +8,7 @@ pip install -r requirements.txt
 ## Run the Flask server
 HTTP server:
 ```
-FLASK_APP=lib/api_server.py flask run --port 5001
+FLASK_APP=ml_service/ml_api.py flask run --port 5001
 ```
 
 The common services api will be launched at port 5000 (localhost:5000)
