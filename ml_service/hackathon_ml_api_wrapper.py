@@ -42,5 +42,9 @@ class hackathon_ml_api_wrapper:
         else:
             return low
 
+    def evaluate_questionarie(self):
+        #Format to be decided 
 
 
+    def decision_logic(self):
+        #WIP
