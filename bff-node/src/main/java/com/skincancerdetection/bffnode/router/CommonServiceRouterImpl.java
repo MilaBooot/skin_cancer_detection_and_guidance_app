@@ -57,7 +57,7 @@ public class CommonServiceRouterImpl implements CommonServiceRouter{
 
             if (e.getStatusCode().value()== HttpStatus.CONFLICT.value()) {
                 throw new DuplicateEntryException(e.getStatusCode().getReasonPhrase()
-                        , e.getMessage()
+                        , ErrorEnum.USER_EXISTS_FOUND.getErrMessage()
                         , new RuntimeException());
 
             }
@@ -87,7 +87,7 @@ public class CommonServiceRouterImpl implements CommonServiceRouter{
             }
 
         } catch (HttpClientErrorException e) {
-            throw new BffNodeException(e.getMessage(), e);
+            throw new BffNodeException(e.getMessage(), ErrorEnum.USER_NOT_FOUND.getErrMessage(), e);
         }
         return responseEntity.getBody();
 
