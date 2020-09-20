@@ -4,12 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ImageProcRequest {
-    private byte[] image;
-    private List<SurveyResponseDto> questions;
+public class ImageProcReponse {
+    private String cancer;
+    private float value;
+    private String type;
 }

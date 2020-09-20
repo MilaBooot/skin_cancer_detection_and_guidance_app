@@ -69,9 +69,9 @@ public class BffNodeController {
             , @PathVariable("userid") String userid) throws IOException {
         byte[] imageByteArr = multipartFile.getBytes();
         ImageProcRequest imageProcRequest = requestAssembler.assembleImageProcRequest(imageByteArr, userid);
-        //invoke ML service
+        ImageProcReponse reponse = commonService.getPrediction(imageProcRequest);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(reponse, HttpStatus.OK);
     }
 
     @PostMapping("/questionnaire-reponse/{userid}/upload")

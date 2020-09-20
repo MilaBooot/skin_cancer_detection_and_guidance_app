@@ -44,7 +44,7 @@ public class RequestAssembler {
 
     public ImageProcRequest assembleImageProcRequest(byte[] bytes, String username) {
         ImageProcRequest imageProcRequest = new ImageProcRequest();
-        imageProcRequest.setByteArray(bytes);
+        imageProcRequest.setImage(bytes);
         List<SurveyResponseDto> surveyResponseDtoList = SurveyUtil.getResponse(username).getQuestions()
                 .stream()
                 .map(s -> new SurveyResponseDto(s.getId(), s.getAnswer()))
