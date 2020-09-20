@@ -4,7 +4,7 @@ export class Question {
     id: number;
     question: string;
     options: Option[];
-    answer:number;
+    answer:string;
    
 }
 

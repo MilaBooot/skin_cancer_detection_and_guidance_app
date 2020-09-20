@@ -4,13 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class QuestionDto {
-    private int id;
-    private OptionsDto[] options;
-    private String answer;
-    private String question;
-
+public class ImageProcRequest {
+    private byte[] image;
+    private List<SurveyResponseDto> questions;
 }

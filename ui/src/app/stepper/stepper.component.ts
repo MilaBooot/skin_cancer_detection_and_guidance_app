@@ -1,7 +1,8 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import { Question } from '../_models';
-import { GeolocationService } from '../_services';
+import { Question, User , Prediction} from '../_models';
+import { AlertService, AuthenticationService, GeolocationService, UserService } from '../_services';
+import { first } from 'rxjs/operators';
 
 
 @Component({
@@ -12,6 +13,7 @@ import { GeolocationService } from '../_services';
 export class StepperComponent implements OnInit {
 
   prediction = 0.0;
+  predictionModel : Prediction = null;
   isLinear = false;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
@@ -19,12 +21,17 @@ export class StepperComponent implements OnInit {
   fileUpload: ElementRef;
   file: File;
   url;
+  currentUser: User;
   surveyQuestion: Question[];
   
   constructor(private _formBuilder: FormBuilder
-    , private geolocationService: GeolocationService) {}
+    , private geolocationService: GeolocationService
+    , private userService : UserService
+    , private authenticationService: AuthenticationService
+    , private alertService: AlertService) {}
 
   ngOnInit() {
+    this.currentUser = this.authenticationService.currentUserValue;
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: ['', Validators.required]
     });
@@ -47,12 +54,28 @@ export class StepperComponent implements OnInit {
 
 uploadFile() {
   //call upload service to post the request
-   
-    console.log(this.file.name, this.file.size);
-    console.log(this.surveyQuestion);
-    console.log(this.geolocationService.lat, this.geolocationService.lng);
+    const uploadData = new FormData();
+    uploadData.append("image", this.file, this.file.name);
+    this.userService.upload(uploadData, this.currentUser)
+    .pipe(first())
+    .subscribe(
+        data => {
+           this.predictionModel = data;
+        },
+        error => {
+            this.alertService.error(error);
+          
+        });;
 
 }
+
+ isEmpty():boolean {
+   if (this.predictionModel == null) {
+     return true;
+   } else {
+     return false;
+   }
+ }
 
 onSelectFile(event) {
   if (event.target.files && event.target.files[0]) {
@@ -66,11 +89,12 @@ onSelectFile(event) {
   }
 }
 
+/*
 receiveMessage($event) {
   this.surveyQuestion = $event
 }
 
-
+*/
 
 }
 
