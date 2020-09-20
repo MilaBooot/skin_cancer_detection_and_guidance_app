@@ -1,4 +1,6 @@
 import psycopg2
+import logging
+
 
 
 class dbConnect:
@@ -10,7 +12,7 @@ class dbConnect:
             print("Login failed %s" %errmsg)
         
     def get_login_creds(self, user_id):
-        query = """SELECT password FROM user_data.user_details WHERE user_id='%s'""" % (user_id,)
+        query = """SELECT password FROM app_data.user_details WHERE user_id='%s'""" % (user_id,)
         self.cur.execute(query)
         password = self.cur.fetchall()
         if len(password) > 0:
@@ -20,7 +22,7 @@ class dbConnect:
         return password
 
     def get_user_details(self, user_id):
-        query = """SELECT * FROM user_data.user_details WHERE user_id='%s'""" % (user_id,)
+        query = """SELECT * FROM app_data.user_details WHERE user_id='%s'""" % (user_id,)
         self.cur.execute(query)
         result = self.cur.fetchall()
         if len(result) > 0:
@@ -34,19 +36,20 @@ class dbConnect:
         return ret
     
     def get_user_ids(self):
-        self.cur.execute("""SELECT user_id FROM user_data.user_details""")
+        self.cur.execute("""SELECT user_id FROM app_data.user_details""")
         user_ids = self.cur.fetchall()
         user_ids = [uid[0] for uid in user_ids]
         return user_ids
 
     def insert_value(self, user_id, password, first_name, last_name, dob, gender):
         try:
-            insert_query = """INSERT INTO user_data.user_details (user_id, password, first_name, last_name, dob, gender) VALUES (%s, %s, %s, %s, %s, %s)"""
+            insert_query = """INSERT INTO app_data.user_details (user_id, password, first_name, last_name, dob, gender) VALUES (%s, %s, %s, %s, %s, %s)"""
             to_insert = (user_id, password, first_name, last_name, dob, gender)
             self.cur.execute(insert_query, to_insert)
             self.db.commit()
             count = self.cur.rowcount
-        except Exception:
+        except Exception as errmsg:
+            print(errmsg)
             self.db.rollback()
             raise Exception("DB insert operation failed")
         return ("%s Record inserted successfully into user_registration table" % count)
@@ -54,9 +57,9 @@ class dbConnect:
     def get_questions(self, id=None):
         ret = []
         if id is None:
-            self.cur.execute("""SELECT * FROM questionaire_data.questions""")
+            self.cur.execute("""SELECT * FROM app_data.questionnaire""")
         else:
-            self.cur.execute("""SELECT * FROM questionaire_data.questions WHERE id='%s'""" % (id,))
+            self.cur.execute("""SELECT * FROM app_data.questionnaire WHERE id='%s'""" % (id,))
         questions = self.cur.fetchall()
         for question in questions:
             options = self.get_options(question[2])
@@ -65,6 +68,8 @@ class dbConnect:
                     "options": options,
                     "answer": 0}
             ret.append(data)
+        if len(ret) == 0:
+            raise KeyError()
         return ret
 
     def get_options(self, ans_ids):
@@ -72,10 +77,12 @@ class dbConnect:
         if not isinstance(ans_ids, list):
             ans_ids = [ans_ids]
         for id in ans_ids:
-            self.cur.execute("""SELECT * FROM questionaire_data.answers WHERE id='%s'""" % (id,))
+            self.cur.execute("""SELECT * FROM app_data.answers WHERE id='%s'""" % (id,))
             answer = self.cur.fetchall()
             answer = {"id":id, "value": answer[0][1]}
             ret.append(answer)
+        if len(ret) == 0:
+            raise KeyError()
         return ret
 
     def __del__(self):

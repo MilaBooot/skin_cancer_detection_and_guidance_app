@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, redirect
 #Workaround for the bug in https://github.com/jarus/flask-testing/issues/143
 import werkzeug
 werkzeug.cached_property = werkzeug.utils.cached_property
@@ -123,8 +123,9 @@ class getQuestions(Resource):
 	@common_services_api.response(401, 'Resource not found')
 	def get(self, id):
 		id = int(id)
-		data = db.get_questions(id)
-		if len(data) == 0:
+		try:
+			data = db.get_questions(id)
+		except KeyError:
 			abort(401, result="question id NOT FOUND")
 		return msgFormats().data_msg(data)
 
