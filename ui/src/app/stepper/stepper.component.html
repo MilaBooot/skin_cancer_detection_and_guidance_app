@@ -31,7 +31,16 @@
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Result</ng-template>
-    <p>Prediction: {{prediction}}</p>
+    <div class="comeBack_up" *ngIf="isEmpty()">
+      <img src="/assets/image/loading.gif" />
+  </div>
+
+  <div class="comeBack_up" *ngIf="!isEmpty()">
+    <p>Cancer Recognised: {{predictionModel.cancer}}</p><br>
+    <p>Risk Factor: {{predictionModel.value}}</p><br>
+    <p>Type: {{predictionModel.type}}</p>
+  </div>
+
     <div>
       <button mat-button matStepperPrevious>Back</button>
       <button mat-button (click)="stepper.reset()">Reset</button>
