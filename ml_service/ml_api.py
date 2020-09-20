@@ -4,6 +4,11 @@ import werkzeug
 werkzeug.cached_property = werkzeug.utils.cached_property
 from flask_restplus import Api, Resource, fields, abort
 import json
+import base64
+from PIL import Image
+import io
+import numpy as np
+import cv2
 
 flask_app = Flask(__name__)
 app = Api(app = flask_app)
@@ -42,8 +47,8 @@ class login(Resource):
 		json_data = request.json
 		image = json_data["image"]
 		response = json_data["questions"]
-		print(image)
-		print(response)
+		image_data = self.convert_imgdata(image)
+		cv2.imwrite("out.jpg", image_data)
 		data = {"cancer":"yes", "value":0.75, "type": "Basal cell carsinoma"}
 		#try:
 	#		data = ldb.get_user_details(user_id)
@@ -51,3 +56,7 @@ class login(Resource):
 			#abort(401, result=msgFormats().error_msg("User ID not found"))
 		return msgFormats().data_msg(data)
 
+	def convert_imgdata(self, img_str):
+		imgdata = base64.b64decode(img_str)
+		image = Image.open(io.BytesIO(imgdata))
+		return cv2.cvtColor(np.array(image), cv2.COLOR_BGR2RGB)
