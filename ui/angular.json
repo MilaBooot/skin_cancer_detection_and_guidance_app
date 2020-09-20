@@ -123,5 +123,8 @@
       }
     }
   },
-  "defaultProject": "skin-cancer-detection-ui"
+  "defaultProject": "skin-cancer-detection-ui",
+  "cli": {
+    "analytics": false
+  }
 }
