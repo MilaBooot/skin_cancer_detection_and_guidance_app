@@ -7,10 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class QuestionDto {
-    private int id;
-    private OptionsDto[] options;
-    private String answer;
-    private String question;
-
+public class ImageProcReponse {
+    private String cancer;
+    private float value;
+    private String type;
 }

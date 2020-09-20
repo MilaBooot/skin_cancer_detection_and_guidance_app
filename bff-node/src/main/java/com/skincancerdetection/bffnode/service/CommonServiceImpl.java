@@ -3,6 +3,7 @@ package com.skincancerdetection.bffnode.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skincancerdetection.bffnode.model.*;
 import com.skincancerdetection.bffnode.router.CommonServiceRouter;
+import com.skincancerdetection.bffnode.router.MlServiceRouter;
 import com.skincancerdetection.bffnode.utils.AESEncryptionDecryption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,9 @@ public class CommonServiceImpl implements CommonService{
 
     @Autowired
     private CommonServiceRouter commonServiceRouter;
+
+    @Autowired
+    private MlServiceRouter mlServiceRouter;
 
     @Autowired
     private ObjectMapper mapper;
@@ -47,6 +51,15 @@ public class CommonServiceImpl implements CommonService{
         CommonResponse<CommonArrResponseData> response = commonServiceRouter.getQuestionnaire();
         responseData = mapper.convertValue(response.getResult(), CommonArrResponseData.class);
         return Arrays.asList(mapper.convertValue(responseData.getData(), QuestionDto[].class));
+
+    }
+
+    public ImageProcReponse getPrediction(ImageProcRequest imageProcRequest) {
+        CommonResponseData<ImageProcReponse> responseData = new CommonResponseData<>();
+        CommonResponse<CommonResponseData> response = mlServiceRouter.processImage(imageProcRequest);
+        responseData = (CommonResponseData<ImageProcReponse>)mapper
+                .convertValue(response.getResult(), CommonResponseData.class);
+        return mapper.convertValue(responseData.getData(), ImageProcReponse.class);
 
     }
 

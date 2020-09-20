@@ -7,10 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class QuestionDto {
+public class SurveyResponseDto {
     private int id;
-    private OptionsDto[] options;
     private String answer;
-    private String question;
-
 }
