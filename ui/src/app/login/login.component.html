@@ -1,26 +1,33 @@
 <div class="container-fluid">
     <div class = "row">
+        
       
-        <div class="col-md-6">
-    <H1>Skin Cancer Detection App</H1>
-<p>
-first step in the proposed framework is a preprocessing step, where the image is corrected for illumination variation (i.e. the presence of shadows and brightly illuminated areas).
- Our approach to the problem of correcting is a multi-stage illumination modeling algorithm. We assume an illumination-reflectance multiplicative model where each pixel from the Value colour channel (in the HSV colour space) can be decomposed into an illumination component and a reflectance component. The goal of the algorithm is to first estimate the illumination component and calculate the reflectance component using that illumination estimate.
-</p>
-
-        </div>
-
+    
+        <div class="col-md-5">
+            <H1 style="text-align:center;">Skin Cancer Detection App</H1>
+             <div class="col-md-1 offset-sm-1">
+                 <img src="/assets/image/app-logo.png" width="200" height="200"  class="logo-image"/>
+                </div> 
+                <p style="text-align:center;">Skin cancer detection made easier. Get early predictions now.</p>
+            </div>
+        
         <div class="col-md-6">
 
             <h2>Login</h2>
             <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
-            <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+            
+                <label for="username">Username</label>
+            
+                <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+            
+                <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
                 <div *ngIf="f.username.errors.required">Username is required</div>
-            </div>
+             </div>
+       
+         
         </div>
+        
         <div class="form-group">
             <label for="password">Password</label>
             <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
