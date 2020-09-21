@@ -3,10 +3,7 @@ package com.skincancerdetection.bffnode.router;
 import com.skincancerdetection.bffnode.enums.ErrorEnum;
 import com.skincancerdetection.bffnode.exception.BffNodeException;
 import com.skincancerdetection.bffnode.exception.DuplicateEntryException;
-import com.skincancerdetection.bffnode.model.CommonResponse;
-import com.skincancerdetection.bffnode.model.ErrorMessageDto;
-import com.skincancerdetection.bffnode.model.UserDetailsDto;
-import com.skincancerdetection.bffnode.model.UserInfoRequestDto;
+import com.skincancerdetection.bffnode.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -33,6 +30,11 @@ public class CommonServiceRouterImpl implements CommonServiceRouter{
 
     @Value("${common.service.questionnaire.endpoint}")
     private String questionnaireEndpoint;
+
+
+    @Value("${common.service.doctors.endpoint}")
+    private String doctorsEndpoint;
+
 
     @Autowired
     private RestTemplate restTemplate;
@@ -100,6 +102,30 @@ public class CommonServiceRouterImpl implements CommonServiceRouter{
         try {
             responseEntity = restTemplate
                     .getForEntity(url, CommonResponse.class);
+            if (responseEntity.getStatusCode().value()!= HttpStatus.OK.value()) {
+                throw new BffNodeException(responseEntity.getStatusCode().getReasonPhrase()
+                        , ErrorEnum.COMMON_SERVICE_ERROR.getErrMessage()
+                        , new RuntimeException());
+
+            }
+
+        } catch (HttpClientErrorException e) {
+            throw new BffNodeException(e.getMessage(), e);
+        }
+        return responseEntity.getBody();
+    }
+
+    @Override
+    public CommonResponse getDoctors(double longitude, double latitude) {
+        final String url = new StringBuilder(commonServiceUrl).append(doctorsEndpoint).toString();
+        ResponseEntity<CommonResponse> responseEntity = null;
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
+                .queryParam("latitude",latitude)
+                .queryParam("longitude", longitude);
+
+        try {
+            responseEntity = restTemplate
+                    .getForEntity(builder.toUriString(), CommonResponse.class);
             if (responseEntity.getStatusCode().value()!= HttpStatus.OK.value()) {
                 throw new BffNodeException(responseEntity.getStatusCode().getReasonPhrase()
                         , ErrorEnum.COMMON_SERVICE_ERROR.getErrMessage()

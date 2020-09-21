@@ -9,5 +9,6 @@ public interface CommonService {
     UserInfoResponseDto retrieveUser(UserInfoRequestDto userInfoRequestDto);
     List<QuestionDto> getQuestionnaire();
     public ImageProcReponse getPrediction(ImageProcRequest imageProcRequest);
+    List<DoctorDetailsDto> getDoctors(double longitude, double latitude);
 
 }
