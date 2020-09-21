@@ -23,4 +23,9 @@ export class HomeComponent implements OnInit {
     ngOnInit() {
   }
 
+  checkImageProcessed():boolean {
+    return this.userService.checkImageProcessed();
+
+  }
+
 }

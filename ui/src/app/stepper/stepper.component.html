@@ -1,7 +1,7 @@
 
 <mat-horizontal-stepper [linear]="isLinear" #stepper>
 
-  <mat-step [stepControl]="secondFormGroup">
+  <mat-step [stepControl]="secondFormGroup" >
     <form [formGroup]="secondFormGroup">
       <ng-template matStepLabel>Answer the Questionnaire</ng-template>
   
@@ -36,9 +36,8 @@
   </div>
 
   <div class="comeBack_up" *ngIf="!isEmpty()">
-    <p>Cancer Recognised: {{predictionModel.cancer}}</p><br>
-    <p>Risk Factor: {{predictionModel.value}}</p><br>
-    <p>Type: {{predictionModel.type}}</p>
+    <p>Risk Factor: <b>{{predictionModel.value}}</b> <br>
+    Type:  <b>{{predictionModel.type}}</b></p>
   </div>
 
     <div>
@@ -47,3 +46,5 @@
     </div>
   </mat-step>
 </mat-horizontal-stepper>
+
+
