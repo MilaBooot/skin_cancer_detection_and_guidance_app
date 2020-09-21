@@ -81,5 +81,13 @@ public class BffNodeController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @GetMapping("/doctors/{longitude}/{latitude}")
+    public ResponseEntity getDoctors(@PathVariable("longitude") double longitude
+            , @PathVariable("latitude") double latitude) {
+        DoctorEnquiryReponse reponse = new DoctorEnquiryReponse();
+        reponse.setDoctors(commonService.getDoctors(longitude, latitude));
+        return new ResponseEntity(reponse, HttpStatus.OK);
+    }
+
 
 }

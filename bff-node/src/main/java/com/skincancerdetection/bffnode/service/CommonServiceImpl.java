@@ -63,4 +63,12 @@ public class CommonServiceImpl implements CommonService{
 
     }
 
+    @Override
+    public List<DoctorDetailsDto> getDoctors(double longitude, double latitude) {
+        CommonArrResponseData<DoctorDetailsDto[]> responseData = new CommonArrResponseData<>();
+        CommonResponse<CommonArrResponseData> response = commonServiceRouter.getDoctors(longitude, latitude);
+        responseData = mapper.convertValue(response.getResult(), CommonArrResponseData.class);
+        return Arrays.asList(mapper.convertValue(responseData.getData(), DoctorDetailsDto[].class));
+    }
+
 }
