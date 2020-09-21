@@ -5,12 +5,14 @@ import { RegisterComponent } from './register';
 import { HomeComponent } from './home';
 import { AboutComponent } from './about';
 import { AuthGuard } from './_helpers';
+import { PolicyComponent } from './policy/policy.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'about', component: AboutComponent }, 
+  { path: 'info', component: PolicyComponent }, 
   // otherwise redirect to home
   { path: '**', redirectTo: '' }
 ];

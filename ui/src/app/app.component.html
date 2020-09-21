@@ -1,10 +1,50 @@
 <!-- nav -->
 <nav class="navbar navbar-expand navbar-dark bg-dark" *ngIf="currentUser">
-  <div class="navbar-nav">
-      <a class="nav-item nav-link" routerLink="/">Home</a>
-      <a class="nav-item nav-link" routerLink="about">About</a>
-      <a class="nav-item nav-link" (click)="logout()">Logout</a>
+  <div class="navbar-header">
+    <a class="navbar-brand" href="#">Skin Cancer Detection App</a>
   </div>
+  <div class="container-fluid">
+    
+  <ul class="nav navbar-nav navbar-left">
+  <div class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/">Home</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="about">About</a>
+    </li>
+
+    <li class="nav-item" *ngIf="check()">
+      <a class="nav-link" routerLink="info">Information</a>
+    </li>
+
+    
+      <!--
+     
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li>
+    -->
+
+  </div>
+</ul>
+
+<ul class="nav navbar-nav navbar-right">
+
+  <div class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link" (click)="logout()">Logout</a>
+    </li>
+
+    
+  </div>
+</ul>
+</div>
 </nav>
 
 <!-- main app container -->

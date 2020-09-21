@@ -27,6 +27,14 @@ export class GeolocationService {
       });
     }
   }
+
+  getLatitude():number {
+    return this.lat;
+  }
+
+  getLongitude():number {
+    return this.lng;
+  }
   
   async getDirection() {
 

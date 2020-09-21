@@ -12,7 +12,6 @@ import { first } from 'rxjs/operators';
 })
 export class StepperComponent implements OnInit {
 
-  prediction = 0.0;
   predictionModel : Prediction = null;
   isLinear = false;
   firstFormGroup: FormGroup;
@@ -23,9 +22,12 @@ export class StepperComponent implements OnInit {
   url;
   currentUser: User;
   surveyQuestion: Question[];
+  width;
+  height;
+
+
   
   constructor(private _formBuilder: FormBuilder
-    , private geolocationService: GeolocationService
     , private userService : UserService
     , private authenticationService: AuthenticationService
     , private alertService: AlertService) {}
@@ -42,16 +44,20 @@ export class StepperComponent implements OnInit {
 
   onClick() {  
     const fileUpload = this.fileUpload.nativeElement; 
+  
     fileUpload.onchange = () => {  
       for (let index = 0; index < fileUpload.files.length; index++)  {  
-        this.file = fileUpload.files[0];  
-     }
-    // this.uploadFile(); 
-
-    };
+        this.file = fileUpload.files[0]; 
+      }
+  
+  };
+ 
     fileUpload.click();  
 }
 
+reset() {
+  this.userService.setCancerDetected("no");
+}
 uploadFile() {
   //call upload service to post the request
     const uploadData = new FormData();
@@ -61,11 +67,15 @@ uploadFile() {
     .subscribe(
         data => {
            this.predictionModel = data;
+           this.userService.setCancerDetected(this.predictionModel.cancer);
+           this.userService.setImageProcessed();
         },
         error => {
             this.alertService.error(error);
           
         });;
+
+    
 
 }
 
