@@ -15,8 +15,8 @@ from hackathon_deep_learning_using_transfer_learning import deep_learning_model_
 DATASETDIR = ''  # Parent directory of videos
 IMAGE_SIZE = 256  # Image Size
 IMAGE_DIMENSION = 3
-CLASS = 9  # This is a multiclass classification problem - has 9 classes
-LABEL = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+CLASS = 9  # This is a multiclass classification problem - has 7 classes
+LABEL = [0, 1, 2, 3, 4, 5, 6]
 EPOCH = 1
 BATCH_SIZE = 1
 STEPS_PER_EPOCH_TRAINING = 1  #Training images processed in each step would be no. of train images/STEPS_PER_EPOCH_TRAINING
@@ -88,7 +88,8 @@ class hackathon_skin_cancer_detection_top:
         DLM.test_model(test_generator=test_generator, model=trained_model, NUM_TEST_IMAGES=NUM_TEST_IMAGES)
 
         print('Time to predict your model')
-        DLM.predict_model(model=trained_model)
+        #USER_IMAGE = user image path
+        probability, type = DLM.predict_model(model=trained_model, predict_image=USER_IMAGE)
         print('Congratulations - Deep learning model is created ')
 
 
