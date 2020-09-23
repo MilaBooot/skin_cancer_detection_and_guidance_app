@@ -82,3 +82,4 @@ if __name__ == "__main__":
     #X_train, y_train = DSC.create_data_set(DATASETDIR=DATASETDIR, LABEL=LABEL, IMAGE_SIZE=IMAGE_SIZE)
 
     print('Hurrayyyyyy Enjoy Life :)')
+#####################################################################################EOF####################################################################
