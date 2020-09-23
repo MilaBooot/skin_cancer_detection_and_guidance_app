@@ -131,14 +131,17 @@ if __name__ == "__main__":
     DLM = deep_learning_model_creation()
 
     print('Deep learning model creation is in progress - Layer addition is happening')
-    created_model = DLM.deep_learning_model_creation_using_transfer_learning(MODEL_OPTIMIZER=MODEL_OPTIMIZER, MODEL_LOSS=MODEL_LOSS,
-                                                             LOSS_METRICS=LOSS_METRICS,
-                                                             RESNET50_POOLING_AVERAGE=RESNET50_POOLING_AVERAGE,
-                                                             FIRST_DENSE_LAYER_ACTIVATION=FIRST_DENSE_LAYER_ACTIVATION,
-                                                             OUTPUT_LAYER_ACTIVATION=OUTPUT_LAYER_ACTIVATION,
-                                                             SECOND_DENSE_LAYER_ACTVIVATION=SECOND_DENSE_LAYER_ACTVIVATION,
-                                                             FIRST_DENSE_LAYER_NEURONS=FIRST_DENSE_LAYER_NEURONS,
-                                                             SECOND_DENSE_LAYER_NEURONS=SECOND_DENSE_LAYER_NEURONS)
+    created_model = DLM.deep_learning_model_creation_using_transfer_learning(
+                                                           MODEL_OPTIMIZER=MODEL_OPTIMIZER, 
+                                                           MODEL_LOSS=MODEL_LOSS,
+                                                           LOSS_METRICS=LOSS_METRICS,
+                                                           RESNET50_POOLING_AVERAGE=RESNET50_POOLING_AVERAGE,
+                                                           FIRST_DENSE_LAYER_ACTIVATION=FIRST_DENSE_LAYER_ACTIVATION,
+                                                           OUTPUT_LAYER_ACTIVATION=OUTPUT_LAYER_ACTIVATION,
+                                                           SECOND_DENSE_LAYER_ACTVIVATION=SECOND_DENSE_LAYER_ACTVIVATION,
+                                                           FIRST_DENSE_LAYER_NEURONS=FIRST_DENSE_LAYER_NEURONS,
+                                                           SECOND_DENSE_LAYER_NEURONS=SECOND_DENSE_LAYER_NEURONS
+                                                           )
 
     print('Train/Validation/Test data generation is in progress')
     train_generator, validation_generator, test_generator, cb_checkpointer, cb_early_stopper = DLM.create_data_set \
@@ -158,4 +161,6 @@ if __name__ == "__main__":
 
     print('Time to predict your model')
     #USER_IMAGE= <IMAGE INPUT FROM USER>
-    probability, type = DLM.predict_model(model=trained_mod
+    probability, type = DLM.predict_model(model=trained_model, USER_IMAGE=USER_IMAGE)
+    
+   #####################################################################EOF####################################################################
