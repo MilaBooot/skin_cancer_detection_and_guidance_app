@@ -114,3 +114,5 @@ if __name__ == "__main__":
                                       BATCH_SIZE_TESTING=BATCH_SIZE_TESTING, EARLY_STOP_PATIENCE=EARLY_STOP_PATIENCE,
                                       STEPS_PER_EPOCH_TRAINING=STEPS_PER_EPOCH_TRAINING,
                                       STEPS_PER_EPOCH_VALIDATION=STEPS_PER_EPOCH_VALIDATION, NUM_TEST_IMAGES=NUM_TEST_IMAGES)
+    
+#####################################################################################EOF####################################################################
