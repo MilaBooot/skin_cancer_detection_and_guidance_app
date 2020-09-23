@@ -1,4 +1,4 @@
-#######################################################################################################################
+########################################################################################################################
 # Name of file: hackathon_deep_learning_using_transfer_learning.py
 # Description: This file uses transfer learning technique
 # Revision: 1.0
@@ -18,18 +18,18 @@ from tensorflow.python.keras.callbacks import EarlyStopping, ModelCheckpoint
 #%matplotlib inline
 
 #Global Variables
-DATASETDIR = ''  # Parent directory of videos
+DATASETDIR = ''  #Parent directory of videos
 IMAGE_SIZE = 256  # Image Size
 IMAGE_DIMENSION = 3
-CLASS = 3  #This is a multiclass classification problem - has 9 classes
-LABEL = [0, 1, 2, 3, 4, 5, 6, 7, 8]
-EPOCH = 1
-BATCH_SIZE = 1
-STEPS_PER_EPOCH_TRAINING = 1  #Training images processed in each step would be no.-of-train-images / STEPS_PER_EPOCH_TRAINING
-STEPS_PER_EPOCH_VALIDATION = 1
-BATCH_SIZE_TRAINING = 1
-BATCH_SIZE_VALIDATION = 1
-BATCH_SIZE_TESTING = 1
+CLASS = 7  #This is a multiclass classification problem - has 7 classes
+LABEL = [0, 1, 2, 3, 4, 5, 6]
+EPOCH = 100
+BATCH_SIZE = 100
+STEPS_PER_EPOCH_TRAINING = 10  #Training images processed in each step would be no.-of-train-images / STEPS_PER_EPOCH_TRAINING
+STEPS_PER_EPOCH_VALIDATION = 10
+BATCH_SIZE_TRAINING = 10
+BATCH_SIZE_VALIDATION = 10
+BATCH_SIZE_TESTING = 10
 EARLY_STOP_PATIENCE = 3  #EARLY_STOP_PATIENCE < EPOCH
 NUM_TEST_IMAGES = 10
 
@@ -73,26 +73,27 @@ class deep_learning_model_creation:
         data_generator = ImageDataGenerator(preprocessing_function=preprocess_input)
 
         train_generator = data_generator.flow_from_directory(
-            DATASETDIR + 'Train', target_size=(IMAGE_SIZE, IMAGE_SIZE),
-            batch_size=BATCH_SIZE_TRAINING,
-            class_mode=CLASS_MODE
-        )
+                                                             DATASETDIR + 'Train', 
+                                                             target_size=(IMAGE_SIZE, IMAGE_SIZE),
+                                                             batch_size=BATCH_SIZE_TRAINING,
+                                                             class_mode=CLASS_MODE
+                                                             )
 
         validation_generator = data_generator.flow_from_directory(
-            DATASETDIR + 'Validation',
-            target_size=(IMAGE_SIZE, IMAGE_SIZE),
-            batch_size=BATCH_SIZE_VALIDATION,
-            class_mode=CLASS_MODE
-        )
+                                                                  DATASETDIR + 'Validation',
+                                                                  target_size=(IMAGE_SIZE, IMAGE_SIZE),
+                                                                  batch_size=BATCH_SIZE_VALIDATION,
+                                                                  class_mode=CLASS_MODE
+                                                                  )
 
         test_generator = data_generator.flow_from_directory(
-            directory=DATASETDIR + 'Test',
-            target_size=(IMAGE_SIZE, IMAGE_SIZE),
-            batch_size=BATCH_SIZE_TESTING,
-            class_mode=None,
-            shuffle=False,
-            seed=123
-        )
+                                                            directory=DATASETDIR + 'Test',
+                                                            target_size=(IMAGE_SIZE, IMAGE_SIZE),
+                                                            batch_size=BATCH_SIZE_TESTING,
+                                                            class_mode=None,
+                                                            shuffle=False,
+                                                            seed=123
+                                                            )
 
         (BATCH_SIZE_TRAINING, len(train_generator), BATCH_SIZE_VALIDATION, len(validation_generator))
 
@@ -119,8 +120,11 @@ class deep_learning_model_creation:
         scores = model.predict_generator(test_generator, NUM_TEST_IMAGES)  # 1514 testing images
         print("Accuracy = ", scores[1])
 
-    def predict_model(self,model):
+    def predict_model(self, model, predict_image):
+        predictions = model.predict_generatot(predict_image, 1)
+        y_pred = np.argmax(predictions, axis=1) #index of class with highest accuracy
         print('This module is WIP')
+        return predictions[y_pred], y_pred
 
 if __name__ == "__main__":
     print('Creating class handles')
@@ -153,4 +157,5 @@ if __name__ == "__main__":
     DLM.test_model(test_generator=test_generator, model=trained_model, NUM_TEST_IMAGES=NUM_TEST_IMAGES)
 
     print('Time to predict your model')
-    DLM.predict_model(model=trained_model)
+    #USER_IMAGE= <IMAGE INPUT FROM USER>
+    probability, type = DLM.predict_model(model=trained_mod
