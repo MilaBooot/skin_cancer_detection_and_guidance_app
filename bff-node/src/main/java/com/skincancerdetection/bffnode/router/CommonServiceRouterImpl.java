@@ -3,7 +3,11 @@ package com.skincancerdetection.bffnode.router;
 import com.skincancerdetection.bffnode.enums.ErrorEnum;
 import com.skincancerdetection.bffnode.exception.BffNodeException;
 import com.skincancerdetection.bffnode.exception.DuplicateEntryException;
-import com.skincancerdetection.bffnode.model.*;
+import com.skincancerdetection.bffnode.model.CommonResponse;
+import com.skincancerdetection.bffnode.model.UserDetailsDto;
+import com.skincancerdetection.bffnode.model.UserInfoRequestDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -13,11 +17,10 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Component
 public class CommonServiceRouterImpl implements CommonServiceRouter{
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommonServiceRouterImpl.class);
 
     @Value("${common.service.url}")
     private String commonServiceUrl;
@@ -41,6 +44,7 @@ public class CommonServiceRouterImpl implements CommonServiceRouter{
 
     @Override
     public CommonResponse registerUser(UserDetailsDto userDetailsDto) {
+
         final String url = new StringBuilder(commonServiceUrl).append(userRegistrationEndpoint).toString();
         ResponseEntity<CommonResponse> responseEntity = null;
 
@@ -56,6 +60,7 @@ public class CommonServiceRouterImpl implements CommonServiceRouter{
             }
 
         } catch (HttpClientErrorException e) {
+            LOGGER.error(e.getMessage());
 
             if (e.getStatusCode().value()== HttpStatus.CONFLICT.value()) {
                 throw new DuplicateEntryException(e.getStatusCode().getReasonPhrase()
@@ -89,6 +94,7 @@ public class CommonServiceRouterImpl implements CommonServiceRouter{
             }
 
         } catch (HttpClientErrorException e) {
+            LOGGER.error(e.getMessage());
             throw new BffNodeException(e.getMessage(), ErrorEnum.USER_NOT_FOUND.getErrMessage(), e);
         }
         return responseEntity.getBody();
@@ -110,6 +116,7 @@ public class CommonServiceRouterImpl implements CommonServiceRouter{
             }
 
         } catch (HttpClientErrorException e) {
+            LOGGER.error(e.getMessage());
             throw new BffNodeException(e.getMessage(), e);
         }
         return responseEntity.getBody();
@@ -123,6 +130,8 @@ public class CommonServiceRouterImpl implements CommonServiceRouter{
                 .queryParam("latitude",latitude)
                 .queryParam("longitude", longitude);
 
+        LOGGER.info("latitude: " +  latitude + ", longitude: " + longitude);
+
         try {
             responseEntity = restTemplate
                     .getForEntity(builder.toUriString(), CommonResponse.class);
@@ -134,6 +143,7 @@ public class CommonServiceRouterImpl implements CommonServiceRouter{
             }
 
         } catch (HttpClientErrorException e) {
+            LOGGER.error(e.getMessage());
             throw new BffNodeException(e.getMessage(), e);
         }
         return responseEntity.getBody();

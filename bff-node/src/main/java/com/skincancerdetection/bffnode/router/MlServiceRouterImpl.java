@@ -4,6 +4,8 @@ import com.skincancerdetection.bffnode.enums.ErrorEnum;
 import com.skincancerdetection.bffnode.exception.BffNodeException;
 import com.skincancerdetection.bffnode.model.CommonResponse;
 import com.skincancerdetection.bffnode.model.ImageProcRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 public class MlServiceRouterImpl implements MlServiceRouter{
+    private static final Logger LOGGER = LoggerFactory.getLogger(MlServiceRouterImpl.class);
 
     @Autowired
     private RestTemplate restTemplate;
@@ -37,6 +40,7 @@ public class MlServiceRouterImpl implements MlServiceRouter{
             }
 
         } catch (HttpClientErrorException e) {
+            LOGGER.error(e.getMessage());
             throw new BffNodeException(e.getMessage(), ErrorEnum.ML_SERVICE_ERROR.getErrMessage(), e);
         }
         return responseEntity.getBody();
