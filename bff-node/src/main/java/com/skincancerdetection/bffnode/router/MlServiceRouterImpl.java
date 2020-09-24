@@ -21,7 +21,7 @@ public class MlServiceRouterImpl implements MlServiceRouter{
     @Autowired
     private RestTemplate restTemplate;
 
-    @Value("${ml.service.url}")
+    @Value("${ml.service.url:http://localhost:5001/mlService/predict}")
     private String mlServiceUrl;
 
 
