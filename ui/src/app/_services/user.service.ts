@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Doctor, Prediction, User } from '../_models';
 import { map } from 'rxjs/operators';
 import { AlertService } from './alert.service';
 import { Observable } from 'rxjs';
 import { GeolocationService } from './geolocation.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -20,20 +21,21 @@ export class UserService {
 
   register(user: User) {
     console.log(user);
-    return this.http.post(`/bff/api/register`, user);
+
+    return this.http.post(environment.baseUrl + '/bff/api/register' , user);
 }
 
   upload(uploadForm: FormData, user: User):Observable<Prediction> {
   
-    return this.http.post<Prediction>(`/bff/api/image/`+ encodeURIComponent(user.username) + `/upload`, uploadForm)
+    return this.http.post<Prediction>(environment.baseUrl + '/bff/api/image/'+ encodeURIComponent(user.username) + '/upload', uploadForm)
     .pipe(map( result => {
       console.log(result);
       return result}));
   }
 
   getDoctorInfo():Observable<Doctor[]> {
-    return this.http.get<Doctor[]>(`/bff/api/doctors/`+ encodeURIComponent(this.geolocationService.getLongitude())
-     + `/` + encodeURIComponent(this.geolocationService.getLatitude()))
+    return this.http.get<Doctor[]>(environment.baseUrl + '/bff/api/doctors/' + encodeURIComponent(this.geolocationService.getLongitude())
+     + '/' + encodeURIComponent(this.geolocationService.getLatitude()))
     .pipe(map( result => {
       console.log(result['doctors']);
       return result['doctors']}));
