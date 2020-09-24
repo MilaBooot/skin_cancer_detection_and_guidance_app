@@ -22,7 +22,7 @@ public class CommonServiceRouterImpl implements CommonServiceRouter{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CommonServiceRouterImpl.class);
 
-    @Value("${common.service.url}")
+    @Value("${common.service.url:http://localhost:5000}")
     private String commonServiceUrl;
 
     @Value("${common.service.user.registration.endpoint}")

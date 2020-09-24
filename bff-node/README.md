@@ -12,6 +12,13 @@ Backend-for-Frontend (BFF) developed using Java and Spring Boot
 
 `$ gradle clean build -xtest`
 
+####Set environment varaiables
+
+`BFF_PORT=8081`
+`FRONT_END_URL=http://localhost:4200`
+`COMMON_SERVICE_URL=http://localhost:5000`
+`ML_SERVICE_URL=http://localhost:5001/mlService/predict`
+
 
 ####Run
 
