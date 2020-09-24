@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { User } from './_models';
 import { AuthenticationService, UserService } from './_services';
 
+
 @Component({
   selector: 'app',
   templateUrl: './app.component.html'
@@ -11,6 +12,7 @@ import { AuthenticationService, UserService } from './_services';
 export class AppComponent {
   title = 'skin-cancer-detection-ui';
   currentUser: User;
+
 
     constructor(
         private router: Router,
@@ -21,8 +23,10 @@ export class AppComponent {
     }
 
     logout() {
-        this.authenticationService.logout();
-        this.router.navigate(['/login']);
+      console.log(this.currentUser.lastname);
+      
+      this.authenticationService.logout();
+      this.router.navigate(['/login']);
     }
 
     check(): boolean {

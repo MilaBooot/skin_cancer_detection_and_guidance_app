@@ -21,6 +21,8 @@ import {MatButtonModule} from '@angular/material/button';
 import { QuestionnaireComponent } from './questionnaire/questionnaire.component';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatTableModule} from '@angular/material/table';
+import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
+import {GoogleLoginProvider} from 'angularx-social-login';
 
 
  
@@ -52,11 +54,25 @@ import {MatTableModule} from '@angular/material/table';
     MatIconModule,
     MatButtonModule,
     MatPaginatorModule,
-    MatTableModule
+    MatTableModule,
+    SocialLoginModule
 
 
   ],
-  providers: [ ],
+  providers: [ {
+    provide: 'SocialAuthServiceConfig',
+    useValue: {
+      autoLogin: false,
+      providers: [
+        {
+          id: GoogleLoginProvider.PROVIDER_ID,
+          provider: new GoogleLoginProvider(
+            '1005663427262-0thkv1hfrufo4rqsc2eph7u7bt3v5i2f.apps.googleusercontent.com'
+          ),
+        }
+      ],
+    } as SocialAuthServiceConfig,
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
