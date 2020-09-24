@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { Question, User } from '../_models';
 import { first } from 'rxjs/operators';
 import { AlertService } from './alert.service';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({
@@ -16,7 +17,7 @@ export class QuestionnaireService {
   constructor(private http: HttpClient, private alertService: AlertService) { }
 
   getQuestions():Observable<Question[]> {
-    return this.http.get(`/bff/api/questionnaire`)
+    return this.http.get(environment.baseUrl + '/bff/api/questionnaire')
     .pipe(map(result=> {
       console.log(result['questions']);
       return result['questions']}));
@@ -24,7 +25,7 @@ export class QuestionnaireService {
 
   upload(user: User, surveyAnswers: Question[]) {
     console.log(user.username);
-    return this.http.post(`/bff/api/questionnaire-reponse/`+ encodeURIComponent(user.username) + `/upload`, {
+    return this.http.post(environment.baseUrl + '/bff/api/questionnaire-reponse/'+ encodeURIComponent(user.username) + '/upload', {
       questions: surveyAnswers}) .pipe(first())
       .subscribe(
           data => {
