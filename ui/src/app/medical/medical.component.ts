@@ -26,8 +26,7 @@ export class MedicalComponent implements AfterViewInit, OnInit {
     this.dataSource = new MatTableDataSource<Doctor>(this.doctorList);
    }
   ngOnInit(): void {
-    
-   
+      
     
   }
 

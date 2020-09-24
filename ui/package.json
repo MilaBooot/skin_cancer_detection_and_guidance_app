@@ -25,6 +25,9 @@
     "@angular/router": "~10.1.1",
     "@ng-toolkit/universal": "^1.1.21",
     "@schematics/angular": "^10.1.1",
+    "@types/gapi": "0.0.39",
+    "@types/gapi.auth2": "0.0.52",
+    "angularx-social-login": "^3.2.2",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"
