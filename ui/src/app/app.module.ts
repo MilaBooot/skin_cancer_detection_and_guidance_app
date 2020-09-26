@@ -23,7 +23,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatTableModule} from '@angular/material/table';
 import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
 import {GoogleLoginProvider} from 'angularx-social-login';
-
+import { TrackComponent } from './track/track.component';
 
  
 
@@ -39,7 +39,8 @@ import {GoogleLoginProvider} from 'angularx-social-login';
     StepperComponent,
     MedicalComponent,
     PolicyComponent,
-    QuestionnaireComponent
+    QuestionnaireComponent,
+    TrackComponent
   ],
   imports: [
     BrowserModule,
@@ -56,6 +57,7 @@ import {GoogleLoginProvider} from 'angularx-social-login';
     MatPaginatorModule,
     MatTableModule,
     SocialLoginModule
+   
 
 
   ],

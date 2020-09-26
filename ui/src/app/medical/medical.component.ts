@@ -15,6 +15,8 @@ export class MedicalComponent implements AfterViewInit, OnInit {
   displayedColumns: string[] = [ 'name', 'speciality', 'hospital'];
   dataSource;
   doctorList: Doctor[];
+  lat = 27.1751;
+  lng = 78.0421;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
