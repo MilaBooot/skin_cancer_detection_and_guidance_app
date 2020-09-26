@@ -1,8 +1,5 @@
 flask-restplus==0.13.0
 Flask==1.1.2
-pillow==7.2.0
-numpy==1.19.2
-
 astor==0.7.1
 backcall==0.1.0
 certifi==2019.9.11
@@ -40,8 +37,6 @@ Markdown==3.0.1
 matplotlib==3.0.2
 mock==2.0.0
 numpy==1.16.1
-opencv-contrib-python==4.1.1.26
-opencv-python==4.1.1.26
 pandas==0.24.1
 parso==0.4.0
 pbr==5.1.2
@@ -76,3 +71,4 @@ traitlets==4.3.2
 urllib3==1.25.5
 wcwidth==0.1.7
 xlrd==1.2.0
+opencv-contrib-python-headless==4.4.0.44
