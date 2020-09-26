@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class QuestionDto {
     private int id;
     private OptionsDto[] options;
-    private int answer;
+    private String answer;
     private String question;
 
 }

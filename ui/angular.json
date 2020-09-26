@@ -119,9 +119,24 @@
               "devServerTarget": "skin-cancer-detection-ui:serve:production"
             }
           }
+        },
+        "deploy": {
+          "builder": "@jefiozie/ngx-aws-deploy:deploy",
+          "options": {},
+          "configurations": {
+            "production": {
+              "configuration": "production",
+              "region": "ap-southeast-1",
+              "bucket": "skincancerdetection",
+              "subFolder": "ui"
+            }
+          }
         }
       }
     }
   },
-  "defaultProject": "skin-cancer-detection-ui"
+  "defaultProject": "skin-cancer-detection-ui",
+  "cli": {
+    "analytics": false
+  }
 }

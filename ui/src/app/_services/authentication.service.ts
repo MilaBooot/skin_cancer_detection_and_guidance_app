@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 import { User } from '../_models';
 
@@ -22,7 +23,7 @@ export class AuthenticationService {
   }
 
   login(username, password) {
-      return this.http.post<any>(`/bff/api/authenticate`, { username, password })
+      return this.http.post<any>(environment.baseUrl + '/bff/api/authenticate', { username, password })
           .pipe(map(user => {
               // store user details and jwt token in local storage to keep user logged in between page refreshes
               localStorage.setItem('currentUser', JSON.stringify(user));
@@ -35,5 +36,10 @@ export class AuthenticationService {
       // remove user from local storage and set current user to null
       localStorage.removeItem('currentUser');
       this.currentUserSubject.next(null);
+  }
+
+  googleLogin(user: User){
+    localStorage.setItem('currentUser', JSON.stringify(user));
+    this.currentUserSubject.next(user);
   }
 }

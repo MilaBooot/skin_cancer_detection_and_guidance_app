@@ -1,45 +1,45 @@
-<!--<div class="container-fluid">
-    <p>Doctor Details</p>
+
+  
     <table id="productSizes" class="table">
         <thead>
     <tr>
       <th>Name</th>
+      <th>Speciality</th>
       <th>Hospital</th>
-      <th>Contact</th>
     </tr>
  </thead>
  <tbody>
-    <tr *ngFor="let docDetail of doctorDetails">
+    <tr *ngFor="let docDetail of doctorList">
       <td>{{docDetail.name}}</td>
+      <td>{{docDetail.speciality}}</td>
       <td>{{docDetail.hospital}}</td>
-      <td>{{docDetail.contact}}</td>
     </tr>
  </tbody>
 
 </table>
-</div>
--->
+<!--</div>-->
+
+<!--
 <div class="mat-elevation-z8">
   <table mat-table [dataSource]="dataSource">
 
 
 
-    <!-- Name Column -->
+
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef> Name </th>
       <td mat-cell *matCellDef="let element"> {{element.name}} </td>
     </ng-container>
 
-    <!-- Hospital Column -->
+    <ng-container matColumnDef="speciality">
+      <th mat-header-cell *matHeaderCellDef> Speciality </th>
+      <td mat-cell *matCellDef="let element"> {{element.speciality}} </td>
+    </ng-container>
+
+  
     <ng-container matColumnDef="hospital">
       <th mat-header-cell *matHeaderCellDef> Hospital </th>
       <td mat-cell *matCellDef="let element"> {{element.hospital}} </td>
-    </ng-container>
-
-    <!-- Contact Column -->
-    <ng-container matColumnDef="contact">
-      <th mat-header-cell *matHeaderCellDef> Contact </th>
-      <td mat-cell *matCellDef="let element"> {{element.contact}} </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -48,3 +48,5 @@
 
   <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
 </div>
+
+-->

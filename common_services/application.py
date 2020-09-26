@@ -1,19 +1,19 @@
-from flask import Flask, request
+from flask import Flask, request, redirect
 #Workaround for the bug in https://github.com/jarus/flask-testing/issues/143
 import werkzeug
 werkzeug.cached_property = werkzeug.utils.cached_property
-from flask_restplus import Api, Resource, fields, abort
-from lib.services.db_connect import loginDBConnect
+from flask_restplus import Api, Resource, fields, abort, reqparse, inputs
+from services.db_connect import dbConnect
 import json
 
-flask_app = Flask(__name__)
+application = flask_app = Flask(__name__)
 app = Api(app = flask_app)
 
 register_api = app.namespace('register', description='signup API')
 user_validate_api = app.namespace("getUserDetails", description="user validation API")
 common_services_api = app.namespace("commonServices", description="common services API")
 
-ldb = loginDBConnect()
+db = dbConnect()
 
 
 class msgFormats:
@@ -40,10 +40,18 @@ class dataFields:
 			})
 		return resource_fields
 
-	def login_creds(self):
-		resource_fields = user_validate_api.model("Login credentials",
-		   {'user_id': fields.String(description="Email ID of user", required=True)})
-		return resource_fields
+
+class reqparseArgs:
+	def get_user_details(self):
+		parser = reqparse.RequestParser()
+		parser.add_argument('user_id', default=None, required=True)
+		return parser
+
+	def get_doc_list(self):
+		parser = reqparse.RequestParser()
+		parser.add_argument('latitude', type=float, default=None, required=True)
+		parser.add_argument('longitude', type=float, default=None, required=True)
+		return parser
 
 
 @register_api.route("/")
@@ -60,25 +68,26 @@ class signUp(Resource):
 		last_name = json_data["last_name"]
 		dob = json_data["dob"]
 		gender = json_data["gender"]
-		if user_id in ldb.get_user_ids():
+		if user_id in db.get_user_ids():
 			abort(409, result=msgFormats().error_msg("User ID already exists"))
 		try:
-			ret = ldb.insert_value(user_id, password, first_name, last_name, dob, gender)
+			ret = db.insert_value(user_id, password, first_name, last_name, dob, gender)
 		except Exception:
 			abort(400, result=msgFormats().error_msg("Bad request. DB insert operation failed"))
 		return msgFormats().default_msg("User Added")
 
 
-@user_validate_api.route("/")
+@user_validate_api.route("")
 class login(Resource):
-	@user_validate_api.expect(dataFields().login_creds())
 	@user_validate_api.response(200, 'Found user detail')
 	@user_validate_api.response(401, 'User ID not found')
-	def post(self):
-		json_data = request.json
-		user_id = json_data["user_id"]
+	@user_validate_api.expect(reqparseArgs().get_user_details())
+	def get(self):
+		user_id =  request.args.get("user_id", None)
+		if user_id is None:
+			abort(400, result=msgFormats().error_msg("Bad Request. Missing user_id parameter"))
 		try:
-			data = ldb.get_user_details(user_id)
+			data = db.get_user_details(user_id)
 		except KeyError:
 			abort(401, result=msgFormats().error_msg("User ID not found"))
 		return msgFormats().data_msg(data)
@@ -86,9 +95,9 @@ class login(Resource):
 
 @common_services_api.route("/getDoctors")
 class getDocList(Resource):
-	#@user_validate_api.expect(dataFields().login_creds())
-	@user_validate_api.response(200, 'Found doctors nearby')
-	@user_validate_api.response(401, 'Unservicable area')
+	@common_services_api.response(200, 'Found doctors nearby')
+	@common_services_api.response(401, 'Unservicable area')
+	@common_services_api.expect(reqparseArgs().get_doc_list())
 	def get(self):
 		longitude = request.args.get("longitude", None)
 		latitude = request.args.get("latitude", None)
@@ -98,3 +107,28 @@ class getDocList(Resource):
 		data = [{"name": "test_name", "speciality": "dermetologist", "hospital": "some hospital"},
 		  {"name": "test_name2", "speciality": "dermetologist", "hospital": "some hospital2"}]
 		return msgFormats().data_msg(data)
+
+
+@common_services_api.route("/getQuestions")
+class getQuestions(Resource):
+	@common_services_api.response(200, 'Success')
+	def get(self):
+		data = db.get_questions()
+		return msgFormats().data_msg(data)
+
+
+@common_services_api.route("/getQuestions/<id>")
+class getQuestions(Resource):
+	@common_services_api.response(200, 'Success')
+	@common_services_api.response(401, 'Resource not found')
+	def get(self, id):
+		id = int(id)
+		try:
+			data = db.get_questions(id)
+		except KeyError:
+			abort(401, result="question id NOT FOUND")
+		return msgFormats().data_msg(data)
+
+
+if __name__ == "__main__":
+	flask_app.run()

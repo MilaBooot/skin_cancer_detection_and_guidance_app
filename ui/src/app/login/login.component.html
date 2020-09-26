@@ -1,24 +1,55 @@
-<h2>Login</h2>
-<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
-        <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
-            <div *ngIf="f.username.errors.required">Username is required</div>
+<div class="container-fluid">
+    <div class = "row">
+        
+      
+    
+        <div class="col-md-5">
+            <H1 style="text-align:center;">Skin Cancer Detection App</H1>
+             <div class="col-md-1 offset-sm-1">
+                 <img src="/assets/image/app-logo.png" width="200" height="200"  class="logo-image"/>
+                </div> 
+                <p style="text-align:center;">Skin cancer detection made easier. Get early predictions now.</p>
+            </div>
+        
+        <div class="col-md-6">
+
+            <h2>Login</h2>
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+               <div class="form-group">
+            
+                <label for="username">Username</label>
+            
+                <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+            
+                <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+                <div *ngIf="f.username.errors.required">Username is required</div>
+             </div>
+       
+         
         </div>
-    </div>
-    <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
-        <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-            <div *ngIf="f.password.errors.required">Password is required</div>
+        
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+            <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                <div *ngIf="f.password.errors.required">Password is required</div>
+            </div>
         </div>
+        <div class="form-group">
+            <button [disabled]="loading" class="btn btn-primary">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Login
+            </button>
+            <a routerLink="/register" class="btn btn-link">Register</a>
+            
+        </div>
+         
+    </form>
+    <button (click)="onSignIn()" class="btn btn-secondary">
+        Login with Google
+    </button>
+
     </div>
-    <div class="form-group">
-        <button [disabled]="loading" class="btn btn-primary">
-            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-            Login
-        </button>
-        <a routerLink="/register" class="btn btn-link">Register</a>
-    </div>
-</form>
+   
+</div>
+</div>
