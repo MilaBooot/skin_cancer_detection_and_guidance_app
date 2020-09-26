@@ -1,15 +1,19 @@
 import psycopg2
 import logging
+import json
+import os
 
 
+DB_SERVER = os.environ.get("RDS_HOSTNAME")
 
 class dbConnect:
     def __init__(self):
         try:
-            self.db = psycopg2.connect(dbname="app_db", user="postgres", host="localhost", password="postgres")
+            self.db = psycopg2.connect(dbname="app_db", user="postgres", 
+                                       host=DB_SERVER, password="postgres")
             self.cur = self.db.cursor()
         except Exception as errmsg:
-            print("Login failed %s" %errmsg)
+            raise Exception("Login failed %s" %errmsg)
         
     def get_login_creds(self, user_id):
         query = """SELECT password FROM app_data.user_details WHERE user_id='%s'""" % (user_id,)
@@ -88,9 +92,9 @@ class dbConnect:
     def __del__(self):
         self.db.close()
 
-if __name__ == "__main__":
+#if __name__ == "__main__":
     #testing function
-    ldb = dbConnect()
-    password = ldb.get_questions(1)
-    print(password)
+    #ldb = dbConnect()
+    #password = ldb.get_questions(1)
+    #print(password)
 

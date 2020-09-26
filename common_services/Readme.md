@@ -4,15 +4,15 @@ The services are written in python3.6
 ```
 pip install -r requirements.txt
 ```
-
+## Set the environment variable
+ ```
+ RDS_HOSTNAME=localhost
+ ```
+ THE environment variable is set by AWS automatically when an RDS DB is created in the environment. To run locally set RDS_HOSTNAME environment variable in
 ## Run the Flask server
 HTTP server:
 ```
-FLASK_APP=lib/api_server.py flask run
-```
-HTTPS server:
-```
-FLASK_APP=lib/api_server.py flask run --cert adhoc
+python common_services/application.py
 ```
 
 The common services api will be launched at port 5000 (localhost:5000)

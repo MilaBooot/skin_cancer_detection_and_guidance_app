@@ -3,10 +3,10 @@ from flask import Flask, request, redirect
 import werkzeug
 werkzeug.cached_property = werkzeug.utils.cached_property
 from flask_restplus import Api, Resource, fields, abort, reqparse, inputs
-from lib.services.db_connect import dbConnect
+from services.db_connect import dbConnect
 import json
 
-flask_app = Flask(__name__)
+application = flask_app = Flask(__name__)
 app = Api(app = flask_app)
 
 register_api = app.namespace('register', description='signup API')
@@ -130,3 +130,5 @@ class getQuestions(Resource):
 		return msgFormats().data_msg(data)
 
 
+if __name__ == "__main__":
+	flask_app.run()
