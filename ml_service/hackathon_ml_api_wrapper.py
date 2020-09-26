@@ -21,7 +21,7 @@ IMAGE_DIMENSION = 3
 class hackathon_ml_api_wrapper:
   
     #Function Description: This function takes user image as input and resizes it as required
-    #Function Input: uUer image
+    #Function Input: User image
     #Function Output: Resized image
     def image_resize (self, bff_input, IMAGE_SIZE, IMAGE_DIMENSION):
         
@@ -68,10 +68,8 @@ class hackathon_ml_api_wrapper:
             weight = 0.25
         else:
             weight = 0.20
-
         return weight
-
-            
+      
     #Function Description: This is the decision logic
     #Function Input: weight, y_predict, RISK LABEL
     #Function Output: list which contains 4 values
@@ -91,17 +89,16 @@ class hackathon_ml_api_wrapper:
 print ('creating class handles')
 HMLAPIW = hackathon_ml_api_wrapper()
 
-
 #Function Description: This function is called by ml_api. It sequences akk the above function calls
 #Function Input: weight, y_predict, RISK LABEL
 #Function Output: list which contains 4 values
-def predict_cancer(bff_input, answer):
+def predict_cancer(input_image, input_answer):
   
     print ('Input image is read and resizing is in progress')
-    image = HMLAPIW.image_resize(bff_input=bff_input, IMAGE_SIZE=IMAGE_SIZE, IMAGE_DIMENSION=IMAGE_DIMENSION)
+    image = HMLAPIW.image_resize(bff_input=input_image, IMAGE_SIZE=IMAGE_SIZE, IMAGE_DIMENSION=IMAGE_DIMENSION)
     y_predict = HMLAPIW.predict_model(image=image)
     risk = HMLAPIW.compute_risk_using_image(y_predict=y_predict, THRESHOLD=THRESHOLD, RISK_LABEL=RISK_LABEL)
-    weight = HMLAPIW.compute_weight_using_questionarie(answer=answer)
+    weight = HMLAPIW.compute_weight_using_questionarie(answer=input_answer)
     o_result = HMLAPIW.decision_logic(weight=weight, y_predict=y_predict, RISK_LABEL=risk, )
     
     return o_result
