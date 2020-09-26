@@ -6,6 +6,7 @@ import { HomeComponent } from './home';
 import { AboutComponent } from './about';
 import { AuthGuard } from './_helpers';
 import { PolicyComponent } from './policy/policy.component';
+import { TrackComponent } from './track/track.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -13,6 +14,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'about', component: AboutComponent }, 
   { path: 'info', component: PolicyComponent }, 
+  { path: 'track', component: TrackComponent }, 
   // otherwise redirect to home
   { path: '**', redirectTo: '' }
 ];
