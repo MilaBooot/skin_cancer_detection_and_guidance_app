@@ -5,7 +5,7 @@
 -- Dumped from database version 12.0
 -- Dumped by pg_dump version 12.0
 
--- Started on 2020-09-27 20:43:21
+-- Started on 2020-09-28 00:12:16
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -82,7 +82,9 @@ CREATE TABLE app_data.doctors (
     speciality character varying NOT NULL,
     "State" character varying NOT NULL,
     pincode integer NOT NULL,
-    address character varying NOT NULL
+    address character varying NOT NULL,
+    latitude double precision,
+    longitude double precision
 );
 
 
@@ -155,19 +157,19 @@ INSERT INTO app_data.answers (id, value) VALUES (7, 'Never burns');
 -- Data for Name: doctors; Type: TABLE DATA; Schema: app_data; Owner: postgres
 --
 
-INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address) VALUES (1001, 'doctor1', 'Fortis Cancer Institute', 'Bengaluru', 'dermatologist', 'Karnataka', 560076, '154/9, Bannerghatta Main Road FCI Basement Floor');
-INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address) VALUES (1002, 'doctor2', 'Kidwai Memorial Institute of Oncology', 'Bengaluru', 'dermatologist', 'Karnataka', 560029, 'Dr M H, Marigowda Rd, Hombegowda Nagar');
-INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address) VALUES (1003, 'doctor3', 'Fortis Cancer Institute', 'Bengaluru', 'dermatologist', 'Karnataka', 560076, '154/9, Bannerghatta Main Road FCI Basement Floor');
-INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address) VALUES (1004, 'doctor4', 'Fortis Cancer Institute', 'Bengaluru', 'dermatologist', 'Karnataka', 560076, '154/9, Bannerghatta Main Road FCI Basement Floor');
-INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address) VALUES (1005, 'doctor5', 'Kidwai Memorial Institute of Oncology', 'Bengaluru', 'dermatologist', 'Karnataka', 560029, 'Dr M H, Marigowda Rd, Hombegowda Nagar');
-INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address) VALUES (1009, 'doctor8', 'Tata Memorial Center', 'Mumbai', 'dermatologist', 'Maharashtra', 400012, 'Dr Ernest Borges Rd, Parel East, Parel');
-INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address) VALUES (1010, 'doctor9', 'Tata Memorial Center', 'Mumbai', 'dermatologist', 'Maharashtra', 400012, 'Dr Ernest Borges Rd, Parel East, Parel');
-INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address) VALUES (1011, 'doctor10', 'Amrita Institute of Medical Science', 'Kochi', 'dermatologist', 'Kerala', 682041, 'Ponekkara, P. O');
-INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address) VALUES (1012, 'doctor12', 'Amrita Institute of Medical Science', 'Kochi', 'dermatologist', 'Kerala', 682041, 'Ponekkara, P. O');
-INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address) VALUES (1006, 'doctor6', 'Aster MIMS Hospital', 'Kozhikode', 'dermatologist', 'Kerala', 673016, 'Mini Bypass Rd, Govindapuram');
-INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address) VALUES (1007, 'doctor7', 'Aster MIMS Hospital', 'Kozhikode', 'dermatologist', 'Kerala', 673016, 'Mini Bypass Rd, Govindapuram');
-INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address) VALUES (1008, 'doctor7', 'Aster MIMS Hospital', 'Kozhikode', 'dermatologist', 'Kerala', 673016, 'Mini Bypass Rd, Govindapuram');
-INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address) VALUES (1013, 'doctor13', 'Amrita Institute of Medical Science', 'Kochi', 'dermatologist', 'Kerala', 682041, 'Ponekkara, P. O');
+INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address, latitude, longitude) VALUES (1001, 'doctor1', 'Fortis Cancer Institute', 'Bengaluru', 'dermatologist', 'Karnataka', 560076, '154/9, Bannerghatta Main Road FCI Basement Floor', 12.8944, 77.5987);
+INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address, latitude, longitude) VALUES (1003, 'doctor3', 'Fortis Cancer Institute', 'Bengaluru', 'dermatologist', 'Karnataka', 560076, '154/9, Bannerghatta Main Road FCI Basement Floor', 12.8944, 77.5987);
+INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address, latitude, longitude) VALUES (1004, 'doctor4', 'Fortis Cancer Institute', 'Bengaluru', 'dermatologist', 'Karnataka', 560076, '154/9, Bannerghatta Main Road FCI Basement Floor', 12.8944, 77.5987);
+INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address, latitude, longitude) VALUES (1002, 'doctor2', 'Kidwai Memorial Institute of Oncology', 'Bengaluru', 'dermatologist', 'Karnataka', 560029, 'Dr M H, Marigowda Rd, Hombegowda Nagar', 12.9374, 77.598);
+INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address, latitude, longitude) VALUES (1005, 'doctor5', 'Kidwai Memorial Institute of Oncology', 'Bengaluru', 'dermatologist', 'Karnataka', 560029, 'Dr M H, Marigowda Rd, Hombegowda Nagar', 12.9374, 77.598);
+INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address, latitude, longitude) VALUES (1009, 'doctor8', 'Tata Memorial Center', 'Mumbai', 'dermatologist', 'Maharashtra', 400012, 'Dr Ernest Borges Rd, Parel East, Parel', 19.0049, 72.8432);
+INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address, latitude, longitude) VALUES (1010, 'doctor9', 'Tata Memorial Center', 'Mumbai', 'dermatologist', 'Maharashtra', 400012, 'Dr Ernest Borges Rd, Parel East, Parel', 19.0049, 72.8432);
+INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address, latitude, longitude) VALUES (1011, 'doctor10', 'Amrita Institute of Medical Science', 'Kochi', 'dermatologist', 'Kerala', 682041, 'Ponekkara, P. O', 10.0329423, 76.2935769);
+INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address, latitude, longitude) VALUES (1012, 'doctor12', 'Amrita Institute of Medical Science', 'Kochi', 'dermatologist', 'Kerala', 682041, 'Ponekkara, P. O', 10.0329423, 76.2935769);
+INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address, latitude, longitude) VALUES (1013, 'doctor13', 'Amrita Institute of Medical Science', 'Kochi', 'dermatologist', 'Kerala', 682041, 'Ponekkara, P. O', 10.0329423, 76.2935769);
+INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address, latitude, longitude) VALUES (1006, 'doctor6', 'Aster MIMS Hospital', 'Kozhikode', 'dermatologist', 'Kerala', 673016, 'Mini Bypass Rd, Govindapuram', 11.2458, 75.7985);
+INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address, latitude, longitude) VALUES (1007, 'doctor7', 'Aster MIMS Hospital', 'Kozhikode', 'dermatologist', 'Kerala', 673016, 'Mini Bypass Rd, Govindapuram', 11.2458, 75.7985);
+INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address, latitude, longitude) VALUES (1008, 'doctor7', 'Aster MIMS Hospital', 'Kozhikode', 'dermatologist', 'Kerala', 673016, 'Mini Bypass Rd, Govindapuram', 11.2458, 75.7985);
 
 
 --
@@ -256,7 +258,7 @@ ALTER TABLE ONLY app_data.records
     ADD CONSTRAINT records_user_id_fkey FOREIGN KEY (user_id) REFERENCES app_data.user_details(user_id);
 
 
--- Completed on 2020-09-27 20:43:22
+-- Completed on 2020-09-28 00:12:16
 
 --
 -- PostgreSQL database dump complete

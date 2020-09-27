@@ -97,11 +97,11 @@ class dbConnect:
         location = geolocator.reverse(coordinates)
         city = location.raw["address"]["city"]
         self.cur.execute("""SELECT * FROM app_data.doctors WHERE city='%s'""" % (city,))
-        doctors = self.cur.fetchall()      
+        doctors = self.cur.fetchall()
         for doctor in doctors:
             hospital = ", " .join([doctor[2], doctor[7], doctor[3], doctor[5], str(doctor[6])])
-            data = {"name": doctor[1], "speciality": doctor[4], "hospital": hospital, "latitude": "9.9312", 
-                    "longitude": "76.2673"}
+            data = {"name": doctor[1], "speciality": doctor[4], "hospital": hospital, "latitude": doctor[8], 
+                    "longitude": doctor[9]}
             ret_data.append(data)
         return ret_data
 
@@ -112,7 +112,7 @@ if __name__ == "__main__":
     #testing function
     from pprint import pprint
     ldb = dbConnect()
-    pprint(ldb.get_doctors(9.9312, 76.2673))
+    pprint(ldb.get_doctors(12.9716, 77.5946))
     #password = ldb.get_questions(1)
     #print(password)
 
