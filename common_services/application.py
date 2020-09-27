@@ -104,8 +104,8 @@ class getDocList(Resource):
 		if longitude is None or latitude is None:
 			abort(400, result=msgFormats().error_msg("Bad Request. Incomplete location details"))
 		#call service to get list of doctors nearby. Adding a dumy data for now
-		data = [{"name": "test_name", "speciality": "dermetologist", "hospital": "some hospital"},
-		  {"name": "test_name2", "speciality": "dermetologist", "hospital": "some hospital2"}]
+		data = [{"name": "test_name", "speciality": "dermetologist", "hospital": "some hospital", "latitude": "123.45", "longitude": "145.45"},
+		  {"name": "test_name2", "speciality": "dermetologist", "hospital": "some hospital2", "latitude": "123.45", "longitude": "145.45"}]
 		return msgFormats().data_msg(data)
 
 
