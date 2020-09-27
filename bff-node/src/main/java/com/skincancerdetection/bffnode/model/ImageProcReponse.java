@@ -11,4 +11,5 @@ public class ImageProcReponse {
     private String cancer;
     private float value;
     private String type;
+    private String riskFactor;
 }
