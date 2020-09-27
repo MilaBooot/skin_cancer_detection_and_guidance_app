@@ -2,6 +2,7 @@ import psycopg2
 import logging
 import json
 import os
+from geopy.geocoders import Nominatim
 
 
 DB_SERVER = os.environ.get("RDS_HOSTNAME")
@@ -89,12 +90,29 @@ class dbConnect:
             raise KeyError()
         return ret
 
+    def get_doctors(self, lat, long):
+        ret_data = []
+        geolocator = Nominatim(user_agent="custom_name")
+        coordinates = "%s, %s" % (lat, long)
+        location = geolocator.reverse(coordinates)
+        city = location.raw["address"]["city"]
+        self.cur.execute("""SELECT * FROM app_data.doctors WHERE city='%s'""" % (city,))
+        doctors = self.cur.fetchall()      
+        for doctor in doctors:
+            hospital = ", " .join([doctor[2], doctor[7], doctor[3], doctor[5], str(doctor[6])])
+            data = {"name": doctor[1], "speciality": doctor[4], "hospital": hospital, "latitude": "9.9312", 
+                    "longitude": "76.2673"}
+            ret_data.append(data)
+        return ret_data
+
     def __del__(self):
         self.db.close()
 
-#if __name__ == "__main__":
+if __name__ == "__main__":
     #testing function
-    #ldb = dbConnect()
+    from pprint import pprint
+    ldb = dbConnect()
+    pprint(ldb.get_doctors(9.9312, 76.2673))
     #password = ldb.get_questions(1)
     #print(password)
 
