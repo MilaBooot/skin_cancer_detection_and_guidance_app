@@ -104,7 +104,7 @@ def predict_cancer(input_image, input_answer):
     #print('Weight is', weight)
     #o_result = HMLAPIW.decision_logic(weight=weight, y_predict=y_predict, RISK_LABEL=risk, )
     #o_result = ['YES', 0.75, 'Melanoma', 'HIGH']
-    o_result = {"cancer": 'YES', "value": 75, "type": 'Melanoma', "Risk Factor": 'HIGH'}
+    o_result = {"cancer": 'YES', "value": 75, "type": 'Melanoma', "riskFactor": 'HIGH'}
     return o_result
 
 #input_image = []
