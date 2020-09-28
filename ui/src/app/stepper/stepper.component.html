@@ -17,12 +17,12 @@
   <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup">
       <ng-template matStepLabel>Upload Image</ng-template>
-      <button mat-button color="warn" (click)="onClick()">  
+      <button mat-button color="primary" (click)="onClick()">  
         <mat-icon>file_upload</mat-icon>  
         Upload  
       </button> 
       <img [src]="url" height="200"> <br/> 
-      <input type="file" #fileUpload id="fileUpload" name="fileUpload" accept="image/*" style="display:none;" (change)="onSelectFile($event)"/>
+      <input formControlName="firstCtrl" type="file" #fileUpload id="fileUpload" name="fileUpload" accept="image/*" style="display:none;" (change)="onSelectFile($event)" required>
       <div>
         <button mat-button matStepperPrevious>Back</button>
         <button mat-button matStepperNext (click)="uploadFile()">Next</button>
