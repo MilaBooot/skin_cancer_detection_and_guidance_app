@@ -24,6 +24,7 @@ import {MatTableModule} from '@angular/material/table';
 import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
 import {GoogleLoginProvider} from 'angularx-social-login';
 import { TrackComponent } from './track/track.component';
+import { ContactusComponent } from './contactus/contactus.component';
 
  
 
@@ -40,7 +41,8 @@ import { TrackComponent } from './track/track.component';
     MedicalComponent,
     PolicyComponent,
     QuestionnaireComponent,
-    TrackComponent
+    TrackComponent,
+    ContactusComponent
   ],
   imports: [
     BrowserModule,

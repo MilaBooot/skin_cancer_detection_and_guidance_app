@@ -1,5 +1,5 @@
 
-  
+  <!--
     <table id="productSizes" class="table">
         <thead>
     <tr>
@@ -22,11 +22,12 @@
  </tbody>
 
 </table>
+-->
 <!--</div>-->
 
-<!--
+<h2 class="text-muted" >Nearby Doctors</h2>
 <div class="mat-elevation-z8">
-  <table mat-table [dataSource]="dataSource">
+  <table mat-table [dataSource]="doctorDataSource">
 
 
 
@@ -47,6 +48,13 @@
       <td mat-cell *matCellDef="let element"> {{element.hospital}} </td>
     </ng-container>
 
+    <ng-container matColumnDef="action">
+      <th mat-header-cell  *matHeaderCellDef >   </th>
+      <mat-cell *matCellDef="let element" >
+           <button mat-raised-button color="primary" >Book Appointment</button>
+      </mat-cell>
+    </ng-container>
+
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
@@ -54,4 +62,3 @@
   <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
 </div>
 
--->
