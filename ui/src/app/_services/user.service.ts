@@ -42,7 +42,6 @@ export class UserService {
     return this.http.get<Doctor[]>(environment.baseUrl + '/bff/api/doctors/' + encodeURIComponent(lng)
      + '/' + encodeURIComponent(lat))
     .pipe(map( result => {
-      console.log(result['doctors']);
       return result['doctors']}));
   }
 

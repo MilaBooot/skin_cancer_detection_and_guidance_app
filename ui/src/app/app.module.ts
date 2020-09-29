@@ -25,6 +25,7 @@ import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-logi
 import {GoogleLoginProvider} from 'angularx-social-login';
 import { TrackComponent } from './track/track.component';
 import { ContactusComponent } from './contactus/contactus.component';
+import { AgmCoreModule } from '@agm/core';
 
  
 
@@ -58,7 +59,9 @@ import { ContactusComponent } from './contactus/contactus.component';
     MatButtonModule,
     MatPaginatorModule,
     MatTableModule,
-    SocialLoginModule
+    SocialLoginModule,
+    AgmCoreModule.forRoot({
+    })
    
 
 
