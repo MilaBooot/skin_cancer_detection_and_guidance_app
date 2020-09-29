@@ -8,6 +8,8 @@
 # Importing python modules
 import math
 import cv2
+import numpy as np
+from keras.models import load_model
 
 # Global Variables
 THRESHOLD = [70, 50, 10]  # This determines the threshold for high/medium/low
@@ -15,11 +17,13 @@ THRESHOLD = [70, 50, 10]  # This determines the threshold for high/medium/low
 
 RISK_LABEL = ['HIGH', 'MEDIUM', 'LOW', 'NOT_APPLICABLE']
 CANCER = ['YES', 'NO']
+TYPE = ['a', 'b', 'c', 'd', 'e', 'f']
 IMAGE_SIZE = 256
 IMAGE_DIMENSION = 3
 
 print('Loading the model')
 #loaded_model = load_model("C:/Users/kananth2/Downloads/Hackathon_Dataset/temp_model.h5", compile=False)
+
 class hackathon_ml_api_wrapper:
 
     # Function Description: This function takes user image as input and resizes it as required
@@ -27,30 +31,45 @@ class hackathon_ml_api_wrapper:
     # Function Output: Resized image
     def image_resize(self, input_image, IMAGE_SIZE, IMAGE_DIMENSION):
 
-        image = cv2.resize(input_image, (IMAGE_SIZE, IMAGE_SIZE, IMAGE_DIMENSION))
+        image = cv2.resize(-1, input_image, (IMAGE_SIZE, IMAGE_SIZE, IMAGE_DIMENSION))
         return image
 
+    # Function Description: This function predicts the image using trained ML model
+    # Function Input: loaded_model, input image, TYPE
+    # Function Output: answer in binary + integer format
+    def predict_model(self, loaded_model, input_image, TYPE):
+
+        temp_predictions = loaded_model.predict(input_image)
+        y_pred = np.argmax(temp_predictions[0], axis=0) #index of class with highest accuracy
+        prediction = [temp_predictions[0][y_pred], TYPE[y_pred]]
+        return prediction
+
+
+    # Function Description: This function converts the input answer (string format) to binary + integer format
+    # Function Input: User answer
+    # Function Output: answer in binary + integer format
     def convert_answer_string_to_int(self, input_answer):
 
         #Local variable declaration
         temp_answer = []
-        for i in input_answer:
+
+        for i in range(0, len(input_answer)):
             if input_answer[i] is 'Yes':
                 temp_answer.append(1)
             elif input_answer[i] is 'No':
                 temp_answer.append(0)
-            elif input_answer[i] is 'Ivory white':
+            elif input_answer[i] is 'Ivorywhite':
                 temp_answer.append(2)
-            elif input_answer[i] is 'Fair':
-                temp_answer[i].append(3)
             elif input_answer[i] is 'Pale':
-                temp_answer[i].append(4)
-            elif input_answer[i] is 'Darkbrown':
-                temp_answer[i].append(5)
+                temp_answer.append(3)
+            elif input_answer[i] is 'Brown':
+                temp_answer.append(4)
             elif input_answer[i] is 'Black':
-                temp_answer[i].append(6)
+                temp_answer.append(5)
+            elif input_answer[i] is 'Fair':
+                temp_answer.append(6)
 
-            return temp_answer
+        return temp_answer
 
 
     # Function Description: This function identifies the risk label based on y_predict percentage and threshold value
@@ -68,13 +87,12 @@ class hackathon_ml_api_wrapper:
             return RISK_LABEL[3]
 
     # Function Description: This function identifies the risk using questionarie
-    # Function Input: questionarie
+    # Function Input: user answer with binary + integer encoding
     # Function Output:  weights
     def compute_weight_using_questionarie(self, answer):
 
-        # Local Variable Definition
-        temp_answer = 0
-        weight = 1.0
+        #Local Variable Declaration
+        temp_answer = 1
 
         for i in answer:  # Bit wise OR
             temp_answer = answer[i] | temp_answer
@@ -89,7 +107,7 @@ class hackathon_ml_api_wrapper:
             weight = 0.9
         elif (answer[3]):
             weight = 0.75
-        elif (temp_answer == 0):
+        elif (temp_answer==0):
             weight = 0.25
         else:
             weight = 0.20
@@ -105,9 +123,10 @@ class hackathon_ml_api_wrapper:
         else:
             temp_cancer = CANCER[0]
 
-        o_probability = weight * y_predict[0] *100
+        o_probability = weight * y_predict[0] * 100
 
-        o_result = [temp_cancer, math.ceil(o_probability), RISK_LABEL, y_predict[1]]
+        o_result = {"cancer": temp_cancer, "probability": math.ceil(o_probability),
+                    "riskFactor": RISK_LABEL, "type": y_predict[1]}
 
         return o_result
 
@@ -122,18 +141,17 @@ HMLAPIW = hackathon_ml_api_wrapper()
 def predict_cancer(input_image, input_answer):
     print('Input image is read and resizing is in progress')
     #image = HMLAPIW.image_resize(input_image=input_image, IMAGE_SIZE=IMAGE_SIZE, IMAGE_DIMENSION=IMAGE_DIMENSION)
-    # y_predict = HMLAPIW.predict_model(image=image)
-    #y_predict = [0.75, 'MELANOMA']
-    #risk = HMLAPIW.compute_risk_using_image(y_predict=y_predict, THRESHOLD=THRESHOLD, RISK_LABEL=RISK_LABEL)
-    answer = HMLAPIW.convert_answer_string_to_int(answer=input_answer)
-    #weight = HMLAPIW.compute_weight_using_questionarie(answer=input_answer)
-    #print('Weight is', weight)
-    #o_result = HMLAPIW.decision_logic(weight=weight, y_predict=y_predict, RISK_LABEL=risk, CANCER=CANCER)
-    o_result = ['YES', 0.75, 'Melanoma', 'HIGH']
-    o_result = {"cancer": 'YES', "value": 75, "type": 'Melanoma', "Risk Factor": 'HIGH'}
+    #y_predict = HMLAPIW.predict_model(loaded_model=loaded_model, input_image=image, TYPE=TYPE)
+    y_predict = [0.95, 'MELANOMA']
+    risk = HMLAPIW.compute_risk_using_image(y_predict=y_predict, THRESHOLD=THRESHOLD, RISK_LABEL=RISK_LABEL)
+    answer = HMLAPIW.convert_answer_string_to_int(input_answer=input_answer)
+    weight = HMLAPIW.compute_weight_using_questionarie(answer=answer)
+    print('Weight is', weight)
+    o_result = HMLAPIW.decision_logic(weight=weight, y_predict=y_predict, RISK_LABEL=risk, CANCER=CANCER)
     return o_result
 
+#Sanity check
 input_image = []
-input_answer = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+input_answer = ['Yes', 'No', 'Yes', 'No', 'Yes', 'No', 'Yes','NO', 'Yes', 'No']
 result = predict_cancer(input_image=input_image, input_answer=input_answer)
-print (result)
+print(result)
