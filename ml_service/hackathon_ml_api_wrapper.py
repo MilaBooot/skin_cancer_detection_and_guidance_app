@@ -134,7 +134,6 @@ class hackathon_ml_api_wrapper:
 print('creating class handles')
 HMLAPIW = hackathon_ml_api_wrapper()
 
-
 # Function Description: This function is called by ml_api. It sequences akk the above function calls
 # Function Input: weight, y_predict, RISK LABEL
 # Function Output: list which contains 4 values
@@ -142,16 +141,16 @@ def predict_cancer(input_image, input_answer):
     print('Input image is read and resizing is in progress')
     #image = HMLAPIW.image_resize(input_image=input_image, IMAGE_SIZE=IMAGE_SIZE, IMAGE_DIMENSION=IMAGE_DIMENSION)
     #y_predict = HMLAPIW.predict_model(loaded_model=loaded_model, input_image=image, TYPE=TYPE)
-    y_predict = [0.95, 'MELANOMA']
+    #y_predict = [0.95, 'MELANOMA']
     risk = HMLAPIW.compute_risk_using_image(y_predict=y_predict, THRESHOLD=THRESHOLD, RISK_LABEL=RISK_LABEL)
     answer = HMLAPIW.convert_answer_string_to_int(input_answer=input_answer)
     weight = HMLAPIW.compute_weight_using_questionarie(answer=answer)
-    print('Weight is', weight)
     o_result = HMLAPIW.decision_logic(weight=weight, y_predict=y_predict, RISK_LABEL=risk, CANCER=CANCER)
+    
     return o_result
 
 #Sanity check
-input_image = []
-input_answer = ['Yes', 'No', 'Yes', 'No', 'Yes', 'No', 'Yes','NO', 'Yes', 'No']
-result = predict_cancer(input_image=input_image, input_answer=input_answer)
-print(result)
+#input_image = []
+#input_answer = ['Yes', 'No', 'Yes', 'No', 'Yes', 'No', 'Yes','NO', 'Yes', 'No']
+#result = predict_cancer(input_image=input_image, input_answer=input_answer)
+#print(result)
