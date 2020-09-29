@@ -9,9 +9,10 @@
 import math
 import cv2
 import numpy as np
-from keras.models import load_model
+from tensorflow.keras.models import model_from_json
 
-# Global Variables
+#Global Variables
+global loaded_model
 THRESHOLD = [70, 50, 10]  # This determines the threshold for high/medium/low
                           # >70 => HIGH, 50<X<70 => MEDIUM, 10<X<50 => LOW, >10 => Not applicable
 
@@ -21,8 +22,29 @@ TYPE = ['a', 'b', 'c', 'd', 'e', 'f']
 IMAGE_SIZE = 256
 IMAGE_DIMENSION = 3
 
-print('Loading the model')
-#loaded_model = load_model("C:/Users/kananth2/Downloads/Hackathon_Dataset/temp_model.h5", compile=False)
+#File path for json model and weights
+json_path = 'C:/Users/kananth2/Downloads/Hackathon_Dataset/model.json'
+weight_path = 'C:/Users/kananth2/Downloads/Hackathon_Dataset/model.h5'
+
+# Below class is used for loading the saved model
+class loading_model:
+
+    # Function Description: This function loads the saved model
+    # Function Input: json_path and weight_path
+    # Function Output: loaded model
+    def func_loading_model(self, json_path, weight_path):
+        with open( json_path, 'r') as json_file:
+            model_json = json_file.read()
+            model = model_from_json(model_json)
+            model.load_weights(weight_path)
+        return model
+
+print('Creating class handle for loading model function')
+LM = loading_model()
+
+print('Loading the model...')
+loaded_model = LM.func_loading_model(json_path=json_path, weight_path=weight_path)
+print('Model is loaded')
 
 class hackathon_ml_api_wrapper:
 
@@ -31,7 +53,9 @@ class hackathon_ml_api_wrapper:
     # Function Output: Resized image
     def image_resize(self, input_image, IMAGE_SIZE, IMAGE_DIMENSION):
 
-        image = cv2.resize(-1, input_image, (IMAGE_SIZE, IMAGE_SIZE, IMAGE_DIMENSION))
+        temp_image1 = cv2.imread(input_image)
+        temp_image2 = cv2.resize(temp_image1, (IMAGE_SIZE, IMAGE_SIZE))
+        image = temp_image2.reshape(-1,IMAGE_SIZE, IMAGE_SIZE,IMAGE_DIMENSION)
         return image
 
     # Function Description: This function predicts the image using trained ML model
@@ -130,27 +154,42 @@ class hackathon_ml_api_wrapper:
 
         return o_result
 
-
-print('creating class handles')
-HMLAPIW = hackathon_ml_api_wrapper()
-
 # Function Description: This function is called by ml_api. It sequences akk the above function calls
 # Function Input: weight, y_predict, RISK LABEL
 # Function Output: list which contains 4 values
 def predict_cancer(input_image, input_answer):
+
     print('Input image is read and resizing is in progress')
-    #image = HMLAPIW.image_resize(input_image=input_image, IMAGE_SIZE=IMAGE_SIZE, IMAGE_DIMENSION=IMAGE_DIMENSION)
-    #y_predict = HMLAPIW.predict_model(loaded_model=loaded_model, input_image=image, TYPE=TYPE)
-    #y_predict = [0.95, 'MELANOMA']
+    image = HMLAPIW.image_resize(input_image=input_image, IMAGE_SIZE=IMAGE_SIZE, IMAGE_DIMENSION=IMAGE_DIMENSION)
+    print('Input image is resized as required')
+
+    print('Prediction is in progress')
+    y_predict = HMLAPIW.predict_model(loaded_model=loaded_model, input_image=image, TYPE=TYPE)
+    print('Risk evaluation using image is in progress')
+
     risk = HMLAPIW.compute_risk_using_image(y_predict=y_predict, THRESHOLD=THRESHOLD, RISK_LABEL=RISK_LABEL)
+    print('Converting input answer to binary+integer format')
+
     answer = HMLAPIW.convert_answer_string_to_int(input_answer=input_answer)
+    print('Computing weight using questionarie')
+
     weight = HMLAPIW.compute_weight_using_questionarie(answer=answer)
+    print('Concatenating result')
+
     o_result = HMLAPIW.decision_logic(weight=weight, y_predict=y_predict, RISK_LABEL=risk, CANCER=CANCER)
-    
+    print('Result is ', o_result)
+
     return o_result
 
-#Sanity check
-#input_image = []
-#input_answer = ['Yes', 'No', 'Yes', 'No', 'Yes', 'No', 'Yes','NO', 'Yes', 'No']
-#result = predict_cancer(input_image=input_image, input_answer=input_answer)
-#print(result)
+if __name__ == "__main__":
+    print('Creating class handles')
+    HMLAPIW = hackathon_ml_api_wrapper()
+
+# Sanity check
+input_image = 'C:/Users/kananth2/Downloads/Hackathon_Dataset/Test/ISIC_0024800.jpg'
+input_answer = ['Yes', 'No', 'Yes', 'No', 'Yes', 'No', 'Yes', 'NO', 'Yes', 'No']
+result = predict_cancer(input_image=input_image, input_answer=input_answer)
+print(result)
+
+
+###################################################EOF##################################################################
