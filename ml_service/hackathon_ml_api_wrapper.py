@@ -37,6 +37,7 @@ class loading_model:
             model_json = json_file.read()
             model = model_from_json(model_json)
             model.load_weights(weight_path)
+            
         return model
 
 print('Creating class handle for loading model function')
@@ -56,6 +57,7 @@ class hackathon_ml_api_wrapper:
         temp_image1 = cv2.imread(input_image)
         temp_image2 = cv2.resize(temp_image1, (IMAGE_SIZE, IMAGE_SIZE))
         image = temp_image2.reshape(-1,IMAGE_SIZE, IMAGE_SIZE,IMAGE_DIMENSION)
+        
         return image
 
     # Function Description: This function predicts the image using trained ML model
@@ -66,6 +68,7 @@ class hackathon_ml_api_wrapper:
         temp_predictions = loaded_model.predict(input_image)
         y_pred = np.argmax(temp_predictions[0], axis=0) #index of class with highest accuracy
         prediction = [temp_predictions[0][y_pred], TYPE[y_pred]]
+        
         return prediction
 
 
@@ -135,6 +138,7 @@ class hackathon_ml_api_wrapper:
             weight = 0.25
         else:
             weight = 0.20
+            
         return weight
 
     # Function Description: This is the decision logic
@@ -148,9 +152,9 @@ class hackathon_ml_api_wrapper:
             temp_cancer = CANCER[0]
 
         o_probability = weight * y_predict[0] * 100
-
-        o_result = {"cancer": temp_cancer, "probability": math.ceil(o_probability),
-                    "riskFactor": RISK_LABEL, "type": y_predict[1]}
+        
+        o_result = {"cancer": temp_cancer, "value": math.ceil(o_probability),
+                    "type": y_predict[1], "riskFactor": RISK_LABEL}
 
         return o_result
 
