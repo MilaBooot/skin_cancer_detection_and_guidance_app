@@ -11,20 +11,20 @@ import cv2
 import numpy as np
 from tensorflow.keras.models import model_from_json
 
-#Global Variables
+# Global Variables
 global loaded_model
 THRESHOLD = [70, 50, 10]  # This determines the threshold for high/medium/low
                           # >70 => HIGH, 50<X<70 => MEDIUM, 10<X<50 => LOW, >10 => Not applicable
 
 RISK_LABEL = ['HIGH', 'MEDIUM', 'LOW', 'NOT_APPLICABLE']
 CANCER = ['YES', 'NO']
-TYPE = ['a', 'b', 'c', 'd', 'e', 'f']
+TYPE = ['Actinic_Keratosis', 'Basal_Cell_Carcinoma', 'BKL', 'Dermtofibroma', 'Melanoma', 'Nevus', 'Vascular_Lesion']
 IMAGE_SIZE = 256
 IMAGE_DIMENSION = 3
 
-#File path for json model and weights
-json_path = 'C:/Users/kananth2/Downloads/Hackathon_Dataset/model.json'
-weight_path = 'C:/Users/kananth2/Downloads/Hackathon_Dataset/model.h5'
+# File path for json model and weights
+json_path = ''
+weight_path = ''
 
 # Below class is used for loading the saved model
 class loading_model:
@@ -153,6 +153,7 @@ class hackathon_ml_api_wrapper:
                     "riskFactor": RISK_LABEL, "type": y_predict[1]}
 
         return o_result
+
 
 # Function Description: This function is called by ml_api. It sequences akk the above function calls
 # Function Input: weight, y_predict, RISK LABEL
