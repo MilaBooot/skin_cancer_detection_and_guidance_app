@@ -11,4 +11,6 @@ public class DoctorDetailsDto {
     private String name;
     private String speciality;
     private String hospital;
+    public double latitude;
+    public double longitude;
 }
