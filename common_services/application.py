@@ -72,8 +72,8 @@ class signUp(Resource):
 			abort(409, result=msgFormats().error_msg("User ID already exists"))
 		try:
 			ret = db.insert_value(user_id, password, first_name, last_name, dob, gender)
-		except Exception:
-			abort(400, result=msgFormats().error_msg("Bad request. DB insert operation failed"))
+		except Exception as err:
+			abort(400, result=msgFormats().error_msg(str(err)))
 		return msgFormats().default_msg("User Added")
 
 

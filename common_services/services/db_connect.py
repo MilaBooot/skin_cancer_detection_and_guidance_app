@@ -3,9 +3,10 @@ import logging
 import json
 import os
 from geopy.geocoders import Nominatim
-
+from .email_validation import emailValidator
 
 DB_SERVER = os.environ.get("RDS_HOSTNAME")
+validate_email = emailValidator()
 
 class dbConnect:
     def __init__(self):
@@ -48,15 +49,16 @@ class dbConnect:
 
     def insert_value(self, user_id, password, first_name, last_name, dob, gender):
         try:
+            if not validate_email.is_valid(user_id):
+                raise Exception ("User ID not a valid email id")
             insert_query = """INSERT INTO app_data.user_details (user_id, password, first_name, last_name, dob, gender) VALUES (%s, %s, %s, %s, %s, %s)"""
             to_insert = (user_id, password, first_name, last_name, dob, gender)
             self.cur.execute(insert_query, to_insert)
             self.db.commit()
             count = self.cur.rowcount
         except Exception as errmsg:
-            print(errmsg)
             self.db.rollback()
-            raise Exception("DB insert operation failed")
+            raise Exception(errmsg)
         return ("%s Record inserted successfully into user_registration table" % count)
 
     def get_questions(self, id=None):
