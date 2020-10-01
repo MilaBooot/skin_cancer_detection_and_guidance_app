@@ -2,9 +2,11 @@ import psycopg2
 import logging
 import json
 import os
-
+from geopy.geocoders import Nominatim
+from .email_validation import emailValidator
 
 DB_SERVER = os.environ.get("RDS_HOSTNAME")
+validate_email = emailValidator()
 
 class dbConnect:
     def __init__(self):
@@ -47,15 +49,16 @@ class dbConnect:
 
     def insert_value(self, user_id, password, first_name, last_name, dob, gender):
         try:
+            if not validate_email.is_valid(user_id):
+                raise Exception ("User ID not a valid email id")
             insert_query = """INSERT INTO app_data.user_details (user_id, password, first_name, last_name, dob, gender) VALUES (%s, %s, %s, %s, %s, %s)"""
             to_insert = (user_id, password, first_name, last_name, dob, gender)
             self.cur.execute(insert_query, to_insert)
             self.db.commit()
             count = self.cur.rowcount
         except Exception as errmsg:
-            print(errmsg)
             self.db.rollback()
-            raise Exception("DB insert operation failed")
+            raise Exception(errmsg)
         return ("%s Record inserted successfully into user_registration table" % count)
 
     def get_questions(self, id=None):
@@ -89,12 +92,29 @@ class dbConnect:
             raise KeyError()
         return ret
 
+    def get_doctors(self, lat, long):
+        ret_data = []
+        geolocator = Nominatim(user_agent="custom_name")
+        coordinates = "%s, %s" % (lat, long)
+        location = geolocator.reverse(coordinates)
+        city = location.raw["address"]["city"]
+        self.cur.execute("""SELECT * FROM app_data.doctors WHERE city='%s'""" % (city,))
+        doctors = self.cur.fetchall()
+        for doctor in doctors:
+            hospital = ", " .join([doctor[2], doctor[7], doctor[3], doctor[5], str(doctor[6])])
+            data = {"name": doctor[1], "speciality": doctor[4], "hospital": hospital, "latitude": doctor[8], 
+                    "longitude": doctor[9]}
+            ret_data.append(data)
+        return ret_data
+
     def __del__(self):
         self.db.close()
 
-#if __name__ == "__main__":
+if __name__ == "__main__":
     #testing function
-    #ldb = dbConnect()
+    from pprint import pprint
+    ldb = dbConnect()
+    pprint(ldb.get_doctors(12.9716, 77.5946))
     #password = ldb.get_questions(1)
     #print(password)
 

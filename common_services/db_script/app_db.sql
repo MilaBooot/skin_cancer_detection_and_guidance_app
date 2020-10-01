@@ -5,7 +5,7 @@
 -- Dumped from database version 12.0
 -- Dumped by pg_dump version 12.0
 
--- Started on 2020-09-21 00:08:41
+-- Started on 2020-09-28 00:12:16
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -20,7 +20,7 @@ SET row_security = off;
 
 DROP DATABASE app_db;
 --
--- TOC entry 2846 (class 1262 OID 16756)
+-- TOC entry 2854 (class 1262 OID 16756)
 -- Name: app_db; Type: DATABASE; Schema: -; Owner: postgres
 --
 
@@ -70,6 +70,27 @@ CREATE TABLE app_data.answers (
 ALTER TABLE app_data.answers OWNER TO postgres;
 
 --
+-- TOC entry 207 (class 1259 OID 16813)
+-- Name: doctors; Type: TABLE; Schema: app_data; Owner: postgres
+--
+
+CREATE TABLE app_data.doctors (
+    id integer NOT NULL,
+    name character varying NOT NULL,
+    hospital character varying NOT NULL,
+    city character varying NOT NULL,
+    speciality character varying NOT NULL,
+    "State" character varying NOT NULL,
+    pincode integer NOT NULL,
+    address character varying NOT NULL,
+    latitude double precision,
+    longitude double precision
+);
+
+
+ALTER TABLE app_data.doctors OWNER TO postgres;
+
+--
 -- TOC entry 205 (class 1259 OID 16797)
 -- Name: questionnaire; Type: TABLE; Schema: app_data; Owner: postgres
 --
@@ -116,7 +137,7 @@ CREATE TABLE app_data.user_details (
 ALTER TABLE app_data.user_details OWNER TO postgres;
 
 --
--- TOC entry 2840 (class 0 OID 16805)
+-- TOC entry 2847 (class 0 OID 16805)
 -- Dependencies: 206
 -- Data for Name: answers; Type: TABLE DATA; Schema: app_data; Owner: postgres
 --
@@ -131,7 +152,28 @@ INSERT INTO app_data.answers (id, value) VALUES (7, 'Never burns');
 
 
 --
--- TOC entry 2839 (class 0 OID 16797)
+-- TOC entry 2848 (class 0 OID 16813)
+-- Dependencies: 207
+-- Data for Name: doctors; Type: TABLE DATA; Schema: app_data; Owner: postgres
+--
+
+INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address, latitude, longitude) VALUES (1001, 'doctor1', 'Fortis Cancer Institute', 'Bengaluru', 'dermatologist', 'Karnataka', 560076, '154/9, Bannerghatta Main Road FCI Basement Floor', 12.8944, 77.5987);
+INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address, latitude, longitude) VALUES (1003, 'doctor3', 'Fortis Cancer Institute', 'Bengaluru', 'dermatologist', 'Karnataka', 560076, '154/9, Bannerghatta Main Road FCI Basement Floor', 12.8944, 77.5987);
+INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address, latitude, longitude) VALUES (1004, 'doctor4', 'Fortis Cancer Institute', 'Bengaluru', 'dermatologist', 'Karnataka', 560076, '154/9, Bannerghatta Main Road FCI Basement Floor', 12.8944, 77.5987);
+INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address, latitude, longitude) VALUES (1002, 'doctor2', 'Kidwai Memorial Institute of Oncology', 'Bengaluru', 'dermatologist', 'Karnataka', 560029, 'Dr M H, Marigowda Rd, Hombegowda Nagar', 12.9374, 77.598);
+INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address, latitude, longitude) VALUES (1005, 'doctor5', 'Kidwai Memorial Institute of Oncology', 'Bengaluru', 'dermatologist', 'Karnataka', 560029, 'Dr M H, Marigowda Rd, Hombegowda Nagar', 12.9374, 77.598);
+INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address, latitude, longitude) VALUES (1009, 'doctor8', 'Tata Memorial Center', 'Mumbai', 'dermatologist', 'Maharashtra', 400012, 'Dr Ernest Borges Rd, Parel East, Parel', 19.0049, 72.8432);
+INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address, latitude, longitude) VALUES (1010, 'doctor9', 'Tata Memorial Center', 'Mumbai', 'dermatologist', 'Maharashtra', 400012, 'Dr Ernest Borges Rd, Parel East, Parel', 19.0049, 72.8432);
+INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address, latitude, longitude) VALUES (1011, 'doctor10', 'Amrita Institute of Medical Science', 'Kochi', 'dermatologist', 'Kerala', 682041, 'Ponekkara, P. O', 10.0329423, 76.2935769);
+INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address, latitude, longitude) VALUES (1012, 'doctor12', 'Amrita Institute of Medical Science', 'Kochi', 'dermatologist', 'Kerala', 682041, 'Ponekkara, P. O', 10.0329423, 76.2935769);
+INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address, latitude, longitude) VALUES (1013, 'doctor13', 'Amrita Institute of Medical Science', 'Kochi', 'dermatologist', 'Kerala', 682041, 'Ponekkara, P. O', 10.0329423, 76.2935769);
+INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address, latitude, longitude) VALUES (1006, 'doctor6', 'Aster MIMS Hospital', 'Kozhikode', 'dermatologist', 'Kerala', 673016, 'Mini Bypass Rd, Govindapuram', 11.2458, 75.7985);
+INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address, latitude, longitude) VALUES (1007, 'doctor7', 'Aster MIMS Hospital', 'Kozhikode', 'dermatologist', 'Kerala', 673016, 'Mini Bypass Rd, Govindapuram', 11.2458, 75.7985);
+INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pincode, address, latitude, longitude) VALUES (1008, 'doctor7', 'Aster MIMS Hospital', 'Kozhikode', 'dermatologist', 'Kerala', 673016, 'Mini Bypass Rd, Govindapuram', 11.2458, 75.7985);
+
+
+--
+-- TOC entry 2846 (class 0 OID 16797)
 -- Dependencies: 205
 -- Data for Name: questionnaire; Type: TABLE DATA; Schema: app_data; Owner: postgres
 --
@@ -147,7 +189,7 @@ INSERT INTO app_data.questionnaire (id, question, options) VALUES (8, 'How does 
 
 
 --
--- TOC entry 2838 (class 0 OID 16766)
+-- TOC entry 2845 (class 0 OID 16766)
 -- Dependencies: 204
 -- Data for Name: records; Type: TABLE DATA; Schema: app_data; Owner: postgres
 --
@@ -155,7 +197,7 @@ INSERT INTO app_data.questionnaire (id, question, options) VALUES (8, 'How does 
 
 
 --
--- TOC entry 2837 (class 0 OID 16758)
+-- TOC entry 2844 (class 0 OID 16758)
 -- Dependencies: 203
 -- Data for Name: user_details; Type: TABLE DATA; Schema: app_data; Owner: postgres
 --
@@ -163,7 +205,7 @@ INSERT INTO app_data.questionnaire (id, question, options) VALUES (8, 'How does 
 
 
 --
--- TOC entry 2709 (class 2606 OID 16812)
+-- TOC entry 2714 (class 2606 OID 16812)
 -- Name: answers answers_pkey; Type: CONSTRAINT; Schema: app_data; Owner: postgres
 --
 
@@ -172,7 +214,16 @@ ALTER TABLE ONLY app_data.answers
 
 
 --
--- TOC entry 2707 (class 2606 OID 16804)
+-- TOC entry 2716 (class 2606 OID 16820)
+-- Name: doctors doctors_pkey; Type: CONSTRAINT; Schema: app_data; Owner: postgres
+--
+
+ALTER TABLE ONLY app_data.doctors
+    ADD CONSTRAINT doctors_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2712 (class 2606 OID 16804)
 -- Name: questionnaire questionnaire_pkey; Type: CONSTRAINT; Schema: app_data; Owner: postgres
 --
 
@@ -181,7 +232,7 @@ ALTER TABLE ONLY app_data.questionnaire
 
 
 --
--- TOC entry 2705 (class 2606 OID 16773)
+-- TOC entry 2710 (class 2606 OID 16773)
 -- Name: records records_pkey; Type: CONSTRAINT; Schema: app_data; Owner: postgres
 --
 
@@ -190,7 +241,7 @@ ALTER TABLE ONLY app_data.records
 
 
 --
--- TOC entry 2703 (class 2606 OID 16765)
+-- TOC entry 2708 (class 2606 OID 16765)
 -- Name: user_details user_details_pkey; Type: CONSTRAINT; Schema: app_data; Owner: postgres
 --
 
@@ -199,7 +250,7 @@ ALTER TABLE ONLY app_data.user_details
 
 
 --
--- TOC entry 2710 (class 2606 OID 16774)
+-- TOC entry 2717 (class 2606 OID 16774)
 -- Name: records records_user_id_fkey; Type: FK CONSTRAINT; Schema: app_data; Owner: postgres
 --
 
@@ -207,7 +258,7 @@ ALTER TABLE ONLY app_data.records
     ADD CONSTRAINT records_user_id_fkey FOREIGN KEY (user_id) REFERENCES app_data.user_details(user_id);
 
 
--- Completed on 2020-09-21 00:08:42
+-- Completed on 2020-09-28 00:12:16
 
 --
 -- PostgreSQL database dump complete

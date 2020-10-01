@@ -72,8 +72,8 @@ class signUp(Resource):
 			abort(409, result=msgFormats().error_msg("User ID already exists"))
 		try:
 			ret = db.insert_value(user_id, password, first_name, last_name, dob, gender)
-		except Exception:
-			abort(400, result=msgFormats().error_msg("Bad request. DB insert operation failed"))
+		except Exception as err:
+			abort(400, result=msgFormats().error_msg(str(err)))
 		return msgFormats().default_msg("User Added")
 
 
@@ -104,8 +104,7 @@ class getDocList(Resource):
 		if longitude is None or latitude is None:
 			abort(400, result=msgFormats().error_msg("Bad Request. Incomplete location details"))
 		#call service to get list of doctors nearby. Adding a dumy data for now
-		data = [{"name": "test_name", "speciality": "dermetologist", "hospital": "some hospital"},
-		  {"name": "test_name2", "speciality": "dermetologist", "hospital": "some hospital2"}]
+		data = db.get_doctors(latitude, longitude)
 		return msgFormats().data_msg(data)
 
 
