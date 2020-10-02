@@ -161,7 +161,7 @@ print('Model is loaded')
 print('Creating class handles')
 HMLAPIW = hackathon_ml_api_wrapper()
 
-if __name__ == "__main__":
+#if __name__ == "__main__":
     # Sanity check
     # input_image = ''
     # input_answer = ['Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Burns rarely', 'Fair']
