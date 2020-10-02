@@ -185,6 +185,19 @@ class getFile(Resource):
 		data = db.get_records_file(user_id, filename)
 		return msgFormats().data_msg(data)
 
+@common_services_api.route("/deleteRecord")
+class deleteRecord(Resource):
+		@common_services_api.response(200, '{"result": "Record deleted"}')
+		@common_services_api.expect(reqparseArgs().get_file())
+		def delete(self):
+			user_id = request.args.get("userId", None)
+			filename = request.args.get("filename", None)
+			try:
+				db.delete_record(user_id, filename)
+			except Exception as err:
+				abort(400, result=msgFormats().error_msg(str(errmsg)))
+			return msgFormats().default_msg("Record Deleted")
+
 
 if __name__ == "__main__":
 	flask_app.run(debug=True)

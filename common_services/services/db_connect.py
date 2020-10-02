@@ -156,6 +156,16 @@ class dbConnect:
             result = ""
         return result
 
+    def delete_record(self, user_id, filename):
+        try:
+            query = """DELETE FROM app_data.records WHERE user_id='%s' AND file_name='%s'""" % (user_id, filename)
+            self.cur.execute(query)
+            self.db.commit()
+        except Exception as err:
+            self.db.rollback()
+            raise Exception(errmsg)
+        return
+
     def __del__(self):
         self.db.close()
 
@@ -165,12 +175,12 @@ if __name__ == "__main__":
     ldb = dbConnect()
     test_file = open("signup.PNG", "rb").read()
     #print(test_file)
-    #ldb.insert_record("deepak@gmail.com", "signup.PNG", "Testing blob", psycopg2.Binary(test_file))
-    file = ldb.get_records_file("deepak@gmail.com", "signup.PNG")
-    print(type(file))
-    open("write_test.png", 'wb').write(base64.b64decode(bytes(file, "utf-8")))
+    ldb.insert_record("deepak@gmail.com", "write_test.PNG", "Testing blob", psycopg2.Binary(test_file))
+    #ile = ldb.get_records_file("deepak@gmail.com", "signup.PNG")
+    #print(type(file))
+    #open("write_test.png", 'wb').write(base64.b64decode(bytes(file, "utf-8")))
     #pprint(ldb.get_records_file("deepak7946@gmail.com", "tst2"))
-
+    #ldb.delete_record("deepak@gmail.com", "write_test.PNG")
     #password = ldb.get_questions(1)
     #print(password)
 
