@@ -5,7 +5,7 @@
 -- Dumped from database version 12.0
 -- Dumped by pg_dump version 12.0
 
--- Started on 2020-10-02 18:33:39
+-- Started on 2020-10-02 19:21:44
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -114,7 +114,7 @@ CREATE TABLE app_data.records (
     user_id character varying NOT NULL,
     file_name character varying NOT NULL,
     description character varying NOT NULL,
-    file character varying NOT NULL
+    file bytea NOT NULL
 );
 
 
@@ -264,7 +264,7 @@ ALTER TABLE ONLY app_data.records
     ADD CONSTRAINT records_user_id_fkey FOREIGN KEY (user_id) REFERENCES app_data.user_details(user_id);
 
 
--- Completed on 2020-10-02 18:33:40
+-- Completed on 2020-10-02 19:21:44
 
 --
 -- PostgreSQL database dump complete

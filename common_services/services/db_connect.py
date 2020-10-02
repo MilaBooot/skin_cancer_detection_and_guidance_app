@@ -124,8 +124,8 @@ class dbConnect:
             ret.append(data)
         return ret
 
-    def check_file_name_exists(self, filename):
-        self.cur.execute("""SELECT count(*) from app_data.records where file_name='%s'""" % (filename,))
+    def check_file_name_exists(self, filename, user_id):
+        self.cur.execute("""SELECT count(*) from app_data.records where file_name='%s' AND user_id='%s'""" % (filename, user_id))
         count = self.cur.fetchone()
         count = count[0]
         return count
@@ -134,7 +134,7 @@ class dbConnect:
         try:
             count = self.get_total_records()
             id = count + 1
-            if self.check_file_name_exists(filename):
+            if self.check_file_name_exists(filename, user_id):
                 raise Exception("Filename already exists")
             insert_query = """INSERT INTO app_data.records (id, user_id, file_name, file, description) VALUES (%s, %s, %s, %s, %s)"""
             to_insert = (id, user_id, filename, file_bytestr, description)
@@ -146,12 +146,13 @@ class dbConnect:
         return
     
     def get_records_file(self, user_id, filename):
-        ret = []
         query = """SELECT file FROM app_data.records WHERE user_id='%s' AND file_name='%s'""" % (user_id, filename)
         self.cur.execute(query)
-        result = self.cur.fetchall()
-        if len(result):
-            result = result[0][0]
+        result = self.cur.fetchone()
+        if result is not None:
+            result = str(bytes(result[0]))
+        else:
+            result = ""
         return result
 
     def __del__(self):
@@ -161,7 +162,13 @@ if __name__ == "__main__":
     #testing function
     from pprint import pprint
     ldb = dbConnect()
-    pprint(ldb.get_records_file("deepak7946@gmail.com", "tst2"))
+    test_file = open("signup.PNG", "rb").read()
+    #print(test_file)
+    ldb.insert_record("deepak7946@gmail.com", "signup.PNG", "Testing blob", psycopg2.Binary(test_file))
+    #file = bytes(ldb.get_records_file("deepak7946@gmail.com", "signup.PNG"))
+    #open("write_test.png", 'wb').write(file)
+    #pprint(ldb.get_records_file("deepak7946@gmail.com", "tst2"))
+
     #password = ldb.get_questions(1)
     #print(password)
 
