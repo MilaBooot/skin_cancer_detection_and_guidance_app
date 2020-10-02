@@ -3,6 +3,7 @@ import logging
 import json
 import os
 from geopy.geocoders import Nominatim
+import base64
 from .email_validation import emailValidator
 
 DB_SERVER = os.environ.get("RDS_HOSTNAME")
@@ -150,7 +151,7 @@ class dbConnect:
         self.cur.execute(query)
         result = self.cur.fetchone()
         if result is not None:
-            result = str(bytes(result[0]))
+            result = base64.b64encode(bytes(result[0])).decode("utf-8")
         else:
             result = ""
         return result
@@ -164,9 +165,10 @@ if __name__ == "__main__":
     ldb = dbConnect()
     test_file = open("signup.PNG", "rb").read()
     #print(test_file)
-    ldb.insert_record("deepak7946@gmail.com", "signup.PNG", "Testing blob", psycopg2.Binary(test_file))
-    #file = bytes(ldb.get_records_file("deepak7946@gmail.com", "signup.PNG"))
-    #open("write_test.png", 'wb').write(file)
+    #ldb.insert_record("deepak@gmail.com", "signup.PNG", "Testing blob", psycopg2.Binary(test_file))
+    file = ldb.get_records_file("deepak@gmail.com", "signup.PNG")
+    print(type(file))
+    open("write_test.png", 'wb').write(base64.b64decode(bytes(file, "utf-8")))
     #pprint(ldb.get_records_file("deepak7946@gmail.com", "tst2"))
 
     #password = ldb.get_questions(1)
