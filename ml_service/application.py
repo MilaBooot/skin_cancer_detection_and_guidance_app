@@ -47,10 +47,13 @@ class login(Resource):
 	def post(self):
 		json_data = request.json
 		image = json_data["image"]
-		response = json_data["questions"]
+		responses = json_data["questions"]
+		answers = [""]*len(responses)
+		for response in responses:
+			answers[int(response["id"])-1] = response["answer"]
 		image_data = self.convert_imgdata(image)
 		try:
-			data = predict_cancer(image_data, response)
+			data = predict_cancer(image_data, answers)
 		except KeyError:
 			abort(401, result=msgFormats().error_msg("User ID not found"))
 		return msgFormats().data_msg(data)
