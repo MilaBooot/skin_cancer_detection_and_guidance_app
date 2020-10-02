@@ -40,6 +40,15 @@ class dataFields:
 			})
 		return resource_fields
 
+	def add_record(self):
+		resource_fields = common_services_api.model("Add Record Data",
+		   {'userId': fields.String(description="Email ID of user", required=True),
+			'filename': fields.String(description="Filename to save", required=True),
+			'description': fields.String(description="Description of file", required=True),
+			"fileByteString": fields.String(description="Byte String of the image", required=True)
+			})
+		return resource_fields
+
 
 class reqparseArgs:
 	def get_user_details(self):
@@ -57,9 +66,9 @@ class reqparseArgs:
 @register_api.route("/")
 class signUp(Resource):
 	@register_api.expect(dataFields().user_reg())
-	@user_validate_api.response(200, 'User Created')
-	@user_validate_api.response(409, 'User ID already exists')
-	@user_validate_api.response(400, 'Insert failed due to bad input')
+	@register_api.response(200, 'User Created')
+	@register_api.response(409, 'User ID already exists')
+	@register_api.response(400, 'Insert failed due to bad input')
 	def post(self):
 		json_data = request.json
 		user_id = json_data["user_id"]
@@ -103,7 +112,6 @@ class getDocList(Resource):
 		latitude = request.args.get("latitude", None)
 		if longitude is None or latitude is None:
 			abort(400, result=msgFormats().error_msg("Bad Request. Incomplete location details"))
-		#call service to get list of doctors nearby. Adding a dumy data for now
 		data = db.get_doctors(latitude, longitude)
 		return msgFormats().data_msg(data)
 
@@ -129,5 +137,22 @@ class getQuestions(Resource):
 		return msgFormats().data_msg(data)
 
 
+@common_services_api.route("/addRecord")
+class addRecord(Resource):
+	@common_services_api.expect(dataFields().add_record())
+	@common_services_api.response(200, '{"result": "Record added"}')
+	@common_services_api.response(400, '{"result": {"error": "Filename already exists"}}')
+	def post(self):
+		record_data = request.json
+		user_id = record_data.get("userId")
+		filename = record_data.get("filename")
+		description = record_data.get("description")
+		file_bytestr = record_data.get("fileByteString")
+		try:
+			db.insert_record(user_id, filename, description, file_bytestr)
+		except Exception as errmsg:
+			abort(400, result=msgFormats().error_msg(str(errmsg)))
+		return msgFormats().default_msg("Record Added")
+
 if __name__ == "__main__":
-	flask_app.run()
+	flask_app.run(debug=True)

@@ -107,6 +107,39 @@ class dbConnect:
             ret_data.append(data)
         return ret_data
 
+    def get_total_records(self):
+        self.cur.execute("""SELECT count(*) from app_data.records""")
+        count = self.cur.fetchone()
+        count = count[0]
+        return count
+   
+    def get_user_records(self, user_id):
+        query = """SELECT * FROM app_data.user_details WHERE user_id='%s'""" % (user_id,)
+        self.cur.execute(query)
+        result = self.cur.fetchall()
+        return result
+
+    def check_file_name_exists(self, filename):
+        self.cur.execute("""SELECT count(*) from app_data.records where file_name='%s'""" % (filename,))
+        count = self.cur.fetchone()
+        count = count[0]
+        return count
+
+    def insert_record(self, user_id, filename, description, file_bytestr):
+        try:
+            count = self.get_total_records()
+            id = count + 1
+            if self.check_file_name_exists(filename):
+                raise Exception("Filename already exists")
+            insert_query = """INSERT INTO app_data.records (id, user_id, file_name, file, description) VALUES (%s, %s, %s, %s, %s)"""
+            to_insert = (id, user_id, filename, file_bytestr, description)
+            self.cur.execute(insert_query, to_insert)
+            self.db.commit()
+        except Exception as errmsg:
+            self.db.rollback()
+            raise Exception(errmsg)
+        return
+    
     def __del__(self):
         self.db.close()
 
@@ -114,7 +147,7 @@ if __name__ == "__main__":
     #testing function
     from pprint import pprint
     ldb = dbConnect()
-    pprint(ldb.get_doctors(12.9716, 77.5946))
+    pprint(ldb.check_file_name_exists("dummy"))
     #password = ldb.get_questions(1)
     #print(password)
 
