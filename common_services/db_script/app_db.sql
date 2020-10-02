@@ -5,7 +5,7 @@
 -- Dumped from database version 12.0
 -- Dumped by pg_dump version 12.0
 
--- Started on 2020-09-28 00:12:16
+-- Started on 2020-10-02 13:39:49
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -142,13 +142,18 @@ ALTER TABLE app_data.user_details OWNER TO postgres;
 -- Data for Name: answers; Type: TABLE DATA; Schema: app_data; Owner: postgres
 --
 
-INSERT INTO app_data.answers (id, value) VALUES (1, 'yes');
-INSERT INTO app_data.answers (id, value) VALUES (2, 'no');
 INSERT INTO app_data.answers (id, value) VALUES (3, 'Burns rarely');
 INSERT INTO app_data.answers (id, value) VALUES (4, 'Burns moderately');
 INSERT INTO app_data.answers (id, value) VALUES (5, 'Always burns ,blisters and peels');
 INSERT INTO app_data.answers (id, value) VALUES (6, 'Often burns, blisters and peels');
 INSERT INTO app_data.answers (id, value) VALUES (7, 'Never burns');
+INSERT INTO app_data.answers (id, value) VALUES (1, 'Yes');
+INSERT INTO app_data.answers (id, value) VALUES (2, 'No');
+INSERT INTO app_data.answers (id, value) VALUES (8, 'Ivory white');
+INSERT INTO app_data.answers (id, value) VALUES (9, 'Fair');
+INSERT INTO app_data.answers (id, value) VALUES (10, 'Pale');
+INSERT INTO app_data.answers (id, value) VALUES (11, 'Dark Brown');
+INSERT INTO app_data.answers (id, value) VALUES (12, 'Black');
 
 
 --
@@ -179,13 +184,13 @@ INSERT INTO app_data.doctors (id, name, hospital, city, speciality, "State", pin
 --
 
 INSERT INTO app_data.questionnaire (id, question, options) VALUES (1, 'Do you wear protective clothing when you got in sunlight?', '{1,2}');
-INSERT INTO app_data.questionnaire (id, question, options) VALUES (2, ' Do you have any family history of skin cancer?', '{1,2}');
-INSERT INTO app_data.questionnaire (id, question, options) VALUES (3, 'Do you have a fair skin?', '{1,2}');
-INSERT INTO app_data.questionnaire (id, question, options) VALUES (4, 'Do you use Sunscreen when you got in sunlight?', '{1,2}');
-INSERT INTO app_data.questionnaire (id, question, options) VALUES (5, 'Does your work place exposes you to X-rays or chemical carcinogens?', '{1,2}');
-INSERT INTO app_data.questionnaire (id, question, options) VALUES (6, 'Do you have more than 50 moles on your body?', '{1,2}');
-INSERT INTO app_data.questionnaire (id, question, options) VALUES (7, 'Is your skin sensitive to sunlight?', '{1,2}');
-INSERT INTO app_data.questionnaire (id, question, options) VALUES (8, 'How does your skin react to sun exposure?', '{3,4,5,6,7}');
+INSERT INTO app_data.questionnaire (id, question, options) VALUES (3, 'Do you use Sunscreen when you got in sunlight?', '{1,2}');
+INSERT INTO app_data.questionnaire (id, question, options) VALUES (4, 'Does your work place exposes you to X-rays or chemical carcinogens?', '{1,2}');
+INSERT INTO app_data.questionnaire (id, question, options) VALUES (5, 'Do you have more than 50 moles on your body?', '{1,2}');
+INSERT INTO app_data.questionnaire (id, question, options) VALUES (7, 'How does your skin react to sun exposure?', '{3,4,5,6,7}');
+INSERT INTO app_data.questionnaire (id, question, options) VALUES (2, 'Does you have any family history of skin cancer?', '{1,2}');
+INSERT INTO app_data.questionnaire (id, question, options) VALUES (6, 'Does your skin get tanned on exposure to sun?', '{1,2}');
+INSERT INTO app_data.questionnaire (id, question, options) VALUES (8, 'What is your skin tone?', '{8,9,10,11,12}');
 
 
 --
@@ -258,7 +263,7 @@ ALTER TABLE ONLY app_data.records
     ADD CONSTRAINT records_user_id_fkey FOREIGN KEY (user_id) REFERENCES app_data.user_details(user_id);
 
 
--- Completed on 2020-09-28 00:12:16
+-- Completed on 2020-10-02 13:39:49
 
 --
 -- PostgreSQL database dump complete
