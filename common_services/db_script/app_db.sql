@@ -5,7 +5,7 @@
 -- Dumped from database version 12.0
 -- Dumped by pg_dump version 12.0
 
--- Started on 2020-10-02 17:17:45
+-- Started on 2020-10-02 18:33:39
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -113,8 +113,8 @@ CREATE TABLE app_data.records (
     id integer NOT NULL,
     user_id character varying NOT NULL,
     file_name character varying NOT NULL,
-    file bytea NOT NULL,
-    description character varying NOT NULL
+    description character varying NOT NULL,
+    file character varying NOT NULL
 );
 
 
@@ -208,7 +208,6 @@ INSERT INTO app_data.questionnaire (id, question, options) VALUES (8, 'What is y
 -- Data for Name: user_details; Type: TABLE DATA; Schema: app_data; Owner: postgres
 --
 
-INSERT INTO app_data.user_details (user_id, password, first_name, last_name, dob, gender) VALUES ('deepak7946@gmail.com', '12asdasd2345efsdfvsdf', 'Deepak Ram', 'K', '1994-06-17', 'M');
 
 
 --
@@ -265,7 +264,7 @@ ALTER TABLE ONLY app_data.records
     ADD CONSTRAINT records_user_id_fkey FOREIGN KEY (user_id) REFERENCES app_data.user_details(user_id);
 
 
--- Completed on 2020-10-02 17:17:46
+-- Completed on 2020-10-02 18:33:40
 
 --
 -- PostgreSQL database dump complete

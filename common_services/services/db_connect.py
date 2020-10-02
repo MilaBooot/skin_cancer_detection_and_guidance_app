@@ -114,10 +114,15 @@ class dbConnect:
         return count
    
     def get_user_records(self, user_id):
-        query = """SELECT * FROM app_data.user_details WHERE user_id='%s'""" % (user_id,)
+        ret = []
+        query = """SELECT file_name, description FROM app_data.records WHERE user_id='%s'""" % (user_id,)
         self.cur.execute(query)
         result = self.cur.fetchall()
-        return result
+        for entry in result:
+            data = {"filename": entry[0],
+                    "description": entry[1]}
+            ret.append(data)
+        return ret
 
     def check_file_name_exists(self, filename):
         self.cur.execute("""SELECT count(*) from app_data.records where file_name='%s'""" % (filename,))
@@ -140,6 +145,15 @@ class dbConnect:
             raise Exception(errmsg)
         return
     
+    def get_records_file(self, user_id, filename):
+        ret = []
+        query = """SELECT file FROM app_data.records WHERE user_id='%s' AND file_name='%s'""" % (user_id, filename)
+        self.cur.execute(query)
+        result = self.cur.fetchall()
+        if len(result):
+            result = result[0][0]
+        return result
+
     def __del__(self):
         self.db.close()
 
@@ -147,7 +161,7 @@ if __name__ == "__main__":
     #testing function
     from pprint import pprint
     ldb = dbConnect()
-    pprint(ldb.check_file_name_exists("dummy"))
+    pprint(ldb.get_records_file("deepak7946@gmail.com", "tst2"))
     #password = ldb.get_questions(1)
     #print(password)
 

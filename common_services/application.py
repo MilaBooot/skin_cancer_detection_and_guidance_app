@@ -61,6 +61,17 @@ class reqparseArgs:
 		parser.add_argument('latitude', type=float, default=None, required=True)
 		parser.add_argument('longitude', type=float, default=None, required=True)
 		return parser
+	
+	def get_user_records(self):
+		parser = reqparse.RequestParser()
+		parser.add_argument('userId', default=None, required=True)
+		return parser
+
+	def get_file(self):
+		parser = reqparse.RequestParser()
+		parser.add_argument('userId', default=None, required=True)
+		parser.add_argument('filename', default=None, required=True)
+		return parser
 
 
 @register_api.route("/")
@@ -153,6 +164,27 @@ class addRecord(Resource):
 		except Exception as errmsg:
 			abort(400, result=msgFormats().error_msg(str(errmsg)))
 		return msgFormats().default_msg("Record Added")
+
+
+@common_services_api.route("/getUserRecords")
+class getUserRecords(Resource):
+	@common_services_api.response(200, '{"result": {"data":[{"filename": "string", "description"" "string"}]}}')
+	@common_services_api.expect(reqparseArgs().get_user_records())
+	def get(self):
+		user_id = request.args.get("userId", None)
+		data = db.get_user_records(user_id)
+		return msgFormats().data_msg(data)
+
+@common_services_api.route("/getFile")
+class getFile(Resource):
+	@common_services_api.response(200, '{"result": {"data": {"fileByteString": "byte string"}}}')
+	@common_services_api.expect(reqparseArgs().get_file())
+	def get(self):
+		user_id = request.args.get("userId", None)
+		filename = request.args.get("filename", None)
+		data = db.get_records_file(user_id, filename)
+		return msgFormats().data_msg(data)
+
 
 if __name__ == "__main__":
 	flask_app.run(debug=True)
