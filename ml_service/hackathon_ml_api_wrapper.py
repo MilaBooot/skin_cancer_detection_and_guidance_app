@@ -1,10 +1,11 @@
-############################################################################
+###########################################################################################
 # Name of file: hackathon_ml_api_wrapper.py
-# Description: This is the wrapper file which would do the necessary conversion from BFF
+# Description: This is the wrapper file which acts as interface between ML model and BFF
 # Revision: 1.0
 # Last Update:
 # Authors:
-#############################################################################
+############################################################################################
+
 # Importing python modules
 import math
 import cv2
@@ -33,19 +34,12 @@ class loading_model:
     # Function Input: json_path and weight_path
     # Function Output: loaded model
     def func_loading_model(self, json_path, weight_path):
-        with open( json_path, 'r') as json_file:
+        with open(json_path, 'r') as json_file:
             model_json = json_file.read()
             model = model_from_json(model_json)
             model.load_weights(weight_path)
-            
+
         return model
-
-print('Creating class handle for loading model function')
-LM = loading_model()
-
-print('Loading the model...')
-loaded_model = LM.func_loading_model(json_path=json_path, weight_path=weight_path)
-print('Model is loaded')
 
 class hackathon_ml_api_wrapper:
 
@@ -56,7 +50,7 @@ class hackathon_ml_api_wrapper:
 
         temp_image1 = cv2.imread(input_image)
         temp_image2 = cv2.resize(temp_image1, (IMAGE_SIZE, IMAGE_SIZE))
-        image = temp_image2.reshape(-1,IMAGE_SIZE, IMAGE_SIZE,IMAGE_DIMENSION)
+        image = temp_image2.reshape(-1, IMAGE_SIZE, IMAGE_SIZE, IMAGE_DIMENSION)
         
         return image
 
@@ -65,39 +59,13 @@ class hackathon_ml_api_wrapper:
     # Function Output: answer in binary + integer format
     def predict_model(self, loaded_model, input_image, TYPE):
 
-        temp_predictions = loaded_model.predict(input_image)
-        y_pred = np.argmax(temp_predictions[0], axis=0) #index of class with highest accuracy
-        prediction = [temp_predictions[0][y_pred], TYPE[y_pred]]
+        temp_prediction = loaded_model.predict(input_image)
+        y_pred = np.argmax(temp_prediction[0], axis=0) #index of class with highest accuracy
+        prediction = [temp_prediction[0][y_pred], TYPE[y_pred]]
+        #print('temp prediction is ', temp_prediction)
+        #print('y_pred is ', y_pred)
         
         return prediction
-
-
-    # Function Description: This function converts the input answer (string format) to binary + integer format
-    # Function Input: User answer
-    # Function Output: answer in binary + integer format
-    def convert_answer_string_to_int(self, input_answer):
-
-        #Local variable declaration
-        temp_answer = []
-
-        for i in range(0, len(input_answer)):
-            if input_answer[i] is 'Yes':
-                temp_answer.append(1)
-            elif input_answer[i] is 'No':
-                temp_answer.append(0)
-            elif input_answer[i] is 'Ivorywhite':
-                temp_answer.append(2)
-            elif input_answer[i] is 'Pale':
-                temp_answer.append(3)
-            elif input_answer[i] is 'Brown':
-                temp_answer.append(4)
-            elif input_answer[i] is 'Black':
-                temp_answer.append(5)
-            elif input_answer[i] is 'Fair':
-                temp_answer.append(6)
-
-        return temp_answer
-
 
     # Function Description: This function identifies the risk label based on y_predict percentage and threshold value
     # Function Input: y_predict, threshold and risk label
@@ -113,32 +81,31 @@ class hackathon_ml_api_wrapper:
         else:
             return RISK_LABEL[3]
 
-    # Function Description: This function identifies the risk using questionarie
-    # Function Input: user answer with binary + integer encoding
-    # Function Output:  weights
+    # Function Description: This function identifies the risk using questionnaire
+    # Function Input: user answer
+    # Function Output: weights
     def compute_weight_using_questionarie(self, answer):
 
-        #Local Variable Declaration
-        temp_answer = 1
-
-        for i in answer:  # Bit wise OR
-            temp_answer = answer[i] | temp_answer
-
-        if (temp_answer == 1) | (answer[3] & answer[7]):
+        if (answer[1] is 'Yes') & (answer[3] is 'Yes') & (answer[6] is 'Always burns ,blisters and peels'):
             weight = 1
-        elif ~(answer[3] & answer[5] & answer[7]):
-            weight = 0.5
-        elif (~answer[3] & answer[5] & answer[7] & answer[9]):
-            weight = 0.8
-        elif (answer[3] & answer[9]):
+        elif (answer[0] is 'No') & (answer[2] is 'No') & (answer[5] is 'Yes') & (answer[7] is 'Black')\
+            &((answer[6] is 'Often burns,blisters and peels') | (answer[6] is 'Burns moderately')):
             weight = 0.9
-        elif (answer[3]):
-            weight = 0.75
-        elif (temp_answer==0):
-            weight = 0.25
+        elif (answer[4] is 'Yes') & (answer[6] is 'Burns rarely'):
+            weight = 0.3
+        elif (answer[4] is 'Yes') & (answer[5] is 'Yes') & (answer[6] is 'Often burns,blisters and peels')\
+            & (answer[7] is 'Black'):
+            weight = 0.8
+        elif (answer[0] is 'Yes') & (answer[1] is 'No') & (answer[2] is 'Yes') & (answer[3] is 'No')\
+              & (answer[4] is 'No'):
+            weight = 0.2
+        elif (answer[7] is 'Ivory white') & (answer[5] is 'Yes') & (answer[6] is 'Burns moderately'):
+            weight = 0.7
+        elif (answer[7] is 'Fair') & (answer[1] is 'Yes'):
+            weight = 0.6
         else:
-            weight = 0.20
-            
+            weight = 0.1
+
         return weight
 
     # Function Description: This is the decision logic
@@ -151,8 +118,8 @@ class hackathon_ml_api_wrapper:
         else:
             temp_cancer = CANCER[0]
 
-        o_probability = weight * y_predict[0] * 100
-        
+        o_probability = ((weight+y_predict[0])/2 )*100
+
         o_result = {"cancer": temp_cancer, "value": math.ceil(o_probability),
                     "type": y_predict[1], "riskFactor": RISK_LABEL}
 
@@ -175,10 +142,8 @@ def predict_cancer(input_image, input_answer):
     risk = HMLAPIW.compute_risk_using_image(y_predict=y_predict, THRESHOLD=THRESHOLD, RISK_LABEL=RISK_LABEL)
     print('Converting input answer to binary+integer format')
 
-    answer = HMLAPIW.convert_answer_string_to_int(input_answer=input_answer)
-    print('Computing weight using questionarie')
-
-    weight = HMLAPIW.compute_weight_using_questionarie(answer=answer)
+    print('compute weight using questionnaire')
+    weight = HMLAPIW.compute_weight_using_questionarie(answer=input_answer)
     print('Concatenating result')
 
     o_result = HMLAPIW.decision_logic(weight=weight, y_predict=y_predict, RISK_LABEL=risk, CANCER=CANCER)
@@ -186,15 +151,23 @@ def predict_cancer(input_image, input_answer):
 
     return o_result
 
-if __name__ == "__main__":
-    print('Creating class handles')
-    HMLAPIW = hackathon_ml_api_wrapper()
+print('Creating class handle for loading model function')
+LM = loading_model()
 
-# Sanity check
-input_image = 'C:/Users/kananth2/Downloads/Hackathon_Dataset/Test/ISIC_0024800.jpg'
-input_answer = ['Yes', 'No', 'Yes', 'No', 'Yes', 'No', 'Yes', 'NO', 'Yes', 'No']
-result = predict_cancer(input_image=input_image, input_answer=input_answer)
-print(result)
+print('Loading the model...')
+loaded_model = LM.func_loading_model(json_path=json_path, weight_path=weight_path)
+print('Model is loaded')
+
+print('Creating class handles')
+HMLAPIW = hackathon_ml_api_wrapper()
+
+if __name__ == "__main__":
+    # Sanity check
+    # input_image = ''
+    # input_answer = ['Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Burns rarely', 'Fair']
+    # result = predict_cancer(input_image=input_image, input_answer=input_answer)
+    
+    # print(result)
 
 
 ###################################################EOF##################################################################
