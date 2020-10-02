@@ -151,7 +151,7 @@ class dbConnect:
         self.cur.execute(query)
         result = self.cur.fetchone()
         if result is not None:
-            result = base64.b64encode(bytes(result[0])).decode("utf-8")
+            result = base64.b64encode(bytes(result[0])).decode()
         else:
             result = ""
         return result
@@ -173,12 +173,13 @@ if __name__ == "__main__":
     #testing function
     from pprint import pprint
     ldb = dbConnect()
-    test_file = open("signup.PNG", "rb").read()
+    #test_file = open("signup.PNG", "rb").read()
     #print(test_file)
-    ldb.insert_record("deepak@gmail.com", "write_test.PNG", "Testing blob", psycopg2.Binary(test_file))
-    #ile = ldb.get_records_file("deepak@gmail.com", "signup.PNG")
-    #print(type(file))
-    #open("write_test.png", 'wb').write(base64.b64decode(bytes(file, "utf-8")))
+    #ldb.insert_record("deepak@gmail.com", "write_test.PNG", "Testing blob", psycopg2.Binary(test_file))
+    file = ldb.get_records_file("deepak@gmail.com", "signup.PNG")
+    print(file)
+    print(type(file))
+    open("write_test.jpg", 'wb').write(base64.b64decode(file))
     #pprint(ldb.get_records_file("deepak7946@gmail.com", "tst2"))
     #ldb.delete_record("deepak@gmail.com", "write_test.PNG")
     #password = ldb.get_questions(1)
