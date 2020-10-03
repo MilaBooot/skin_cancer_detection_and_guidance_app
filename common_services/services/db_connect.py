@@ -155,7 +155,7 @@ class dbConnect:
             result = base64.b64encode(bytes(data[0])).decode()
         else:
             result = ""
-        return result, bytes(data[0])
+        return result
 
     def delete_record(self, user_id, filename):
         try:
@@ -178,10 +178,10 @@ if __name__ == "__main__":
     #test_file = base64.b64encode(test_file)
     #print(test_file)
     #ldb.insert_record("deepak@gmail.com", "write_test.PNG", "Testing blob", test_file)
-    file, raw_file = ldb.get_records_file("deepak@gmail.com", "write_test.PNG")
-    print(file)
+    #file, raw_file = ldb.get_records_file("deepak@gmail.com", "write_test.PNG")
+    #print(file)
     #print(type(base64.b64decode(file)))
-    print(raw_file)
+    #print(raw_file)
     #print(base64.b64decode(file) == raw_file)
     #pen("write_test.PNG", 'wb').write(base64.b64decode(file))
     #pprint(ldb.get_records_file("deepak7946@gmail.com", "tst2"))
