@@ -1,1 +1,73 @@
-<img src="/assets/image/under-construction-vector.jpg" class="img-fluid" alt="Responsive image">
+<div class="container">  
+    <h1>Upload your Documents</h1>  
+    <br>  
+        <hr>  
+            <form [formGroup]="saveFileForm" (ngSubmit)="onExpSubmit()">  
+                <div class="row">  
+                    <div class="col-md-6">  
+                        <div class="row">  
+                            <div class="col-md-4">  
+                                <b>Description</b>  
+                            </div>  
+                            <div class="col-md-5">  
+                                <input type="text" formControlName="Description" placeholder="Description">  
+                                </div>  
+                            </div>  
+                        </div>  
+                        <div class="col-md-6">  
+                            <div class="row">  
+                                <div class="col-md-6">  
+                                    <b>Upload Document</b>  
+                                </div>  
+                                <div class="col-md-6">  
+                                    <input type='file' #documentInput>  
+                                        <br>  
+                                        </div>  
+                                    </div>  
+                                </div>  
+                            </div>  
+
+
+                                        <div class="row" align="center" style="padding-left: 400px;">  
+                                            <button type="submit" class="button" class="btn btn-primary" color="primary">Upload
+                                            </button>  
+                                        </div>  
+                                 </form>  
+                                    <hr>  
+                                        <div class="row">  
+                                            <table width="100%" class="responsive-table table-striped table-bordered table-hover">  
+                                                <thead>  
+                                                    <tr class="btn-secondary" align = "center" style="height: 40px;">  
+                                                        <th style="width:10%;">  
+                                                            <b>Description</b>  
+                                                        </th>  
+                                                        <th style="width:15%;">  
+                                                            <b>File</b>  
+                                                        </th> 
+                                                        <th style="width:1%;">  
+                                                            <b>Action</b>  
+                                                        </th>  
+                                                    </tr>  
+                                                </thead>  
+                                                <tbody>  
+                                                    <tr *ngFor="let item of lstFileDetails">  
+                                                        <td>  
+                                                            <span>{{item.description}}</span>  
+                                                        </td>  
+                                                            <td>  
+                                                                <button (click)="downloadDocFile(item)" class="btn btn-link">  
+                                                                    <span class="fa fa-download">  {{item.filename}}</span>  
+                                                                </button>  
+                                                            </td>  
+
+                                                            <td>  
+                                                                <button class="del-btn" (click)="deleteDocFile(item)">  
+                                                                    <i class="fa fa-trash" ></i>
+                                                                </button>  
+                                                            </td> 
+                                                        </tr>  
+                                                    </tbody>  
+                                                </table>  
+                                                <br>  
+                                                </div>  
+                                            </div>  
