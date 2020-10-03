@@ -24,8 +24,8 @@ IMAGE_SIZE = 256
 IMAGE_DIMENSION = 3
 
 # File path for json model and weights
-json_path = ''
-weight_path = ''
+json_path = '../model/model.json'
+weight_path = '../model/model.h5'
 
 # Below class is used for loading the saved model
 class loading_model:
@@ -51,7 +51,7 @@ class hackathon_ml_api_wrapper:
         temp_image1 = cv2.imread(input_image)
         temp_image2 = cv2.resize(temp_image1, (IMAGE_SIZE, IMAGE_SIZE))
         image = temp_image2.reshape(-1, IMAGE_SIZE, IMAGE_SIZE, IMAGE_DIMENSION)
-        
+
         return image
 
     # Function Description: This function predicts the image using trained ML model
@@ -62,9 +62,8 @@ class hackathon_ml_api_wrapper:
         temp_prediction = loaded_model.predict(input_image)
         y_pred = np.argmax(temp_prediction[0], axis=0) #index of class with highest accuracy
         prediction = [temp_prediction[0][y_pred], TYPE[y_pred]]
-        #print('temp prediction is ', temp_prediction)
-        #print('y_pred is ', y_pred)
-        
+        print('temp prediction is ', temp_prediction)
+        print('y_pred is ', y_pred)
         return prediction
 
     # Function Description: This function identifies the risk label based on y_predict percentage and threshold value
@@ -161,13 +160,13 @@ print('Model is loaded')
 print('Creating class handles')
 HMLAPIW = hackathon_ml_api_wrapper()
 
-#if __name__ == "__main__":
+if __name__ == "__main__":
     # Sanity check
-    # input_image = ''
-    # input_answer = ['Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Burns rarely', 'Fair']
-    # result = predict_cancer(input_image=input_image, input_answer=input_answer)
-    
-    # print(result)
+    input_image = ''
+    input_answer = ['Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Burns rarely', 'Fair']
+    result = predict_cancer(input_image=input_image, input_answer=input_answer)
+
+    print(result)
 
 
 ###################################################EOF##################################################################
