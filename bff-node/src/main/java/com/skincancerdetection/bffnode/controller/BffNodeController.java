@@ -2,6 +2,7 @@ package com.skincancerdetection.bffnode.controller;
 
 import com.skincancerdetection.bffnode.assemble.RequestAssembler;
 import com.skincancerdetection.bffnode.enums.ErrorEnum;
+import com.skincancerdetection.bffnode.exception.BffNodeException;
 import com.skincancerdetection.bffnode.model.*;
 import com.skincancerdetection.bffnode.service.CommonService;
 import com.skincancerdetection.bffnode.utils.SurveyUtil;
@@ -68,6 +69,12 @@ public class BffNodeController {
     public ResponseEntity upload(@RequestParam("image") MultipartFile multipartFile
             , @PathVariable("userid") String userid) throws IOException {
         byte[] imageByteArr = multipartFile.getBytes();
+        if (SurveyUtil.getResponse(userid) == null) {
+            ErrorMessageDto messageDto = new ErrorMessageDto(ErrorEnum.UNANSWERED_ERROR.getErrMessage());
+            CommonResponse<ErrorMessageDto> errResponse = new CommonResponse(messageDto);
+            return new ResponseEntity(ErrorEnum.UNANSWERED_ERROR.getErrMessage(), HttpStatus.BAD_REQUEST);
+
+        }
         ImageProcRequest imageProcRequest = requestAssembler.assembleImageProcRequest(imageByteArr, userid);
         ImageProcReponse reponse = commonService.getPrediction(imageProcRequest);
 
@@ -77,6 +84,12 @@ public class BffNodeController {
     @PostMapping("/questionnaire-reponse/{userid}/upload")
     public ResponseEntity upload(@RequestBody QuestionnaireResponse questionnaireResponse
             , @PathVariable("userid") String userid) {
+        if(questionnaireResponse.getQuestions().isEmpty() && questionnaireResponse.getQuestions().size() ==0) {
+            ErrorMessageDto messageDto = new ErrorMessageDto(ErrorEnum.UNANSWERED_ERROR.getErrMessage());
+            CommonResponse<ErrorMessageDto> errResponse = new CommonResponse(messageDto);
+            return new ResponseEntity(ErrorEnum.UNANSWERED_ERROR.getErrMessage(), HttpStatus.BAD_REQUEST);
+
+        }
         SurveyUtil.recordResponse(questionnaireResponse,userid);
         return new ResponseEntity(HttpStatus.OK);
     }
