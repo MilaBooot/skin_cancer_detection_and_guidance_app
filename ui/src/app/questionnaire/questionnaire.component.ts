@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { Question, User } from '../_models';
-import { AuthenticationService, QuestionnaireService } from '../_services';
+import { AlertService, AuthenticationService, QuestionnaireService } from '../_services';
 
 @Component({
   selector: 'app-questionnaire',
@@ -13,7 +13,9 @@ export class QuestionnaireComponent implements OnInit {
   @Output() messageEvent = new EventEmitter<Question[]>();
   currentUser: User;
 
-  constructor(private questionnaireService: QuestionnaireService, private authenticationService: AuthenticationService) { 
+  constructor(private questionnaireService: QuestionnaireService
+    , private authenticationService: AuthenticationService
+    , private alertService: AlertService) { 
  
   }
 

@@ -9,7 +9,7 @@
 </div>
 
 
-<div class="container-fluid pt-4" *ngIf ="!checkImageProcessed()"> 
+<div class="container-fluid pt-4" *ngIf ="checkImageProcessed()"> 
   
     <div class="row justify-content-md-center">
         <div class="col-auto .mr-auto">
@@ -24,7 +24,7 @@
     </div>
 </div>
 
-<div class="container-fluid pt-4"> 
+<div class="container-fluid pt-4" *ngIf ="checkImageProcessed()"> 
   
     <div class="row justify-content-md-center">
         <div class="col-auto .mr-auto">
