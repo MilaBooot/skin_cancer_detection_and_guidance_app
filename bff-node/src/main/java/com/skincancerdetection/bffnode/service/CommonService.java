@@ -10,5 +10,9 @@ public interface CommonService {
     List<QuestionDto> getQuestionnaire();
     public ImageProcReponse getPrediction(ImageProcRequest imageProcRequest);
     List<DoctorDetailsDto> getDoctors(double longitude, double latitude);
+    void uploadDocument(FileUploadDto fileUploadDto);
+    List<UserDocuments> getUserDocuments(String username);
+    byte[] getFile(String username, String filename);
+    void deleteDocument(String username, String filename);
 
 }

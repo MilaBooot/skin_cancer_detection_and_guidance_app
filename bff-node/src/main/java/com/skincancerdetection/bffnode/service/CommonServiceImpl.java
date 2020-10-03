@@ -8,7 +8,10 @@ import com.skincancerdetection.bffnode.utils.AESEncryptionDecryption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -69,6 +72,33 @@ public class CommonServiceImpl implements CommonService{
         CommonResponse<CommonArrResponseData> response = commonServiceRouter.getDoctors(longitude, latitude);
         responseData = mapper.convertValue(response.getResult(), CommonArrResponseData.class);
         return Arrays.asList(mapper.convertValue(responseData.getData(), DoctorDetailsDto[].class));
+    }
+
+    @Override
+    public void uploadDocument(FileUploadDto fileUploadDto) {
+        commonServiceRouter.uploadDocument(fileUploadDto);
+    }
+
+    @Override
+    public List<UserDocuments> getUserDocuments(String username) {
+        CommonArrResponseData<UserDocuments[]> responseData = new CommonArrResponseData<>();
+        CommonResponse<CommonArrResponseData> response = commonServiceRouter.getUserDocuments(username);
+        responseData = mapper.convertValue(response.getResult(), CommonArrResponseData.class);
+        return Arrays.asList(mapper.convertValue(responseData.getData(), UserDocuments[].class));
+    }
+
+    @Override
+    public byte[] getFile(String username, String filename) {
+        CommonResponseData<String> responseData = new CommonResponseData<>();
+        CommonResponse<CommonArrResponseData> response = commonServiceRouter.getFile(username, filename);
+        responseData = mapper.convertValue(response.getResult(), CommonResponseData.class);
+        return Base64.getDecoder().decode(responseData.getData());
+
+    }
+
+    @Override
+    public void deleteDocument(String username, String filename) {
+        commonServiceRouter.deleteDocument(username, filename);
     }
 
 }

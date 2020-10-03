@@ -5,7 +5,10 @@ import com.skincancerdetection.bffnode.utils.AESEncryptionDecryption;
 import com.skincancerdetection.bffnode.utils.SurveyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,5 +54,24 @@ public class RequestAssembler {
                 .collect(Collectors.toList());
         imageProcRequest.setQuestions(surveyResponseDtoList);
         return imageProcRequest;
+    }
+
+    public FileUploadDto assembleFileUploadDto(String username, String desc, MultipartFile file) throws IOException {
+        FileUploadDto fileUploadDto = new FileUploadDto();
+        fileUploadDto.setDescription(desc);
+        fileUploadDto.setUserId(username);
+        String filename = file.getOriginalFilename();
+        String[] filenameSplit = filename.split("\\.");
+        String time = LocalDateTime.now().toString()
+                .replaceAll("\\.", "-")
+                .replaceAll(":", "-");
+        String newFileName = new StringBuilder(filenameSplit[0])
+                .append("-")
+                .append(time)
+                .append(".")
+                .append(filenameSplit[1]).toString();
+        fileUploadDto.setFilename(newFileName);
+        fileUploadDto.setFileByteString(file.getBytes());
+        return fileUploadDto;
     }
 }
