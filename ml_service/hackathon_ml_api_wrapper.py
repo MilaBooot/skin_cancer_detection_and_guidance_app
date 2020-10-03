@@ -24,8 +24,8 @@ IMAGE_SIZE = 256
 IMAGE_DIMENSION = 3
 
 # File path for json model and weights
-json_path = '../model/model.json'
-weight_path = '../model/model.h5'
+json_path = 'model/model.json'
+weight_path = 'model/model.h5'
 
 # Below class is used for loading the saved model
 class loading_model:
