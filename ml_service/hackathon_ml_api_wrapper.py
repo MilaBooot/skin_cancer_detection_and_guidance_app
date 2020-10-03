@@ -10,10 +10,9 @@
 import math
 import cv2
 import numpy as np
-from tensorflow.keras.models import model_from_json
+from tensorflow.keras.models import model_from_json, load_model
 
 # Global Variables
-global loaded_model
 THRESHOLD = [70, 50, 10]  # This determines the threshold for high/medium/low
                           # >70 => HIGH, 50<X<70 => MEDIUM, 10<X<50 => LOW, >10 => Not applicable
 
@@ -23,43 +22,39 @@ TYPE = ['Actinic_Keratosis', 'Basal_Cell_Carcinoma', 'BKL', 'Dermtofibroma', 'Me
 IMAGE_SIZE = 256
 IMAGE_DIMENSION = 3
 
-# File path for json model and weights
+
 json_path = 'model/model.json'
 weight_path = 'model/model.h5'
+# File path for json model and weights
 
 # Below class is used for loading the saved model
-class loading_model:
-
-    # Function Description: This function loads the saved model
-    # Function Input: json_path and weight_path
-    # Function Output: loaded model
-    def func_loading_model(self, json_path, weight_path):
-        with open(json_path, 'r') as json_file:
-            model_json = json_file.read()
-            model = model_from_json(model_json)
-            model.load_weights(weight_path)
-
-        return model
 
 class hackathon_ml_api_wrapper:
+    def __init__(self, load=True):
+        self.model = None
+        self.load_model(json_path, weight_path)
+
+    def load_model(self, json_path, weight_path):
+        with open(json_path, 'r') as json_file:
+            model_json = json_file.read()
+            self.model = model_from_json(model_json)
+            self.model.load_weights(weight_path)
 
     # Function Description: This function takes user image as input and resizes it as required
     # Function Input: User image
     # Function Output: Resized image
     def image_resize(self, input_image, IMAGE_SIZE, IMAGE_DIMENSION):
-
         temp_image2 = cv2.resize(input_image, (IMAGE_SIZE, IMAGE_SIZE))
         image = temp_image2.reshape(-1, IMAGE_SIZE, IMAGE_SIZE, IMAGE_DIMENSION)
-
         return image
 
     # Function Description: This function predicts the image using trained ML model
     # Function Input: loaded_model, input image, TYPE
     # Function Output: answer in binary + integer format
-    def predict_model(self, loaded_model, input_image, TYPE):
+    def predict_model(self, input_image, TYPE):
 
         print('model.predict function is called')
-        temp_prediction = loaded_model.predict(input_image)
+        temp_prediction = self.model.predict(input_image)
         print('model.predict has predicted')
         print('np.argmax function is called')
         y_pred = np.argmax(temp_prediction[0], axis=0) #index of class with highest accuracy
@@ -128,46 +123,39 @@ class hackathon_ml_api_wrapper:
         return o_result
 
 
-# Function Description: This function is called by ml_api. It sequences akk the above function calls
-# Function Input: weight, y_predict, RISK LABEL
-# Function Output: list which contains 4 values
-def predict_cancer(input_image, input_answer):
+    # Function Description: This function is called by ml_api. It sequences akk the above function calls
+    # Function Input: weight, y_predict, RISK LABEL
+    # Function Output: list which contains 4 values
+    def predict_cancer(self, input_image, input_answer):
+        #self.model = load_model(weight_path)
+        
+        print('Input image is read and resizing is in progress')
+        image = self.image_resize(input_image=input_image, IMAGE_SIZE=IMAGE_SIZE, IMAGE_DIMENSION=IMAGE_DIMENSION)
+        print('Input image is resized as required')
 
-    print('Input image is read and resizing is in progress')
-    image = HMLAPIW.image_resize(input_image=input_image, IMAGE_SIZE=IMAGE_SIZE, IMAGE_DIMENSION=IMAGE_DIMENSION)
-    print('Input image is resized as required')
+        print('Prediction is in progress')
+        y_predict = self.predict_model(input_image=image, TYPE=TYPE)
+        print('Risk evaluation using image is in progress')
 
-    print('Prediction is in progress')
-    y_predict = HMLAPIW.predict_model(loaded_model=loaded_model, input_image=image, TYPE=TYPE)
-    print('Risk evaluation using image is in progress')
+        risk = self.compute_risk_using_image(y_predict=y_predict, THRESHOLD=THRESHOLD, RISK_LABEL=RISK_LABEL)
+        print('Converting input answer to binary+integer format')
 
-    risk = HMLAPIW.compute_risk_using_image(y_predict=y_predict, THRESHOLD=THRESHOLD, RISK_LABEL=RISK_LABEL)
-    print('Converting input answer to binary+integer format')
+        print('compute weight using questionnaire')
+        weight = self.compute_weight_using_questionarie(answer=input_answer)
+        print('Concatenating result')
 
-    print('compute weight using questionnaire')
-    weight = HMLAPIW.compute_weight_using_questionarie(answer=input_answer)
-    print('Concatenating result')
+        o_result = self.decision_logic(weight=weight, y_predict=y_predict, RISK_LABEL=risk, CANCER=CANCER)
+        print('Result is ', o_result)
 
-    o_result = HMLAPIW.decision_logic(weight=weight, y_predict=y_predict, RISK_LABEL=risk, CANCER=CANCER)
-    print('Result is ', o_result)
+        return o_result
 
-    return o_result
-
-print('Creating class handle for loading model function')
-LM = loading_model()
-
-print('Loading the model...')
-loaded_model = LM.func_loading_model(json_path=json_path, weight_path=weight_path)
-print('Model is loaded')
-
-print('Creating class handles')
-HMLAPIW = hackathon_ml_api_wrapper()
 
 if __name__ == "__main__":
     # Sanity check
-    input_image = ''
+    input_image = 'D:/projects/test.jpeg'
+    image = cv2.imread(input_image)
     input_answer = ['Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Burns rarely', 'Fair']
-    result = predict_cancer(input_image=input_image, input_answer=input_answer)
+    result = predict_cancer(input_image=image, input_answer=input_answer)
 
     print(result)
 

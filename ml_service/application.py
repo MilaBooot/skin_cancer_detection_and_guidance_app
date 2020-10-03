@@ -9,13 +9,14 @@ from PIL import Image
 import io
 import numpy as np
 import cv2
-from hackathon_ml_api_wrapper import predict_cancer
+from hackathon_ml_api_wrapper import hackathon_ml_api_wrapper as ml_wrapper
+
 
 application = flask_app = Flask(__name__)
 app = Api(app = flask_app)
 
 ml_api = app.namespace('mlService', description='ML service API')
-
+model = ml_wrapper()
 
 class msgFormats:
 	def default_msg(self, msg):
@@ -53,7 +54,7 @@ class login(Resource):
 			answers[int(response["id"])-1] = response["answer"]
 		image_data = self.convert_imgdata(image)
 		try:
-			data = predict_cancer(image_data, answers)
+			data = model.predict_cancer(image_data, answers)
 		except KeyError:
 			abort(401, result=msgFormats().error_msg("User ID not found"))
 		return msgFormats().data_msg(data)
