@@ -7,10 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DoctorDetailsDto {
-    private String name;
-    private String speciality;
-    private String hospital;
-    public double latitude;
-    public double longitude;
+public class FileUploadDto {
+    private String userId;
+    private String filename;
+    private String description;
+    private byte[] fileByteString;
 }

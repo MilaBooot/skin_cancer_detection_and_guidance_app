@@ -1,0 +1,26 @@
+
+	<div class="container-fluid">
+		<div class="col-md-10">
+	
+				<form role="form">
+					<br style="clear:both">
+					<div class="form-group">
+									<input type="text" class="form-control" id="name" name="name" placeholder="Name" [(ngModel)]="name" required>
+					</div>
+					<div class="form-group">
+									<input type="email" class="form-control" id="email" name="email" placeholder="Email" [(ngModel)]="email" required>
+					</div>
+					<div class="form-group">
+									<input type="phone" class="form-control" id="mobile" name="mobile" placeholder="Mobile Number" [(ngModel)]="mobile" required>
+					</div>
+					<div class="form-group">
+									<input type="text" class="form-control" id="subject" name="subject" placeholder="Subject" [(ngModel)]="subject" required>
+					</div>
+					<div class="form-group">
+									<textarea class="form-control" type="textarea" id="message" name="message" placeholder="Message" [(ngModel)]="message" maxlength="140" rows="7"></textarea>              
+					</div>
+					<button type="button" id="submit" name="submit" class="btn btn-primary pull-right" (click)="save()">Submit Form</button>
+				</form>
+			</div>
+		</div>
+

@@ -8,11 +8,11 @@ import com.skincancerdetection.bffnode.utils.SurveyUtil;
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.websocket.server.PathParam;
 import java.io.IOException;
 import java.util.List;
 
@@ -89,5 +89,35 @@ public class BffNodeController {
         return new ResponseEntity(reponse, HttpStatus.OK);
     }
 
+
+    @PostMapping("/uploadDocument" )
+    public ResponseEntity uploadPrescription(@RequestParam(value = "description") String description,
+                                             @RequestParam(value = "file") MultipartFile multipartFile,
+                                             @RequestParam(value = "username") String username) throws IOException {
+        FileUploadDto fileUploadDto = requestAssembler.assembleFileUploadDto(username, description, multipartFile);
+        commonService.uploadDocument(fileUploadDto);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping("/{userid}/getDocuments")
+    public ResponseEntity getUserDocuments(@PathVariable("userid") String userid) {
+
+        List<UserDocuments> reponse = commonService.getUserDocuments(userid);
+        return new ResponseEntity(reponse, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{userid}/getDocument",  produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity getUserDocumentForDownload(@RequestParam(value = "docFile") String fileName
+            , @PathVariable("userid") String userid) throws IOException {
+        byte[] fileByteArr = commonService.getFile(userid, fileName);
+        return new ResponseEntity(fileByteArr, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{userid}/document")
+    public ResponseEntity deleteDocument(@RequestParam(value = "docFile") String fileName
+            , @PathVariable("userid") String userid)  {
+        commonService.deleteDocument(userid, fileName);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 
 }

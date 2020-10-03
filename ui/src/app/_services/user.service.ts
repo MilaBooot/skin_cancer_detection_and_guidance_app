@@ -15,9 +15,13 @@ export class UserService {
   cancerDetected = "No";
   isImageProcessed = false;
 
+
+
   constructor(private http: HttpClient
-    , private alertService: AlertService
-    , private geolocationService: GeolocationService) { }
+    , private alertService: AlertService) {
+    
+     
+     }
 
   register(user: User) {
     console.log(user);
@@ -33,11 +37,11 @@ export class UserService {
       return result}));
   }
 
-  getDoctorInfo():Observable<Doctor[]> {
-    return this.http.get<Doctor[]>(environment.baseUrl + '/bff/api/doctors/' + encodeURIComponent(this.geolocationService.getLongitude())
-     + '/' + encodeURIComponent(this.geolocationService.getLatitude()))
+  getDoctorInfo(lat: number, lng: number):Observable<Doctor[]> {
+  
+    return this.http.get<Doctor[]>(environment.baseUrl + '/bff/api/doctors/' + encodeURIComponent(lng)
+     + '/' + encodeURIComponent(lat))
     .pipe(map( result => {
-      console.log(result['doctors']);
       return result['doctors']}));
   }
 

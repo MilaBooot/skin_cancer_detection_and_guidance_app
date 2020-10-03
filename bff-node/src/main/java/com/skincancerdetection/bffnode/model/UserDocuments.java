@@ -5,11 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class ImageProcReponse {
-    private String cancer;
-    private float value;
-    private String type;
-    private String riskFactor;
+@AllArgsConstructor
+public class UserDocuments {
+    private String description;
+    private String filename;
 }

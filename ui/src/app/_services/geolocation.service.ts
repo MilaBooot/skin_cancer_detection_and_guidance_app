@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -9,13 +10,14 @@ export class GeolocationService {
   zoom;
   origin;
   destination;
+  coords: number[];
 
   constructor() {
     this.getUserLocation();
    }
 
    
-  getUserLocation() {
+  getUserLocation(){
     // get Users current position
 
     if (navigator.geolocation) {
@@ -24,9 +26,16 @@ export class GeolocationService {
         this.lng = position.coords.longitude;
         this.zoom = 16;
         console.log("position", position)
+  
       });
     }
+   
+   
+    
   }
+
+
+
 
   getLatitude():number {
     return this.lat;
@@ -35,7 +44,7 @@ export class GeolocationService {
   getLongitude():number {
     return this.lng;
   }
-  
+  /*
   async getDirection() {
 
     if (typeof this.lat === "undefined" || typeof this.lng === "undefined" || typeof this.zoom === "undefined") {
@@ -47,4 +56,5 @@ export class GeolocationService {
     console.log(this.origin);
 
   } 
+  */
 }

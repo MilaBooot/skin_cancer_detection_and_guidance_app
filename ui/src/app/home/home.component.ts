@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
 
 import { User } from '../_models';
-import { UserService, AuthenticationService } from '../_services';;
+import { UserService, AuthenticationService, GeolocationService } from '../_services';;
 
 @Component({
   selector: 'app-home',
@@ -15,7 +15,7 @@ export class HomeComponent implements OnInit {
 
     constructor(
         private authenticationService: AuthenticationService,
-        private userService: UserService
+        private userService: UserService, private geolocationService: GeolocationService
     ) {
         this.currentUser = this.authenticationService.currentUserValue;
     }
