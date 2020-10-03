@@ -58,8 +58,12 @@ class hackathon_ml_api_wrapper:
     # Function Output: answer in binary + integer format
     def predict_model(self, loaded_model, input_image, TYPE):
 
+        print('model.predict function is called')
         temp_prediction = loaded_model.predict(input_image)
+        print('model.predict has predicted')
+        print('np.argmax function is called')
         y_pred = np.argmax(temp_prediction[0], axis=0) #index of class with highest accuracy
+        print('np.argmax function is complete')
         prediction = [temp_prediction[0][y_pred], TYPE[y_pred]]
         print('temp prediction is ', temp_prediction)
         print('y_pred is ', y_pred)
