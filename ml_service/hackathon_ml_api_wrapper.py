@@ -48,8 +48,7 @@ class hackathon_ml_api_wrapper:
     # Function Output: Resized image
     def image_resize(self, input_image, IMAGE_SIZE, IMAGE_DIMENSION):
 
-        temp_image1 = cv2.imread(input_image)
-        temp_image2 = cv2.resize(temp_image1, (IMAGE_SIZE, IMAGE_SIZE))
+        temp_image2 = cv2.resize(input_image, (IMAGE_SIZE, IMAGE_SIZE))
         image = temp_image2.reshape(-1, IMAGE_SIZE, IMAGE_SIZE, IMAGE_DIMENSION)
 
         return image
