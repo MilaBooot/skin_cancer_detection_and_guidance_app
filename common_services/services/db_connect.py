@@ -4,7 +4,7 @@ import json
 import os
 from geopy.geocoders import Nominatim
 import base64
-from email_validation import emailValidator
+from .email_validation import emailValidator
 
 DB_SERVER = os.environ.get("RDS_HOSTNAME")
 validate_email = emailValidator()
@@ -180,10 +180,10 @@ if __name__ == "__main__":
     #ldb.insert_record("deepak@gmail.com", "write_test.PNG", "Testing blob", test_file)
     file, raw_file = ldb.get_records_file("deepak@gmail.com", "write_test.PNG")
     print(file)
-    print(type(base64.b64decode(file)))
-    print(type(raw_file))
-    print(base64.b64decode(file) == raw_file)
-    open("write_test.PNG", 'wb').write(base64.b64decode(file))
+    #print(type(base64.b64decode(file)))
+    print(raw_file)
+    #print(base64.b64decode(file) == raw_file)
+    #pen("write_test.PNG", 'wb').write(base64.b64decode(file))
     #pprint(ldb.get_records_file("deepak7946@gmail.com", "tst2"))
     #ldb.delete_record("deepak@gmail.com", "write_test.PNG")
     #password = ldb.get_questions(1)
