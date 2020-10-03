@@ -4,7 +4,7 @@ import json
 import os
 from geopy.geocoders import Nominatim
 import base64
-from .email_validation import emailValidator
+from email_validation import emailValidator
 
 DB_SERVER = os.environ.get("RDS_HOSTNAME")
 validate_email = emailValidator()
@@ -137,6 +137,7 @@ class dbConnect:
             id = count + 1
             if self.check_file_name_exists(filename, user_id):
                 raise Exception("Filename already exists")
+            file_bytestr = base64.b64decode(file_bytestr)
             insert_query = """INSERT INTO app_data.records (id, user_id, file_name, file, description) VALUES (%s, %s, %s, %s, %s)"""
             to_insert = (id, user_id, filename, file_bytestr, description)
             self.cur.execute(insert_query, to_insert)
@@ -149,12 +150,12 @@ class dbConnect:
     def get_records_file(self, user_id, filename):
         query = """SELECT file FROM app_data.records WHERE user_id='%s' AND file_name='%s'""" % (user_id, filename)
         self.cur.execute(query)
-        result = self.cur.fetchone()
-        if result is not None:
-            result = base64.b64encode(bytes(result[0])).decode()
+        data = self.cur.fetchone()
+        if data is not None:
+            result = base64.b64encode(bytes(data[0])).decode()
         else:
             result = ""
-        return result
+        return result, bytes(data[0])
 
     def delete_record(self, user_id, filename):
         try:
@@ -173,13 +174,16 @@ if __name__ == "__main__":
     #testing function
     from pprint import pprint
     ldb = dbConnect()
-    #test_file = open("signup.PNG", "rb").read()
+    #test_file = open("snapshots/signup.PNG", "rb").read()
+    #test_file = base64.b64encode(test_file)
     #print(test_file)
-    #ldb.insert_record("deepak@gmail.com", "write_test.PNG", "Testing blob", psycopg2.Binary(test_file))
-    file = ldb.get_records_file("deepak@gmail.com", "signup.PNG")
+    #ldb.insert_record("deepak@gmail.com", "write_test.PNG", "Testing blob", test_file)
+    file, raw_file = ldb.get_records_file("deepak@gmail.com", "write_test.PNG")
     print(file)
-    print(type(file))
-    open("write_test.jpg", 'wb').write(base64.b64decode(file))
+    print(type(base64.b64decode(file)))
+    print(type(raw_file))
+    print(base64.b64decode(file) == raw_file)
+    open("write_test.PNG", 'wb').write(base64.b64decode(file))
     #pprint(ldb.get_records_file("deepak7946@gmail.com", "tst2"))
     #ldb.delete_record("deepak@gmail.com", "write_test.PNG")
     #password = ldb.get_questions(1)
