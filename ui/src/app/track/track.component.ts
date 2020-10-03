@@ -2,7 +2,8 @@ import { Component, OnInit, ViewChild,  AfterViewInit} from '@angular/core';
 import { saveAs as importedSaveAs } from "file-saver";  
 import { FileuploadService } from '../_services/fileupload.service';  
 import {  Validators, FormBuilder } from '@angular/forms';
-import { AuthenticationService } from '../_services';
+import { AlertService, AuthenticationService } from '../_services';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-track',
@@ -22,7 +23,9 @@ lstFileDetails: any;
 user: any;
 constructor(private service: FileuploadService
   , private formBuilder: FormBuilder
-  , private authenticationService: AuthenticationService) {}  
+  , private authenticationService: AuthenticationService
+  , private alertService: AlertService
+  , private router: Router) {}  
 
 ngOnInit(): void {  
    
@@ -40,10 +43,12 @@ downloadDocFile(data) {
     const DocFileName = data.filename;  
     var DocFile = DocFileName;  
     this.service.downloadFile(DocFile, this.user).subscribe((data) => { 
-        console.log(data);
-      
+    
+        
        let blob = new Blob([data]); 
-        importedSaveAs(blob, DocFile)  
+       importedSaveAs(blob, DocFile)  
+       this.alertService.success('Document downloaded', true);
+     
     });  
 }  
 
@@ -58,6 +63,9 @@ downloadImage(data) {
     var image = ImageName.slice(0, -4);  
     this.service.downloadImage(image).subscribe((data) => {  
         importedSaveAs(data, image)
+    }, 
+    err => {
+            this.alertService.error(err);
     });  
 }  
 
@@ -67,7 +75,11 @@ deleteDocFile(data) {
     console.log(DocFileName);
     var DocFile = DocFileName;  
     this.service.deleteDocument(DocFile, this.user).subscribe((data) => {
-        console.log("removed file successfully");
+        this.alertService.success('Document deleted successfully', true);
+        this.router.navigate(['/track']);
+    }, 
+    err => {
+            this.alertService.error(err);
     }); 
 }
 
@@ -81,6 +93,11 @@ onExpSubmit() {
     formData.append('file', this.prescriptionInput.nativeElement.files[0]);  
     formData.append('description', this.saveFileForm.value.Description);  
     formData.append('username', this.user)
-    this.service.AddFileDetails(formData).subscribe(result => {});  
+    this.service.AddFileDetails(formData).subscribe(result => {
+        this.alertService.success('Document uploaded successfully', true);
+        this.router.navigate(['/track']);}, 
+        err => {
+                this.alertService.error(err);
+        });  
 } 
 }

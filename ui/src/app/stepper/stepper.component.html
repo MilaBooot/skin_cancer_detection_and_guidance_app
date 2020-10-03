@@ -17,9 +17,9 @@
   <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup">
       <ng-template matStepLabel>Upload Image</ng-template>
-      <button mat-button color="primary" (click)="onClick()">  
-        <mat-icon>file_upload</mat-icon>  
-        Upload  
+      <button mat-button color="info" (click)="onClick()">  
+        <mat-icon  color="primary">cloud_upload</mat-icon>  
+          
       </button> 
       <img [src]="url" height="200"> <br/> 
       <input formControlName="firstCtrl" type="file" #fileUpload id="fileUpload" name="fileUpload" accept="image/*" style="display:none;" (change)="onSelectFile($event)" required>

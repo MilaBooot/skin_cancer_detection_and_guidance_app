@@ -6,7 +6,9 @@ public enum ErrorEnum {
     COMMON_SERVICE_ERROR("ERR03", "Common service down"),
     USER_NOT_FOUND("ERR04", "Incorrect Username or Password"),
     USER_EXISTS_FOUND("ERR04", "User already registered"),
-    ML_SERVICE_ERROR("ERR05", "Error occurred in Image processing");
+    ML_SERVICE_ERROR("ERR05", "Error occurred in Image processing"),
+    UNANSWERED_ERROR("ERR07", "Please complete the questionnaire");
+
 
     ErrorEnum(String errCode, String errMessage) {
         this.errCode = errCode;

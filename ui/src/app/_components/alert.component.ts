@@ -8,6 +8,7 @@ export class AlertComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
     message: any;
 
+
     constructor(private alertService: AlertService) { }
 
     ngOnInit() {
@@ -16,13 +17,15 @@ export class AlertComponent implements OnInit, OnDestroy {
                 switch (message && message.type) {
                     case 'success':
                         message.cssClass = 'alert alert-success';
+                        this.message = message;
                         break;
                     case 'error':
                         message.cssClass = 'alert alert-danger';
+                        this.message = message;
                         break;
                 }
 
-                this.message = message;
+               
             });
     }
 
