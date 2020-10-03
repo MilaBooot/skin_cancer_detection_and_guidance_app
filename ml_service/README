@@ -1,0 +1,9 @@
+1. How to download the model ?
+  > Download load it from below path and hardcode the path to model_json and model_weight in hackathon_ml_api_wrapper.py file
+  > You can use either model_resnet_92_percent_accuracy or model_resnet_95_percent_accuracy models.
+  Link: https://drive.google.com/drive/folders/10tvYM3lhA2-RUdbD7vCkq4mHvBkBuykm?usp=sharing
+  
+2. How to run the model
+  > Specify the input_image path (in jpg format) and input answer path inside this  if __name__ == "__main__": 
+  > input_answer format is as follows:  input_answer = ['Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Burns rarely', 'Fair']
+  
