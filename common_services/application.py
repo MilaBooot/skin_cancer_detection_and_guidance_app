@@ -24,7 +24,6 @@ class msgFormats:
 		return {"error": errmsg}
 
 	def data_msg(self, data):
-		json_data = json.dumps(data)
 		return {"result": {"data": data}}
 
 
@@ -187,16 +186,27 @@ class getFile(Resource):
 
 @common_services_api.route("/deleteRecord")
 class deleteRecord(Resource):
-		@common_services_api.response(200, '{"result": "Record deleted"}')
-		@common_services_api.expect(reqparseArgs().get_file())
-		def delete(self):
-			user_id = request.args.get("userId", None)
-			filename = request.args.get("filename", None)
-			try:
-				db.delete_record(user_id, filename)
-			except Exception as err:
-				abort(400, result=msgFormats().error_msg(str(errmsg)))
-			return msgFormats().default_msg("Record Deleted")
+	@common_services_api.response(200, '{"result": "Record deleted"}')
+	@common_services_api.expect(reqparseArgs().get_file())
+	def delete(self):
+		user_id = request.args.get("userId", None)
+		filename = request.args.get("filename", None)
+		try:
+			db.delete_record(user_id, filename)
+		except Exception as err:
+			abort(400, result=msgFormats().error_msg(str(errmsg)))
+		return msgFormats().default_msg("Record Deleted")
+
+@common_services_api.route("/getCancerDetails/<type>")
+class getCancerDetails(Resource):
+	@common_services_api.response(200, 'Success')
+	@common_services_api.response(401, 'Resource not found')
+	def get(self, type):
+		try:
+			data = db.get_cancer_details(type)
+		except KeyError:
+			abort(401, result="Cancer type NOT FOUND")
+		return msgFormats().data_msg(data)
 
 
 if __name__ == "__main__":

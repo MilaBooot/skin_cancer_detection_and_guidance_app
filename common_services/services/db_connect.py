@@ -167,6 +167,20 @@ class dbConnect:
             raise Exception(errmsg)
         return
 
+    def get_cancer_details(self, type):
+        query = """SELECT * FROM app_data.cancer_types WHERE type='%s'""" % (type)
+        self.cur.execute(query)
+        data = self.cur.fetchone()
+        if data is not None:
+            ret = {"type": data[5],
+                   "description": data[1],
+                   "symptoms": data[2],
+                   "riskFactor": data[3],
+                   "link": data[4]}
+        else:
+            raise KeyError()
+        return ret
+
     def __del__(self):
         self.db.close()
 
@@ -174,6 +188,7 @@ if __name__ == "__main__":
     #testing function
     from pprint import pprint
     ldb = dbConnect()
+    pprint(ldb.get_cancer_details("actinicKeratosis"))
     #test_file = open("snapshots/signup.PNG", "rb").read()
     #test_file = base64.b64encode(test_file)
     #print(test_file)
