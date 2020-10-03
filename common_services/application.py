@@ -24,7 +24,6 @@ class msgFormats:
 		return {"error": errmsg}
 
 	def data_msg(self, data):
-		json_data = json.dumps(data)
 		return {"result": {"data": data}}
 
 
@@ -40,6 +39,15 @@ class dataFields:
 			})
 		return resource_fields
 
+	def add_record(self):
+		resource_fields = common_services_api.model("Add Record Data",
+		   {'userId': fields.String(description="Email ID of user", required=True),
+			'filename': fields.String(description="Filename to save", required=True),
+			'description': fields.String(description="Description of file", required=True),
+			"fileByteString": fields.String(description="Byte String of the image", required=True)
+			})
+		return resource_fields
+
 
 class reqparseArgs:
 	def get_user_details(self):
@@ -52,14 +60,25 @@ class reqparseArgs:
 		parser.add_argument('latitude', type=float, default=None, required=True)
 		parser.add_argument('longitude', type=float, default=None, required=True)
 		return parser
+	
+	def get_user_records(self):
+		parser = reqparse.RequestParser()
+		parser.add_argument('userId', default=None, required=True)
+		return parser
+
+	def get_file(self):
+		parser = reqparse.RequestParser()
+		parser.add_argument('userId', default=None, required=True)
+		parser.add_argument('filename', default=None, required=True)
+		return parser
 
 
 @register_api.route("/")
 class signUp(Resource):
 	@register_api.expect(dataFields().user_reg())
-	@user_validate_api.response(200, 'User Created')
-	@user_validate_api.response(409, 'User ID already exists')
-	@user_validate_api.response(400, 'Insert failed due to bad input')
+	@register_api.response(200, 'User Created')
+	@register_api.response(409, 'User ID already exists')
+	@register_api.response(400, 'Insert failed due to bad input')
 	def post(self):
 		json_data = request.json
 		user_id = json_data["user_id"]
@@ -103,7 +122,6 @@ class getDocList(Resource):
 		latitude = request.args.get("latitude", None)
 		if longitude is None or latitude is None:
 			abort(400, result=msgFormats().error_msg("Bad Request. Incomplete location details"))
-		#call service to get list of doctors nearby. Adding a dumy data for now
 		data = db.get_doctors(latitude, longitude)
 		return msgFormats().data_msg(data)
 
@@ -129,5 +147,67 @@ class getQuestions(Resource):
 		return msgFormats().data_msg(data)
 
 
+@common_services_api.route("/addRecord")
+class addRecord(Resource):
+	@common_services_api.expect(dataFields().add_record())
+	@common_services_api.response(200, '{"result": "Record added"}')
+	@common_services_api.response(400, '{"result": {"error": "Filename already exists"}}')
+	def post(self):
+		record_data = request.json
+		user_id = record_data.get("userId")
+		filename = record_data.get("filename")
+		description = record_data.get("description")
+		file_bytestr = record_data.get("fileByteString")
+		try:
+			db.insert_record(user_id, filename, description, file_bytestr)
+		except Exception as errmsg:
+			abort(400, result=msgFormats().error_msg(str(errmsg)))
+		return msgFormats().default_msg("Record Added")
+
+
+@common_services_api.route("/getUserRecords")
+class getUserRecords(Resource):
+	@common_services_api.response(200, '{"result": {"data":[{"filename": "string", "description"" "string"}]}}')
+	@common_services_api.expect(reqparseArgs().get_user_records())
+	def get(self):
+		user_id = request.args.get("userId", None)
+		data = db.get_user_records(user_id)
+		return msgFormats().data_msg(data)
+
+@common_services_api.route("/getFile")
+class getFile(Resource):
+	@common_services_api.response(200, '{"result": {"data": {"fileByteString": "byte string"}}}')
+	@common_services_api.expect(reqparseArgs().get_file())
+	def get(self):
+		user_id = request.args.get("userId", None)
+		filename = request.args.get("filename", None)
+		data = db.get_records_file(user_id, filename)
+		return msgFormats().data_msg(data)
+
+@common_services_api.route("/deleteRecord")
+class deleteRecord(Resource):
+	@common_services_api.response(200, '{"result": "Record deleted"}')
+	@common_services_api.expect(reqparseArgs().get_file())
+	def delete(self):
+		user_id = request.args.get("userId", None)
+		filename = request.args.get("filename", None)
+		try:
+			db.delete_record(user_id, filename)
+		except Exception as err:
+			abort(400, result=msgFormats().error_msg(str(errmsg)))
+		return msgFormats().default_msg("Record Deleted")
+
+@common_services_api.route("/getCancerDetails/<type>")
+class getCancerDetails(Resource):
+	@common_services_api.response(200, 'Success')
+	@common_services_api.response(401, 'Resource not found')
+	def get(self, type):
+		try:
+			data = db.get_cancer_details(type)
+		except KeyError:
+			abort(401, result="Cancer type NOT FOUND")
+		return msgFormats().data_msg(data)
+
+
 if __name__ == "__main__":
-	flask_app.run()
+	flask_app.run(debug=True)

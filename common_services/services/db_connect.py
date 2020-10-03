@@ -3,6 +3,7 @@ import logging
 import json
 import os
 from geopy.geocoders import Nominatim
+import base64
 from .email_validation import emailValidator
 
 DB_SERVER = os.environ.get("RDS_HOSTNAME")
@@ -107,6 +108,79 @@ class dbConnect:
             ret_data.append(data)
         return ret_data
 
+    def get_total_records(self):
+        self.cur.execute("""SELECT count(*) from app_data.records""")
+        count = self.cur.fetchone()
+        count = count[0]
+        return count
+   
+    def get_user_records(self, user_id):
+        ret = []
+        query = """SELECT file_name, description FROM app_data.records WHERE user_id='%s'""" % (user_id,)
+        self.cur.execute(query)
+        result = self.cur.fetchall()
+        for entry in result:
+            data = {"filename": entry[0],
+                    "description": entry[1]}
+            ret.append(data)
+        return ret
+
+    def check_file_name_exists(self, filename, user_id):
+        self.cur.execute("""SELECT count(*) from app_data.records where file_name='%s' AND user_id='%s'""" % (filename, user_id))
+        count = self.cur.fetchone()
+        count = count[0]
+        return count
+
+    def insert_record(self, user_id, filename, description, file_bytestr):
+        try:
+            count = self.get_total_records()
+            id = count + 1
+            if self.check_file_name_exists(filename, user_id):
+                raise Exception("Filename already exists")
+            file_bytestr = base64.b64decode(file_bytestr)
+            insert_query = """INSERT INTO app_data.records (id, user_id, file_name, file, description) VALUES (%s, %s, %s, %s, %s)"""
+            to_insert = (id, user_id, filename, file_bytestr, description)
+            self.cur.execute(insert_query, to_insert)
+            self.db.commit()
+        except Exception as errmsg:
+            self.db.rollback()
+            raise Exception(errmsg)
+        return
+    
+    def get_records_file(self, user_id, filename):
+        query = """SELECT file FROM app_data.records WHERE user_id='%s' AND file_name='%s'""" % (user_id, filename)
+        self.cur.execute(query)
+        data = self.cur.fetchone()
+        if data is not None:
+            result = base64.b64encode(bytes(data[0])).decode()
+        else:
+            result = ""
+        return result
+
+    def delete_record(self, user_id, filename):
+        try:
+            query = """DELETE FROM app_data.records WHERE user_id='%s' AND file_name='%s'""" % (user_id, filename)
+            self.cur.execute(query)
+            self.db.commit()
+        except Exception as err:
+            self.db.rollback()
+            raise Exception(errmsg)
+        return
+
+    def get_cancer_details(self, type):
+        query = """SELECT * FROM app_data.cancer_types WHERE type='%s'""" % (type)
+        self.cur.execute(query)
+        data = self.cur.fetchone()
+        if data is not None:
+            ret = {"type": data[5],
+                   "description": data[1],
+                   "symptoms": data[2],
+                   "riskFactor": data[3],
+                   "link": data[4]}
+        else:
+            raise KeyError()
+        return ret
+
     def __del__(self):
         self.db.close()
 
@@ -114,7 +188,19 @@ if __name__ == "__main__":
     #testing function
     from pprint import pprint
     ldb = dbConnect()
-    pprint(ldb.get_doctors(12.9716, 77.5946))
+    pprint(ldb.get_cancer_details("actinicKeratosis"))
+    #test_file = open("snapshots/signup.PNG", "rb").read()
+    #test_file = base64.b64encode(test_file)
+    #print(test_file)
+    #ldb.insert_record("deepak@gmail.com", "write_test.PNG", "Testing blob", test_file)
+    #file, raw_file = ldb.get_records_file("deepak@gmail.com", "write_test.PNG")
+    #print(file)
+    #print(type(base64.b64decode(file)))
+    #print(raw_file)
+    #print(base64.b64decode(file) == raw_file)
+    #pen("write_test.PNG", 'wb').write(base64.b64decode(file))
+    #pprint(ldb.get_records_file("deepak7946@gmail.com", "tst2"))
+    #ldb.delete_record("deepak@gmail.com", "write_test.PNG")
     #password = ldb.get_questions(1)
     #print(password)
 
