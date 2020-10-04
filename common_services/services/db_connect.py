@@ -3,6 +3,7 @@ import logging
 import json
 import os
 from geopy.geocoders import Nominatim
+from geopy.distance import geodesic
 import base64
 from .email_validation import emailValidator
 
@@ -97,8 +98,23 @@ class dbConnect:
         ret_data = []
         geolocator = Nominatim(user_agent="custom_name")
         coordinates = "%s, %s" % (lat, long)
-        location = geolocator.reverse(coordinates)
-        city = location.raw["address"]["city"]
+        city = "Bengaluru"
+        known_cities = {"Bengaluru": (12.9716, 77.5946),
+                        "Kochi": (9.9312, 76.2673),
+                        "Mumbai": (19.0760, 72.8777),
+                        "Kozhikode": (11.2588, 75.7804)}
+        try:
+            location = geolocator.reverse(coordinates)
+            city = location.raw["address"]["city"]
+            if city not in known_cities.keys():
+                city = "Bengaluru"
+        except Exception:
+            my_coord = (float(lat), float(long))
+            min_dist = 100000
+            for key, value in known_cities.items():
+                dist = geodesic(my_coord, value)
+                if min_dist > dist and dist < 110:
+                    city = key
         self.cur.execute("""SELECT * FROM app_data.doctors WHERE city='%s'""" % (city,))
         doctors = self.cur.fetchall()
         for doctor in doctors:
