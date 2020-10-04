@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Doctor, Prediction, User } from '../_models';
+import { CancerTypeInfo, Doctor, Prediction, User } from '../_models';
 import { map } from 'rxjs/operators';
 import { AlertService } from './alert.service';
 import { Observable } from 'rxjs';
@@ -43,6 +43,13 @@ export class UserService {
      + '/' + encodeURIComponent(lat))
     .pipe(map( result => {
       return result['doctors']}));
+  }
+
+  getCancerDetails(type: string): Observable<CancerTypeInfo> {
+    return this.http.get<CancerTypeInfo>(environment.baseUrl + '/bff/api/cancerDetail/' + type)
+    .pipe(map( result => {
+     return result}));
+
   }
 
   setCancerDetected(reponse: string) {

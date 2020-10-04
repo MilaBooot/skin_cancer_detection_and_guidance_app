@@ -2,7 +2,7 @@
     <h1>Upload your Documents</h1>  
     <br>  
         <hr>  
-            <form [formGroup]="saveFileForm" (ngSubmit)="onExpSubmit()">  
+            <form [formGroup]="saveFileForm" (ngSubmit)="onExpSubmit(); saveFileForm.reset(); ">  
                 <div class="row">  
                     <div class="col-md-6">  
                         <div class="row">  
@@ -18,6 +18,7 @@
                             <div class="row">  
                                 <div class="col-md-6">  
                                     <b>Upload Document</b>  
+                                    <p> (*jpg/png)</p>
                                 </div>  
                                 <div class="col-md-6">  
                                     <input type='file' #documentInput>  
