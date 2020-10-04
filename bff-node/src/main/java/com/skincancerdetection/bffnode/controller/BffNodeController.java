@@ -133,4 +133,11 @@ public class BffNodeController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @GetMapping("/cancerDetail/{type}")
+    public ResponseEntity getCancerDetails(@PathVariable("type") String cancerType) {
+
+        CancerTypeReponse cancerTypeReponse = commonService.getCancerDetails(cancerType);
+        return new ResponseEntity(cancerTypeReponse, HttpStatus.OK);
+    }
+
 }

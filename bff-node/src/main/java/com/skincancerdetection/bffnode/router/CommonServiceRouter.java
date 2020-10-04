@@ -11,4 +11,5 @@ public interface CommonServiceRouter {
     CommonResponse getUserDocuments(String username);
     CommonResponse getFile(String username, String filename);
     void deleteDocument(String username, String filename);
+    CommonResponse getCancerDetails(String type);
 }

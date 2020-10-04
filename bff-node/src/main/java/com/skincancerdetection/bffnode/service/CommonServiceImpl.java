@@ -101,4 +101,13 @@ public class CommonServiceImpl implements CommonService{
         commonServiceRouter.deleteDocument(username, filename);
     }
 
+    @Override
+    public CancerTypeReponse getCancerDetails(String type) {
+        CommonResponseData<CancerTypeReponse> responseData = new CommonResponseData<>();
+        CommonResponse<CommonResponseData> response = commonServiceRouter.getCancerDetails(type);
+        responseData = (CommonResponseData<CancerTypeReponse>)mapper
+                .convertValue(response.getResult(), CommonResponseData.class);
+        return mapper.convertValue(responseData.getData(), CancerTypeReponse.class);
+    }
+
 }
