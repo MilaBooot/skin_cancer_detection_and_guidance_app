@@ -1,15 +1,7 @@
-.meet-us .tooltiptext {
-    visibility: hidden;
-    background-color: black;
-    color: #fff;
-    text-align: center;
-  
-    /* Position the tooltip */
-    position: absolute;
-    z-index: 1;
-  }
 
 
-.meet-us:hover .tooltiptext {
-    visibility: visible;
-  }
+.meet-us{
+    position: relative;
+    top: -5px;
+    margin-left: 5px; /* optional */
+}
