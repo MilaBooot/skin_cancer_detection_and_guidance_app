@@ -14,5 +14,6 @@ public interface CommonService {
     List<UserDocuments> getUserDocuments(String username);
     byte[] getFile(String username, String filename);
     void deleteDocument(String username, String filename);
+    CancerTypeReponse getCancerDetails(String type);
 
 }

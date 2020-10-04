@@ -50,6 +50,9 @@ public class CommonServiceRouterImpl implements CommonServiceRouter{
     @Value("${common.service.user.document.delete.endpoint}")
     private String userDocDeleteEndpoint;
 
+    @Value("${common.service.cancer.type.info.endpoint}")
+    private String typeInfoEndpoint;
+
     @Autowired
     private RestTemplate restTemplate;
 
@@ -254,5 +257,30 @@ public class CommonServiceRouterImpl implements CommonServiceRouter{
 
             throw new BffNodeException(e.getMessage(), e);
         }
+    }
+
+    @Override
+    public CommonResponse getCancerDetails(String type) {
+        final String url = new StringBuilder(commonServiceUrl)
+                .append(typeInfoEndpoint)
+                .append(type).toString();
+        ResponseEntity<CommonResponse> responseEntity = null;
+
+        try {
+            responseEntity = restTemplate
+                    .getForEntity(url, CommonResponse.class);
+
+            if (responseEntity.getStatusCode().value()!= HttpStatus.OK.value()) {
+                throw new BffNodeException(responseEntity.getStatusCode().getReasonPhrase()
+                        , ErrorEnum.COMMON_SERVICE_ERROR.getErrMessage()
+                        , new RuntimeException());
+
+            }
+
+        } catch (HttpClientErrorException e) {
+            LOGGER.error(e.getMessage());
+            throw new BffNodeException(e.getMessage(), e);
+        }
+        return responseEntity.getBody();
     }
 }
