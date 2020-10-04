@@ -71,9 +71,9 @@ class hackathon_ml_api_wrapper:
 
         if (y_predict[0]*100 > THRESHOLD[0]):
             return RISK_LABEL[0]
-        elif (y_predict[0]*100 > THRESHOLD[1]) & (y_predict[0]*100 < THRESHOLD[0]):
+        elif (y_predict[0]*100 > THRESHOLD[1]) & (y_predict[0]*100 <= THRESHOLD[0]):
             return RISK_LABEL[1]
-        elif (y_predict[0]*100 > THRESHOLD[0]) & (y_predict[0]*100 < THRESHOLD[1]):
+        elif (y_predict[0]*100 > THRESHOLD[0]) & (y_predict[0]*100 <= THRESHOLD[1]):
             return RISK_LABEL[2]
         else:
             return RISK_LABEL[3]
