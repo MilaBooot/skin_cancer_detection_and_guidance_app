@@ -102,7 +102,7 @@ class hackathon_ml_api_wrapper:
             weight = 0.6
         else:
             weight = 0.1
-
+        print("weight: %s" %weight)
         return weight
 
     # Function Description: This is the decision logic
@@ -115,7 +115,7 @@ class hackathon_ml_api_wrapper:
         else:
             temp_cancer = CANCER[0]
 
-        o_probability = ((weight+y_predict[0])/2 )*100
+        o_probability = ((0.1*weight + y_predict[0]) )*100
 
         o_result = {"cancer": temp_cancer, "value": math.ceil(o_probability),
                     "type": y_predict[1], "riskFactor": RISK_LABEL}
