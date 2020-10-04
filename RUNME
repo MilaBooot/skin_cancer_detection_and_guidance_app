@@ -1,0 +1,25 @@
+########################################################################################################################
+# Name of file: RUNME
+# Description: This file contains the requirements/file information/steps to run ML model
+# Revision: 1.0
+# Last Update:
+# Authors:
+########################################################################################################################
+
+Requirements:
+1. IDE - example - PYCHARM/ANACONDA
+2. Download latest tensorflow, kera, numpy, graphviz, matplotlib and other basic packages
+3. Download python.exe (if already not available)
+
+File Information:
+1. hackathon_ml_top.py - This is top file which invokes all the required functions/modules
+2. hackathon_deep_learning_model.py - This file creates resnet 50 architecture deep learning model from scratch
+3. hackathon_deep_learning_model_using_transfer_learning.py  - This file creates deep learning model using pretrained weights from resnet50
+4. hackathon_create_data_set.py - This file creates train/test data set
+
+Steps To Run:
+1. Download dataset: https://www.kaggle.com/nodoubttome/skin-cancer9-classesisic
+2. Specify the downloaded path in DATASETDIR in hackathon_ml_top.py file
+3. Run hackathon_ml_top.py file
+
+##################################################################################EOF##################################################################
