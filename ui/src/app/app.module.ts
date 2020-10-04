@@ -26,6 +26,8 @@ import {GoogleLoginProvider} from 'angularx-social-login';
 import { TrackComponent } from './track/track.component';
 import { ContactusComponent } from './contactus/contactus.component';
 import { AgmCoreModule } from '@agm/core';
+import { AvatarModule } from 'ngx-avatar';
+
 
  
 
@@ -61,7 +63,8 @@ import { AgmCoreModule } from '@agm/core';
     MatTableModule,
     SocialLoginModule,
     AgmCoreModule.forRoot({
-    })
+    }),
+    AvatarModule
    
 
 
