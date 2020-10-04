@@ -104,7 +104,7 @@ onSelectFile(event) {
 }
 
 getCancerTypeDetails() {
-  this.userService.getCancerDetails("basalCellCarcinoma")
+  this.userService.getCancerDetails(this.predictionModel.type)
   .pipe(first())
   .subscribe(
     data => {
