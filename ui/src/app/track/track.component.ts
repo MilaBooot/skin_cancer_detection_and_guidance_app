@@ -76,7 +76,7 @@ deleteDocFile(data) {
     var DocFile = DocFileName;  
     this.service.deleteDocument(DocFile, this.user).subscribe((data) => {
         this.alertService.success('Document deleted successfully', true);
-        this.router.navigate(['/track']);
+
     }, 
     err => {
             this.alertService.error(err);
@@ -94,8 +94,7 @@ onExpSubmit() {
     formData.append('description', this.saveFileForm.value.Description);  
     formData.append('username', this.user)
     this.service.AddFileDetails(formData).subscribe(result => {
-        this.alertService.success('Document uploaded successfully', true);
-        this.router.navigate(['/track']);}, 
+        this.alertService.success('Document uploaded successfully', true);}, 
         err => {
                 this.alertService.error(err);
         });  

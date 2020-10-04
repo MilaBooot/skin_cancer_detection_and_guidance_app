@@ -37,8 +37,9 @@
 
   <div class="comeBack_up" *ngIf="!isEmpty()">
     
-  <h1 class="display-4">Risk Factor: <b>{{predictionModel.value}}</b> </h1>
+  <h1 class="display-4">Result: <b>{{predictionModel.value}}</b> </h1>
   <h1 class="display-8">Type:  <b>{{predictionModel.type}}</b> </h1>
+  <h1 class="display-8">Risk Factor:  <b>{{predictionModel.riskFactor}}</b> </h1>
  
   </div>
 
@@ -48,5 +49,34 @@
     </div>
   </mat-step>
 </mat-horizontal-stepper>
+
+<div class="container-fluid pt-4" *ngIf= "typeInfo">
+  <div class="comeBack_up"> 
+    <h1 class="display-4">Detailed Information</h1>
+   <!-- <h2>Predicted result:  {{predictionModel.value}}</h2>-->
+    <h2>Type:  {{typeInfo.type}}</h2>
+    <h2>Description:</h2>
+    <p>{{typeInfo.description}}</p>
+    <h2>Check for below symtoms: </h2>
+    <div >
+      <ol>
+       <ng-container *ngFor="let symtom of typeInfo.symptoms; let i=index">
+          <li> {{symtom}}</li>
+       </ng-container>    
+      </ol>
+    </div>
+
+    <h2>Risk Factor: </h2>
+    <div >
+      <ol>
+       <ng-container *ngFor="let factor of typeInfo.riskFactor; let i=index">
+          <li>{{factor}}</li>
+       </ng-container>    
+      </ol>
+    </div>
+
+    <a  [href]="typeInfo.link">For more information click here</a>
+  </div>
+</div> 
 
 

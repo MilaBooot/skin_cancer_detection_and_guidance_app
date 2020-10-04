@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import { Question, User , Prediction} from '../_models';
+import { Question, User , Prediction, CancerTypeInfo} from '../_models';
 import { AlertService, AuthenticationService, GeolocationService, UserService } from '../_services';
 import { first } from 'rxjs/operators';
 
@@ -24,6 +24,7 @@ export class StepperComponent implements OnInit {
   surveyQuestion: Question[];
   width;
   height;
+  typeInfo : CancerTypeInfo = null;
 
 
   
@@ -40,6 +41,8 @@ export class StepperComponent implements OnInit {
     this.secondFormGroup = this._formBuilder.group({
       secondCtrl: ['', Validators.required]
     });
+
+   
   }
 
   onClick() {  
@@ -69,11 +72,12 @@ uploadFile() {
            this.predictionModel = data;
            this.userService.setCancerDetected(this.predictionModel.cancer);
            this.userService.setImageProcessed();
+           this.getCancerTypeDetails();
         },
         error => {
             this.alertService.error(error);
           
-        });;
+        });
 
     
 
@@ -97,6 +101,20 @@ onSelectFile(event) {
       this.url = event.target.result;
     }
   }
+}
+
+getCancerTypeDetails() {
+  this.userService.getCancerDetails("basalCellCarcinoma")
+  .pipe(first())
+  .subscribe(
+    data => {
+      this.typeInfo = data;
+   },
+   error => {
+       this.alertService.error(error);
+     
+   }
+  );
 }
 
 /*
