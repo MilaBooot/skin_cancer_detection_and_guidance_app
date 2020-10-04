@@ -27,7 +27,7 @@ Backend-for-Frontend (BFF) developed using Java and Spring Boot
 
 ###Links
 
-`<swagger-url>` : <https://localhost:8080/bff/api/swagger-ui.html>
+`<swagger-url>` : <https://localhost:8081/bff/api/swagger-ui.html>
 
 
 
